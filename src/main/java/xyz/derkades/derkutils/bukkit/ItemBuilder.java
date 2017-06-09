@@ -1,6 +1,7 @@
 package xyz.derkades.derkutils.bukkit;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -46,6 +47,13 @@ public class ItemBuilder {
 	public ItemBuilder setLore(String... lore){
 		final ItemMeta meta = item.getItemMeta();
 		meta.setLore(Arrays.asList(lore));
+		item.setItemMeta(meta);
+		return this;
+	}
+	
+	public ItemBuilder setLore(List<String> lore){
+		final ItemMeta meta = item.getItemMeta();
+		meta.setLore(lore);
 		item.setItemMeta(meta);
 		return this;
 	}
