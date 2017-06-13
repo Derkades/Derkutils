@@ -24,15 +24,10 @@ public abstract class IconMenu implements Listener {
 	private Plugin plugin;
 	private Player player;
 	
-	public IconMenu(Plugin plugin, String name, int size) {
-		this.name = name;
-		this.size = size;
-
-		plugin.getServer().getPluginManager().registerEvents(this, plugin);
-	}
-	
 	public IconMenu(Plugin plugin, String name, int size, Player player){
-		this(plugin, name, size);
+		this.plugin = plugin;
+		this.size = size;
+		this.name = name;
 		this.player = player;
 	}
 	
@@ -50,7 +45,7 @@ public abstract class IconMenu implements Listener {
 	 * @param player
 	 * @param isSpecific Whether contents vary per player.
 	 */
-	public void open(Player player, boolean isSpecific) {	
+	public void open() {
 		Inventory inventory = Bukkit.createInventory(player, size, name);
 		for (MenuItem menuItem : this.getMenuItems(player)){
 			inventory.setItem(menuItem.getPosition(), menuItem.getItemStack());
@@ -60,7 +55,7 @@ public abstract class IconMenu implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onInventoryClick(InventoryClickEvent event) {
-		if (event.getInventory().getTitle().equals(name) && (player == null || event.getWhoClicked().getUniqueId().equals(player.getUniqueId()))) {
+		if (event.getInventory().getTitle().equals(name) && (event.getWhoClicked().getUniqueId().equals(player.getUniqueId()))) {
 			event.setCancelled(true);
 			
 			if (event.getClick() != ClickType.LEFT)
