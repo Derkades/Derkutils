@@ -7,9 +7,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -81,20 +83,17 @@ public abstract class IconMenu implements Listener {
 		}
 	}
 
-	public static class OptionClickEvent {
+	public static class OptionClickEvent extends PlayerEvent {
 
-		private Player player;
 		private int position;
 		private ItemStack item;
 
 		public OptionClickEvent(Player player, int position, MenuItem item) {
+			super(player);
+			
 			this.player = player;
 			this.position = item.getPosition();
 			this.item = item.getItemStack();
-		}
-
-		public Player getPlayer() {
-			return player;
 		}
 
 		public int getPosition() {
@@ -107,6 +106,11 @@ public abstract class IconMenu implements Listener {
 
 		public ItemStack getItemStack() {
 			return item;
+		}
+
+		@Override
+		public HandlerList getHandlers() {
+			return null;
 		}
 	}
 	
