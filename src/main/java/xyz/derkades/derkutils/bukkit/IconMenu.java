@@ -75,8 +75,8 @@ public abstract class IconMenu implements Listener {
 			
 			final Player clicker = (Player) event.getWhoClicked();
 			
-			if (slot >= 0 && slot < size && this.getMenuItems(clicker).get(slot) != null) {				
-				boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, this.getMenuItems(clicker).get(slot)));
+			if (slot >= 0 && slot < size && getMenuItemInSlot(slot) != null) {				
+				boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, getMenuItemInSlot(slot)));
 				if (close) {
 					new BukkitRunnable() {
 						public void run() {
@@ -86,6 +86,15 @@ public abstract class IconMenu implements Listener {
 				}
 			}
 		}
+	}
+	
+	private MenuItem getMenuItemInSlot(int slot){
+		for (MenuItem item : this.getMenuItems(player)){
+			if (item.getPosition() == slot){
+				return item;
+			}
+		}
+		return null;
 	}
 
 	public static class OptionClickEvent extends PlayerEvent {
