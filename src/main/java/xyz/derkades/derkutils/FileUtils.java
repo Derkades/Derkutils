@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.net.URL;
+
+import org.apache.commons.io.FileUtils;
 
 public class FileUtils {
 	
@@ -25,7 +28,19 @@ public class FileUtils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+	}
+	
+	/**
+	 * Copies any file in a jar file to an outside locations. Fails silently if the file already exists.
+	 * @param clazz Class this method is called from
+	 * @param pathToFileInJar
+	 * @param outputFile
+	 */
+	public static void copyOutOfJar(Class<?> clazz, String pathToFileInJar, File outputFile) throws IOException {
+		if (!outputFile.exists()){
+			URL inputUrl = clazz.getResource("/xyz/derkades/serverselectorx/default-selector.yml");
+			org.apache.commons.io.FileUtils.copyURLToFile(inputUrl, outputFile);
+		}
 	}
 
 }
