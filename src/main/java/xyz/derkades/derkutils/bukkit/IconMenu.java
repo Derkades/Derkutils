@@ -42,6 +42,14 @@ public abstract class IconMenu implements Listener {
 	 */
 	public abstract boolean onOptionClick(OptionClickEvent event);
 
+	public void setName(String name){
+		this.name = name;
+	}
+	
+	public void setSize(int size){
+		this.size = size;
+	}
+	
 	/**
 	 * 
 	 * @param player
