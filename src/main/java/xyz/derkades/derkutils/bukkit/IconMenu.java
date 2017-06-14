@@ -29,6 +29,8 @@ public abstract class IconMenu implements Listener {
 		this.size = size;
 		this.name = name;
 		this.player = player;
+		
+		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
 	public abstract List<MenuItem> getMenuItems(Player player);
@@ -60,7 +62,7 @@ public abstract class IconMenu implements Listener {
 			
 			if (event.getClick() != ClickType.LEFT)
 				return;
-			
+
 			int slot = event.getRawSlot();
 			
 			final Player clicker = (Player) event.getWhoClicked();
