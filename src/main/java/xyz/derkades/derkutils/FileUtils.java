@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
 
-import org.apache.commons.io.FileUtils;
-
 public class FileUtils {
 	
 	public static String getFileName(File file){
