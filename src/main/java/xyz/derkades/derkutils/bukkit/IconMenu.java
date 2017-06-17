@@ -11,6 +11,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -85,6 +86,13 @@ public abstract class IconMenu implements Listener {
 					}.runTaskLater(plugin, 1);
 				}
 			}
+		}
+	}
+	
+	@EventHandler
+	public void onInventoryClose(InventoryCloseEvent event){
+		if (event.getInventory().getTitle().equals(name) && (event.getPlayer().getUniqueId().equals(player.getUniqueId()))) {
+			HandlerList.unregisterAll(this);
 		}
 	}
 	
