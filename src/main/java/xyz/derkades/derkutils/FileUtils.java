@@ -9,6 +9,10 @@ import java.net.URL;
 
 public class FileUtils {
 	
+	/**
+	 * @param file
+	 * @return File name without extension
+	 */
 	public static String getFileName(File file){
 		String name = file.getName();
 		int pos = name.lastIndexOf(".");
@@ -18,6 +22,9 @@ public class FileUtils {
 		return name;
 	}
 	
+	/**
+	 * Adds a string to the end of a file
+	 */
 	public static void appendStringToFile(File file, String string){
 		try {
 			Writer writer = new BufferedWriter(new FileWriter(file, true));

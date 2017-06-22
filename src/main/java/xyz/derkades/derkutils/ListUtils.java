@@ -7,6 +7,12 @@ import java.util.List;
 
 public class ListUtils {
 	
+	/**
+	 * Returns true if one of the strings in the string list contains the string
+	 * @param list
+	 * @param string
+	 * @return
+	 */
 	public static boolean stringListContainsString(List<String> list, String string){
 		boolean contains = false;
 		for (String entry : list){
