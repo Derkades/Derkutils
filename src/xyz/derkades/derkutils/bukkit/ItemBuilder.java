@@ -27,16 +27,33 @@ public class ItemBuilder {
 		item = new ItemBuilder(Material.SKULL_ITEM).setDamage(3).setSkullOwner(skullOwner).create();
 	}
 	
+	@Deprecated
 	public ItemBuilder setAmount(int amount){
 		item.setAmount(amount);
 		return this;
 	}
 	
+	public ItemBuilder amount(int amount){
+		item.setAmount(amount);
+		return this;
+	}
+	
+	@Deprecated
 	public ItemBuilder setDamage(int i){
 		item.setDurability((short) i);
 		return this;
 	}
 	
+	public ItemBuilder data(int data){
+		return data((short) data);
+	}
+	
+	public ItemBuilder data(short data){
+		item.setDurability(data);
+		return this;
+	}
+	
+	@Deprecated
 	public ItemBuilder setName(String name){
 		final ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(name);
@@ -44,6 +61,21 @@ public class ItemBuilder {
 		return this;
 	}
 	
+	public ItemBuilder name(String name){
+		final ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(name);
+		item.setItemMeta(meta);
+		return this;
+	}
+	
+	public ItemBuilder coloredName(String name){
+		final ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(Colors.parseColors(name));
+		item.setItemMeta(meta);
+		return this;
+	}
+	
+	@Deprecated
 	public ItemBuilder setLore(String... lore){
 		final ItemMeta meta = item.getItemMeta();
 		meta.setLore(Arrays.asList(lore));
@@ -51,6 +83,21 @@ public class ItemBuilder {
 		return this;
 	}
 	
+	public ItemBuilder lore(String... lore){
+		final ItemMeta meta = item.getItemMeta();
+		meta.setLore(Arrays.asList(lore));
+		item.setItemMeta(meta);
+		return this;
+	}
+	
+	public ItemBuilder coloredLore(String... lore){
+		final ItemMeta meta = item.getItemMeta();
+		meta.setLore(Colors.parseColors(Arrays.asList(lore)));
+		item.setItemMeta(meta);
+		return this;
+	}
+	
+	@Deprecated
 	public ItemBuilder setLore(List<String> lore){
 		final ItemMeta meta = item.getItemMeta();
 		meta.setLore(lore);
@@ -58,6 +105,21 @@ public class ItemBuilder {
 		return this;
 	}
 	
+	public ItemBuilder lore(List<String> lore){
+		final ItemMeta meta = item.getItemMeta();
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+		return this;
+	}
+	
+	public ItemBuilder coloredLore(List<String> lore){
+		final ItemMeta meta = item.getItemMeta();
+		meta.setLore(Colors.parseColors(lore));
+		item.setItemMeta(meta);
+		return this;
+	}
+	
+	@Deprecated
 	public ItemBuilder setSkullOwner(String playerName){
 		final SkullMeta meta = (SkullMeta) item.getItemMeta();
 		meta.setOwner(playerName);
@@ -65,14 +127,49 @@ public class ItemBuilder {
 		return this;
 	}
 	
+	public ItemBuilder skullOwner(String playerName){
+		final SkullMeta meta = (SkullMeta) item.getItemMeta();
+		meta.setOwner(playerName);
+		item.setItemMeta(meta);
+		return this;
+	}
+	
+	@Deprecated	
 	public ItemBuilder setLeatherArmorColor(Color color){
 		final LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
 		meta.setColor(color);
 		return this;
 	}
+
+	public ItemBuilder leatherArmorColor(Color color){
+		final LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
+		meta.setColor(color);
+		return this;
+	}
 	
+	@Deprecated
 	public ItemBuilder addEnchantment(Enchantment type, int level){
+		return enchant(type, level);
+	}
+	
+	public ItemBuilder enchant(Enchantment type, int level){
 		item.addEnchantment(type, level);
+		return this;
+	}
+	
+	public ItemBuilder unsafeEnchant(Enchantment type, int level){
+		final ItemMeta meta = item.getItemMeta();
+		meta.addEnchant(type, level, true);
+		return this;
+	}
+	
+	public ItemBuilder material(Material material){
+		item.setType(material);
+		return this;
+	}
+	
+	public ItemBuilder type(Material type){
+		item.setType(type);
 		return this;
 	}
 	
