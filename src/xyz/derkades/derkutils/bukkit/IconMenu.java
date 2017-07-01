@@ -25,7 +25,7 @@ public abstract class IconMenu implements Listener {
 	private Plugin plugin;
 	private Player player;
 	
-	private Map<Integer, ItemStack> items; 
+	public Map<Integer, ItemStack> items; 
 	
 	public IconMenu(Plugin plugin, String name, int size, Player player){
 		this.plugin = plugin;
