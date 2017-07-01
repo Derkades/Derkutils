@@ -1,9 +1,9 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,16 +25,17 @@ public abstract class IconMenu implements Listener {
 	private Plugin plugin;
 	private Player player;
 	
+	private Map<Integer, ItemStack> items; 
+	
 	public IconMenu(Plugin plugin, String name, int size, Player player){
 		this.plugin = plugin;
 		this.size = size;
 		this.name = name;
 		this.player = player;
+		this.items = new HashMap<>();
 		
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 	}
-	
-	public abstract List<MenuItem> getMenuItems(Player player);
 	
 	/**
 	 * Called when a player clicks on an item in the menu
@@ -58,8 +59,8 @@ public abstract class IconMenu implements Listener {
 	 */
 	public void open() {
 		Inventory inventory = Bukkit.createInventory(player, size, name);
-		for (MenuItem menuItem : this.getMenuItems(player)){
-			inventory.setItem(menuItem.getPosition(), menuItem.getItemStack());
+		for (Map.Entry<Integer, ItemStack> menuItem : this.items.entrySet()){
+			inventory.setItem(menuItem.getKey(), menuItem.getValue());
 		}
 		player.openInventory(inventory);
 	}
@@ -76,8 +77,8 @@ public abstract class IconMenu implements Listener {
 			
 			final Player clicker = (Player) event.getWhoClicked();
 			
-			if (slot >= 0 && slot < size && getMenuItemInSlot(slot) != null) {				
-				boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, getMenuItemInSlot(slot)));
+			if (slot >= 0 && slot < size && this.items.containsKey(slot)) {				
+				boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, this.items.get(slot)));
 				if (close) {
 					new BukkitRunnable() {
 						public void run() {
@@ -95,27 +96,18 @@ public abstract class IconMenu implements Listener {
 			HandlerList.unregisterAll(this);
 		}
 	}
-	
-	private MenuItem getMenuItemInSlot(int slot){
-		for (MenuItem item : this.getMenuItems(player)){
-			if (item.getPosition() == slot){
-				return item;
-			}
-		}
-		return null;
-	}
 
 	public static class OptionClickEvent extends PlayerEvent {
 
 		private int position;
 		private ItemStack item;
 
-		public OptionClickEvent(Player player, int position, MenuItem item) {
+		public OptionClickEvent(Player player, int position, ItemStack item) {
 			super(player);
 			
 			this.player = player;
-			this.position = item.getPosition();
-			this.item = item.getItemStack();
+			this.position = position;
+			this.item = item;
 		}
 
 		public int getPosition() {
@@ -134,46 +126,6 @@ public abstract class IconMenu implements Listener {
 		public HandlerList getHandlers() {
 			return null;
 		}
-	}
-	
-	public static class MenuItem {
-
-		private ItemStack item;
-		private int position;
-
-		public MenuItem(int position, ItemStack item) {
-			this.item = item;
-			this.position = position;
-		}
-
-		public MenuItem(int position, ItemStack item, String name) {
-			this.item = new ItemBuilder(item).setName(name).create();
-			this.position = position;
-		}
-
-		public MenuItem(int position, Material type, String name) {
-			this.item = new ItemBuilder(type).setName(name).create();
-			this.position = position;
-		}
-
-		public MenuItem(int position, ItemStack item, String name, String... lore) {
-			this.item = new ItemBuilder(item).setName(name).setLore(lore).create();
-			this.position = position;
-		}
-
-		public MenuItem(int position, Material type, String name, String... lore) {
-			this.item = new ItemBuilder(type).setName(name).setLore(lore).create();
-			this.position = position;
-		}
-
-		public int getPosition() {
-			return position;
-		}
-
-		public ItemStack getItemStack() {
-			return item;
-		}
-		
 	}
 	
 }
