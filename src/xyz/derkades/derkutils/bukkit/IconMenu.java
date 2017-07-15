@@ -105,7 +105,6 @@ public abstract class IconMenu implements Listener {
 		public OptionClickEvent(Player player, int position, ItemStack item) {
 			super(player);
 			
-			this.player = player;
 			this.position = position;
 			this.item = item;
 		}
