@@ -14,10 +14,20 @@ public class ListUtils {
 	 * @return
 	 */
 	public static boolean stringListContainsString(List<String> list, String string){
+		return stringListContainsString(list, string, false);
+	}
+	
+	public static boolean stringListContainsString(List<String> list, String string, boolean caseSensitive){
 		boolean contains = false;
 		for (String entry : list){
-			if (entry.contains(string)){
-				contains = true;
+			if (caseSensitive) {
+				if (entry.contains(string)){
+					contains = true;
+				}
+			} else {
+				if (entry.toLowerCase().contains(string.toLowerCase())) {
+					contains = true;
+				}
 			}
 		}
 		return contains;
