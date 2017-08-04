@@ -14,6 +14,10 @@ public class Random {
 	 * @return A random integer between min (inclusive) and max (inclusive)
 	 */
 	public static int getRandomInteger(int min, int max){
+		if (min == max) {
+			return min;
+		}
+		
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
 	
