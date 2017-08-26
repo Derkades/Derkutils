@@ -8,10 +8,7 @@ import java.util.List;
 public class ListUtils {
 	
 	/**
-	 * Returns true if one of the strings in the string list contains the string
-	 * @param list
-	 * @param string
-	 * @return
+	 * @see #stringListContainsString(List, String, boolean)
 	 */
 	public static boolean stringListContainsString(List<String> list, String string){
 		return stringListContainsString(list, string, false);
@@ -21,7 +18,16 @@ public class ListUtils {
 	 * @param list
 	 * @param string
 	 * @param caseSensitive
-	 * @return True if any string inside the list contains the specified string
+	 * @return 
+	 * 		True if any string inside the list contains the specified string
+	 * 		<br><br>Example:
+	 * 		<ul>
+	 * 			<li>Hello world</li>
+	 * 			<li>Foo</li>
+	 * 		</ul>
+	 * 		For string "oo" - Return true
+	 * 		<br>For string "Hello world" - Return true
+	 * 		<br>For string "Bar" - Return false
 	 */
 	public static boolean stringListContainsString(List<String> list, String string, boolean caseSensitive){
 		boolean contains = false;

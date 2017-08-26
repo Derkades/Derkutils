@@ -11,7 +11,7 @@ public class FileUtils {
 	
 	/**
 	 * @param file
-	 * @return File name without extension
+	 * @return File name without extension. For extensions like .tar.gz only .gz will be returned.
 	 */
 	public static String getFileName(File file){
 		String name = file.getName();
@@ -26,10 +26,8 @@ public class FileUtils {
 	 * Adds a string to the end of a file
 	 */
 	public static void appendStringToFile(File file, String string){
-		try {
-			Writer writer = new BufferedWriter(new FileWriter(file, true));
+		try (Writer writer = new BufferedWriter(new FileWriter(file, true))){
 			writer.append(string);
-			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -43,7 +41,7 @@ public class FileUtils {
 	 */
 	public static void copyOutOfJar(Class<?> clazz, String pathToFileInJar, File outputFile) throws IOException {
 		if (!outputFile.exists()){
-			URL inputUrl = clazz.getResource("/xyz/derkades/serverselectorx/default-selector.yml");
+			URL inputUrl = clazz.getResource(pathToFileInJar);
 			org.apache.commons.io.FileUtils.copyURLToFile(inputUrl, outputFile);
 		}
 	}

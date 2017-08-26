@@ -5,7 +5,7 @@ import java.util.List;
 public class NumberUtils {
 	
 	/**
-	 * Calculates the average of all doubles in the list.
+	 * Calculates the average of all doubles in a list.
 	 * @param list
 	 * @return
 	 */
