@@ -106,5 +106,29 @@ public class ListUtils {
 		System.arraycopy(array, 1, newArray, 0, n);
 		return newArray;
 	}
+	
+	/**
+	 * Replaces strings with other strings in a string list.
+	 * @param list ["Hello world", "Lorem ipsum"]
+	 * @param before ["world", "ipsum"]
+	 * @param after ["there", "dolor"]
+	 * @return ["Hello there", "Lorem dolor"]
+	 */
+	public static List<String> replaceInStringList(List<String> list, Object[] before, Object[] after) {
+		if (before.length != after.length) {
+			throw new IllegalArgumentException("before[] length must be equal to after[] length");
+		}
+		
+		List<String> newList = new ArrayList<>();
+		
+		for (String string : list) {
+			for (int i = 0; i < before.length; i++) {
+				string = string.replace(before[i].toString(), after[i].toString());
+			}
+			newList.add(string);
+		}
+		
+		return newList;
+	}
 
 }
