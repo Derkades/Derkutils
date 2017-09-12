@@ -93,7 +93,11 @@ public abstract class IconMenu implements Listener {
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event){
 		if (event.getInventory().getTitle().equals(name) && (event.getPlayer().getUniqueId().equals(player.getUniqueId()))) {
-			HandlerList.unregisterAll(this);
+			new BukkitRunnable() {
+				public void run() {
+					HandlerList.unregisterAll(IconMenu.this);
+				}
+			}.runTaskLater(plugin, 1);
 		}
 	}
 
