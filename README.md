@@ -1,6 +1,7 @@
 # Derkutils
 A collection of somewhat useful stuff
 
+See the wiki for more information: https://github.com/Derkades/Derkutils/wiki
 
 Maven:
 ```
