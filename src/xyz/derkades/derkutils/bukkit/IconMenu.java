@@ -52,6 +52,11 @@ public abstract class IconMenu implements Listener {
 		this.size = size;
 	}
 	
+	public void destroy() {
+		HandlerList.unregisterAll(this);
+		player.closeInventory();
+	}
+	
 	/**
 	 * 
 	 * @param player
