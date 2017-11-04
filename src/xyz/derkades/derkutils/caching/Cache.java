@@ -1,14 +1,14 @@
 package xyz.derkades.derkutils.caching;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Cache {
 	
-	private static final Map<String, CacheObject> CACHE_OBJECT_MAP = new HashMap<>();
+	private static final Map<String, CacheObject> CACHE_OBJECT_MAP = new ConcurrentHashMap<>();
 	
 	/**
 	 * @param identifier
