@@ -4,8 +4,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Random {
 	
-	private static java.util.Random random = new java.util.Random();
-	
 	/**
 	 * @see #getRandomDouble()
 	 * @see #getRandomFloat()
@@ -18,6 +16,10 @@ public class Random {
 			return min;
 		}
 		
+		if (max < min) {
+			throw new IllegalArgumentException("Maximum cannot be less than minumum");
+		}
+		
 		return ThreadLocalRandom.current().nextInt(min, max + 1);
 	}
 	
@@ -25,8 +27,7 @@ public class Random {
 	 * @return True or false, both with 50% chance.
 	 */
 	public static boolean getRandomBoolean(){
-		int i = getRandomInteger(0, 1);
-		return i == 1;
+		return ThreadLocalRandom.current().nextBoolean();
 	}
 	
 	/**
@@ -35,7 +36,24 @@ public class Random {
 	 * @return A value between 0.0 (inclusive) and 1.0 (exclusive)
 	 */
 	public static double getRandomDouble(){
-		return random.nextDouble();
+		return ThreadLocalRandom.current().nextDouble();
+	}
+	
+	/**
+	 * @param min
+	 * @param max
+	 * @return A random number between min (inclusive) and max (exclusive)
+	 */
+	public static double getRandomDouble(double min, double max) {
+		if (min == max) {
+			return min;
+		}
+		
+		if (max < min) {
+			throw new IllegalArgumentException("Maximum cannot be less than minumum");
+		}
+		
+		return ThreadLocalRandom.current().nextDouble(min, max);
 	}
 	
 	/**
@@ -44,7 +62,7 @@ public class Random {
 	 * @return A random value between 0.0 (inclusive) and 1.0 (exclusive)
 	 */
 	public static float getRandomFloat(){
-		return random.nextFloat();
+		return ThreadLocalRandom.current().nextFloat();
 	}
 	
 }
