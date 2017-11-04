@@ -45,5 +45,13 @@ public class StringUtils {
 			return string + ".";
 		}
 	}
+	
+	public static String appendIfNotPresent(String string, String append) {
+		if (string.endsWith(append)) {
+			return string;
+		} else {
+			return string + append;
+		}
+	}
 
 }
