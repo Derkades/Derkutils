@@ -18,6 +18,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import xyz.derkades.derkutils.bukkit.IconMenu.MenuCloseEvent.CloseReason;
+
 public abstract class IconMenu implements Listener {
 
 	private String name;
@@ -43,6 +45,12 @@ public abstract class IconMenu implements Listener {
 	 * @return Whether the menu should be closed
 	 */
 	public abstract boolean onOptionClick(OptionClickEvent event);
+	
+	/**
+	 * @return Whether the menu should be allowed to close
+	 */
+	public void onClose(MenuCloseEvent event) {
+	}
 
 	public void setName(String name){
 		this.name = name;
@@ -52,9 +60,15 @@ public abstract class IconMenu implements Listener {
 		this.size = size;
 	}
 	
-	public void destroy() {
+	public void close() {
+		onClose(new MenuCloseEvent(player, CloseReason.FORCE_CLOSE));
 		HandlerList.unregisterAll(this);
 		player.closeInventory();
+	}
+	
+	@Deprecated
+	public void destroy() {
+		close();
 	}
 	
 	/**
@@ -87,7 +101,8 @@ public abstract class IconMenu implements Listener {
 				if (close) {
 					new BukkitRunnable() {
 						public void run() {
-							clicker.closeInventory();
+							onClose(new MenuCloseEvent(player, CloseReason.ITEM_CLICK));
+							close();
 						}
 					}.runTaskLater(plugin, 1);
 				}
@@ -98,6 +113,9 @@ public abstract class IconMenu implements Listener {
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event){
 		if (event.getInventory().getTitle().equals(name) && (event.getPlayer().getUniqueId().equals(player.getUniqueId()))) {
+			
+			onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
+			
 			new BukkitRunnable() {
 				public void run() {
 					HandlerList.unregisterAll(IconMenu.this);
@@ -134,6 +152,32 @@ public abstract class IconMenu implements Listener {
 		public HandlerList getHandlers() {
 			return null;
 		}
+	}
+	
+	public static class MenuCloseEvent extends PlayerEvent {
+
+		private CloseReason reason;
+		
+		public MenuCloseEvent(Player player, CloseReason reason) {
+			super(player);
+			this.reason = reason;
+		}
+		
+		public CloseReason getReason() {
+			return reason;
+		}
+
+		@Override
+		public HandlerList getHandlers() {
+			return null;
+		}
+		
+		public static enum CloseReason {
+			
+			PLAYER_CLOSED, FORCE_CLOSE, ITEM_CLICK
+			
+		}
+		
 	}
 	
 }
