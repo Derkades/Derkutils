@@ -28,6 +28,7 @@ public abstract class IconMenu implements Listener {
 	private Player player;
 	
 	public Map<Integer, ItemStack> items; 
+	private Inventory inventory;
 	
 	public IconMenu(Plugin plugin, String name, int size, Player player){
 		this.plugin = plugin;
@@ -77,11 +78,16 @@ public abstract class IconMenu implements Listener {
 	 * @param isSpecific Whether contents vary per player.
 	 */
 	public void open() {
-		Inventory inventory = Bukkit.createInventory(player, size, name);
+		inventory = Bukkit.createInventory(player, size, name);
+		refreshItems();
+		player.openInventory(inventory);
+	}
+	
+	public void refreshItems() {
+		inventory.clear();
 		for (Map.Entry<Integer, ItemStack> menuItem : this.items.entrySet()){
 			inventory.setItem(menuItem.getKey(), menuItem.getValue());
 		}
-		player.openInventory(inventory);
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
