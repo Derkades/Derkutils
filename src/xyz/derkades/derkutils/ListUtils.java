@@ -3,6 +3,7 @@ package xyz.derkades.derkutils;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ListUtils {
@@ -61,16 +62,16 @@ public class ListUtils {
 		return list;
 	}
 	
+	/*
 	/**
 	 * @param list
 	 * @return A random element from a list
 	 * @see #getRandomValueFromArray(Object[])
-	 */
 	public static <T> T getRandomValueFromList(List<T> list){
 		int size = list.size();
 		int index = Random.getRandomInteger(0, size - 1); //Size -1 because if the list has 1 entry (entry 0) the length is 1.
 		return list.get(index);
-	}
+	}*/
 	
 	/**
 	 * @param array
@@ -93,6 +94,29 @@ public class ListUtils {
 		int size = array.length;
 		int index = Random.getRandomInteger(0, size - 1); //Size -1 because if the list has 1 entry (entry 0) the length is 1.
 		return array[index];
+	}
+	
+	@SuppressWarnings("unchecked")
+	/**
+	 * @param list
+	 * @return A random element from the provided collection
+	 */
+	public static <T> T getRandomValueFromList(Collection<? extends T> list) {
+		if (list == null) {
+			throw new IllegalArgumentException("List must not be null");
+		}
+		
+		if (list.size() == 0) {
+			throw new IllegalArgumentException("List must not be empty");
+		}
+		
+		if (list.size() == 1) {
+			return (T) list.toArray()[0];
+		}
+		
+		int size = list.size();
+		int index = Random.getRandomInteger(0, size - 1); //Size -1 because if the list has 1 entry (entry 0) the length is 1.
+		return (T) list.toArray()[index];
 	}
 	
 	/**
