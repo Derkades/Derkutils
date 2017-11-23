@@ -77,11 +77,6 @@ public abstract class IconMenu implements Listener {
 		HandlerList.unregisterAll(this);
 		player.closeInventory();
 	}
-	
-	@Deprecated
-	public void destroy() {
-		close();
-	}
 
 	/**
 	 * Opens the menu
