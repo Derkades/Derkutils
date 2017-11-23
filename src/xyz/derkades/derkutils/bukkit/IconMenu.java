@@ -53,14 +53,25 @@ public abstract class IconMenu implements Listener {
 	public void onClose(MenuCloseEvent event) {
 	}
 
+	/**
+	 * Sets the name of the menu. Has no effect after the menu has been opened.
+	 * @param name
+	 */
 	public void setName(String name){
 		this.name = name;
 	}
 	
+	/**
+	 * Sets the size of the menu, a multiple of 9. Has no effect after the menu has been opened
+	 * @param size
+	 */
 	public void setSize(int size){
 		this.size = size;
 	}
 	
+	/**
+	 * Calls {@link #onClose(MenuCloseEvent)} with {@link CloseReason#FORCE_CLOSE} and closes the inventory.
+	 */
 	public void close() {
 		onClose(new MenuCloseEvent(player, CloseReason.FORCE_CLOSE));
 		HandlerList.unregisterAll(this);
@@ -71,11 +82,9 @@ public abstract class IconMenu implements Listener {
 	public void destroy() {
 		close();
 	}
-	
+
 	/**
-	 * 
-	 * @param player
-	 * @param isSpecific Whether contents vary per player.
+	 * Opens the menu
 	 */
 	public void open() {
 		inventory = Bukkit.createInventory(player, size, name);
@@ -83,6 +92,9 @@ public abstract class IconMenu implements Listener {
 		player.openInventory(inventory);
 	}
 	
+	/**
+	 * Update the menu with the {@link #items} map
+	 */
 	public void refreshItems() {
 		inventory.clear();
 		for (Map.Entry<Integer, ItemStack> menuItem : this.items.entrySet()){
@@ -180,7 +192,20 @@ public abstract class IconMenu implements Listener {
 		
 		public static enum CloseReason {
 			
-			PLAYER_CLOSED, FORCE_CLOSE, ITEM_CLICK
+			/*
+			 * When the player closes the menu, for example by pressing escape.
+			 */
+			PLAYER_CLOSED, 
+			
+			/**
+			 * When the menu has been closed using the {@link IconMenu#close()} method.
+			 */
+			FORCE_CLOSE,
+			
+			/**
+			 * When the menu has been closed because {@link IconMenu#onOptionClick(OptionClickEvent)} has returned true
+			 */
+			ITEM_CLICK,
 			
 		}
 		
