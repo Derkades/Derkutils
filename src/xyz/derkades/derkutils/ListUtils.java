@@ -25,9 +25,9 @@ public class ListUtils {
 	 * 			<li>Hello world</li>
 	 * 			<li>Foo</li>
 	 * 		</ul>
-	 * 		For string "oo" - Return true
-	 * 		<br>For string "Hello world" - Return true
-	 * 		<br>For string "Bar" - Return false
+	 * 		For string "oo" - Returns true
+	 * 		<br>For string "Hello world" - Returns true
+	 * 		<br>For string "Bar" - Returns false
 	 */
 	public static boolean stringListContainsString(List<String> list, String string, boolean caseSensitive){
 		boolean contains = false;
