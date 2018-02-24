@@ -12,7 +12,7 @@ public class ListUtils {
 	 * Not case sensitive 
 	 * @see #stringListContainsString(List, String, boolean)
 	 */
-	public static boolean stringListContainsString(List<String> list, String string){
+	public static boolean stringListContainsString(final List<String> list, final String string){
 		return stringListContainsString(list, string, false);
 	}
 	
@@ -31,9 +31,9 @@ public class ListUtils {
 	 * 		<br>For string "Hello world" - Returns true
 	 * 		<br>For string "Bar" - Returns false
 	 */
-	public static boolean stringListContainsString(List<String> list, String string, boolean caseSensitive){
+	public static boolean stringListContainsString(final List<String> list, final String string, final boolean caseSensitive){
 		boolean contains = false;
-		for (String entry : list){
+		for (final String entry : list){
 			if (caseSensitive) {
 				if (entry.contains(string)){
 					contains = true;
@@ -53,8 +53,8 @@ public class ListUtils {
 	 * @return A list of all values in a column as returned by an SQL query
 	 * @throws SQLException
 	 */
-	public static List<String> getStringListFromResultSet(ResultSet resultSet, String column) throws SQLException {
-		List<String> list = new ArrayList<String>();
+	public static List<String> getStringListFromResultSet(final ResultSet resultSet, final String column) throws SQLException {
+		final List<String> list = new ArrayList<String>();
 		
 		while (resultSet.next()){
 			list.add(resultSet.getString(column));
@@ -68,7 +68,7 @@ public class ListUtils {
 	 * @return A random element from an array
 	 * @see #getRandomValueFromList(List)
 	 */
-	public static <T> T getRandomValueFromArray(T[] array){
+	public static <T> T getRandomValueFromArray(final T[] array){
 		if (array == null) {
 			throw new IllegalArgumentException("Array must not be null");
 		}
@@ -81,8 +81,8 @@ public class ListUtils {
 			throw new IllegalArgumentException("Array must not be empty");
 		}
 		
-		int size = array.length;
-		int index = Random.getRandomInteger(0, size - 1);
+		final int size = array.length;
+		final int index = Random.getRandomInteger(0, size - 1);
 		return array[index];
 	}
 	
@@ -91,7 +91,7 @@ public class ListUtils {
 	 * @param list
 	 * @return A random element from the provided collection
 	 */
-	public static <T> T getRandomValueFromList(Collection<? extends T> list) {
+	public static <T> T getRandomValueFromList(final Collection<? extends T> list) {
 		if (list == null) {
 			throw new IllegalArgumentException("List must not be null");
 		}
@@ -104,8 +104,8 @@ public class ListUtils {
 			return (T) list.toArray()[0];
 		}
 		
-		int size = list.size();
-		int index = Random.getRandomInteger(0, size - 1); //Size -1 because if the list has 1 entry (entry 0) the length is 1.
+		final int size = list.size();
+		final int index = Random.getRandomInteger(0, size - 1); //Size -1 because if the list has 1 entry (entry 0) the length is 1.
 		return (T) list.toArray()[index];
 	}
 	
@@ -114,9 +114,9 @@ public class ListUtils {
 	 * @param array
 	 * @return Array without the first string
 	 */
-	public static String[] removeFirstStringFromArray(String[] array){
-		int n = array.length - 1;
-		String[] newArray = new String[n];
+	public static String[] removeFirstStringFromArray(final String[] array){
+		final int n = array.length - 1;
+		final String[] newArray = new String[n];
 		System.arraycopy(array, 1, newArray, 0, n);
 		return newArray;
 	}
@@ -128,12 +128,12 @@ public class ListUtils {
 	 * @param after ["there", "dolor"]
 	 * @return ["Hello there", "Lorem dolor"]
 	 */
-	public static List<String> replaceInStringList(List<String> list, Object[] before, Object[] after) {
+	public static List<String> replaceInStringList(final List<String> list, final Object[] before, final Object[] after) {
 		if (before.length != after.length) {
 			throw new IllegalArgumentException("before[] length must be equal to after[] length");
 		}
 		
-		List<String> newList = new ArrayList<>();
+		final List<String> newList = new ArrayList<>();
 		
 		for (String string : list) {
 			for (int i = 0; i < before.length; i++) {
@@ -145,7 +145,7 @@ public class ListUtils {
 		return newList;
 	}
 	
-	public static List<String> replaceInStringList(List<String> list, Object before, Object after){
+	public static List<String> replaceInStringList(final List<String> list, final Object before, final Object after){
 		return replaceInStringList(list, new Object[] {before}, new Object[] {after});
 	}
 

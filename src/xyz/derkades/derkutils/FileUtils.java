@@ -15,7 +15,7 @@ public class FileUtils {
 	 */
 	public static String getFileName(File file){
 		String name = file.getName();
-		int pos = name.lastIndexOf(".");
+		final int pos = name.lastIndexOf(".");
 		if (pos > 0) {
 		    name = name.substring(0, pos);
 		}
@@ -26,7 +26,7 @@ public class FileUtils {
 	 * Adds a string to the end of a file
 	 */
 	public static void appendStringToFile(File file, String string){
-		try (Writer writer = new BufferedWriter(new FileWriter(file, true))){
+		try (final Writer writer = new BufferedWriter(new FileWriter(file, true))){
 			writer.append(string);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -41,7 +41,7 @@ public class FileUtils {
 	 */
 	public static void copyOutOfJar(Class<?> clazz, String pathToFileInJar, File outputFile) throws IOException {
 		if (!outputFile.exists()){
-			URL inputUrl = clazz.getResource(pathToFileInJar);
+			final URL inputUrl = clazz.getResource(pathToFileInJar);
 			org.apache.commons.io.FileUtils.copyURLToFile(inputUrl, outputFile);
 		}
 	}

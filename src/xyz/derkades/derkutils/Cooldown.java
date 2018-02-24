@@ -12,7 +12,7 @@ public class Cooldown {
 	 * @param identifier
 	 * @param durationMillis
 	 */
-	public static void addCooldown(String identifier, long durationMillis) {
+	public static void addCooldown(final String identifier, final long durationMillis) {
 		COOLDOWNS.put(identifier, System.currentTimeMillis() + durationMillis);
 	}
 	
@@ -21,22 +21,18 @@ public class Cooldown {
 	 * @param identifier
 	 * @return Time in milliseconds
 	 */
-	public static long getCooldown(String identifier) {
+	public static long getCooldown(final String identifier) {
 		if (!COOLDOWNS.containsKey(identifier)) {
 			return 0;
 		}
 		
-		long timeLeft = COOLDOWNS.get(identifier) - System.currentTimeMillis();
+		final long timeLeft = COOLDOWNS.get(identifier) - System.currentTimeMillis();
 		
-		if (timeLeft < 0) {
-			timeLeft = 0;
-		}
-		
-		if (timeLeft == 0) {
+		if (timeLeft <= 0) {
 			COOLDOWNS.remove(identifier);
 		}
 		
-		return timeLeft;
+		return timeLeft < 0 ? 0 : timeLeft;
 	}
 	
 	/**

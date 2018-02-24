@@ -7,8 +7,8 @@ public class StringUtils {
 	 * @param spaces False if spaces should be considered as non-alphanumeric characters. (e.g. "hello world" will return false but "helloworld" will return true)
 	 * @return True if the specified string contains characters other than A-Z, a-z, 0-9 and optionally spaces.
 	 */
-	public static boolean containsNonAlphanumericalCharacters(String string, boolean allowSpaces){
-		String withoutSpecialCharacters;
+	public static boolean containsNonAlphanumericalCharacters(final String string, final boolean allowSpaces){
+		final String withoutSpecialCharacters;
 		
 		if (allowSpaces){
 			withoutSpecialCharacters = string.replaceAll("[^A-Za-z0-9 ]", "");
@@ -24,8 +24,8 @@ public class StringUtils {
 	 * @param string
 	 * @return true if the string contains only numbers, letters and underscores.
 	 */
-	public static boolean validateString(String string){
-		for (char c : string.toCharArray()){
+	public static boolean validateString(final String string){
+		for (final char c : string.toCharArray()){
 			if (!Character.isLetterOrDigit(c) & c != '_'){
 				return false;
 			}
@@ -38,7 +38,7 @@ public class StringUtils {
 	 * @param string
 	 * @return
 	 */
-	public static String addDotIfNecessary(String string){
+	public static String addDotIfNecessary(final String string){
 		if (string.endsWith(".") || string.endsWith("?") || string.endsWith("!")){
 			return string;
 		} else {
@@ -46,7 +46,7 @@ public class StringUtils {
 		}
 	}
 	
-	public static String appendIfNotPresent(String string, String append) {
+	public static String appendIfNotPresent(final String string, final String append) {
 		if (string.endsWith(append)) {
 			return string;
 		} else {

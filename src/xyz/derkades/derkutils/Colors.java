@@ -18,7 +18,7 @@ public class Colors {
 		};
 	}
 
-	public static Color getColorFromHex(String hex) {
+	public static Color getColorFromHex(final String hex) {
 		final int[] rgb = hexToRGB(hex);
 		return new Color(rgb[0], rgb[1], rgb[2]);
 	}

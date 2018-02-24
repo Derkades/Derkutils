@@ -11,7 +11,7 @@ public class Random {
 	 * @param max
 	 * @return A random integer between min (inclusive) and max (inclusive)
 	 */
-	public static int getRandomInteger(int min, int max){
+	public static int getRandomInteger(final int min, final int max){
 		if (min == max) {
 			return min;
 		}
@@ -44,7 +44,7 @@ public class Random {
 	 * @param max
 	 * @return A random number between min (inclusive) and max (exclusive)
 	 */
-	public static double getRandomDouble(double min, double max) {
+	public static double getRandomDouble(final double min, final double max) {
 		if (min == max) {
 			return min;
 		}

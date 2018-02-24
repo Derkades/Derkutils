@@ -9,9 +9,9 @@ public class NumberUtils {
 	 * @param list
 	 * @return
 	 */
-	public static double calculateAverage(List<Double> list){
+	public static double calculateAverage(final List<Double> list){
 		double total = 0;
-		for (double d : list){
+		for (final double d : list){
 			total += d;
 		}
 		
