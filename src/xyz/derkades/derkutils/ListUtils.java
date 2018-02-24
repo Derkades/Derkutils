@@ -154,5 +154,9 @@ public class ListUtils {
 		
 		return newList;
 	}
+	
+	public static List<String> replaceInStringList(List<String> list, Object before, Object after){
+		return replaceInStringList(list, new Object[] {before}, new Object[] {after});
+	}
 
 }
