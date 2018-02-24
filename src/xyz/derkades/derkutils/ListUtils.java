@@ -9,6 +9,7 @@ import java.util.List;
 public class ListUtils {
 	
 	/**
+	 * Not case sensitive 
 	 * @see #stringListContainsString(List, String, boolean)
 	 */
 	public static boolean stringListContainsString(List<String> list, String string){
@@ -62,17 +63,6 @@ public class ListUtils {
 		return list;
 	}
 	
-	/*
-	/**
-	 * @param list
-	 * @return A random element from a list
-	 * @see #getRandomValueFromArray(Object[])
-	public static <T> T getRandomValueFromList(List<T> list){
-		int size = list.size();
-		int index = Random.getRandomInteger(0, size - 1); //Size -1 because if the list has 1 entry (entry 0) the length is 1.
-		return list.get(index);
-	}*/
-	
 	/**
 	 * @param array
 	 * @return A random element from an array
@@ -92,7 +82,7 @@ public class ListUtils {
 		}
 		
 		int size = array.length;
-		int index = Random.getRandomInteger(0, size - 1); //Size -1 because if the list has 1 entry (entry 0) the length is 1.
+		int index = Random.getRandomInteger(0, size - 1);
 		return array[index];
 	}
 	
