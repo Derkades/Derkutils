@@ -1,4 +1,4 @@
-package xyz.derkades.derkutils.bukkit;
+package xyz.derkades.derkutils.bukkit.menu;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,13 +12,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import xyz.derkades.derkutils.bukkit.IconMenu.MenuCloseEvent.CloseReason;
 
 public abstract class IconMenu implements Listener {
 
@@ -135,75 +132,6 @@ public abstract class IconMenu implements Listener {
 				}
 			}.runTaskLater(plugin, 1);
 		}
-	}
-
-	public static class OptionClickEvent extends PlayerEvent {
-
-		private int position;
-		private ItemStack item;
-
-		public OptionClickEvent(Player player, int position, ItemStack item) {
-			super(player);
-			
-			this.position = position;
-			this.item = item;
-		}
-
-		public int getPosition() {
-			return position;
-		}
-
-		public String getName() {
-			return item.getItemMeta().getDisplayName();
-		}
-
-		public ItemStack getItemStack() {
-			return item;
-		}
-
-		@Override
-		public HandlerList getHandlers() {
-			return null;
-		}
-	}
-	
-	public static class MenuCloseEvent extends PlayerEvent {
-
-		private CloseReason reason;
-		
-		public MenuCloseEvent(Player player, CloseReason reason) {
-			super(player);
-			this.reason = reason;
-		}
-		
-		public CloseReason getReason() {
-			return reason;
-		}
-
-		@Override
-		public HandlerList getHandlers() {
-			return null;
-		}
-		
-		public static enum CloseReason {
-			
-			/*
-			 * When the player closes the menu, for example by pressing escape.
-			 */
-			PLAYER_CLOSED, 
-			
-			/**
-			 * When the menu has been closed using the {@link IconMenu#close()} method.
-			 */
-			FORCE_CLOSE,
-			
-			/**
-			 * When the menu has been closed because {@link IconMenu#onOptionClick(OptionClickEvent)} has returned true
-			 */
-			ITEM_CLICK,
-			
-		}
-		
 	}
 	
 }
