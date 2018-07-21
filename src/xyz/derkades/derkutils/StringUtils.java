@@ -17,7 +17,7 @@ public class StringUtils {
 		}
 
 		//If the string is the same as the original it did not contain any non-alphanumeric characters
-		return withoutSpecialCharacters.equals(string);
+		return !withoutSpecialCharacters.equals(string);
 	}
 	
 	/**
