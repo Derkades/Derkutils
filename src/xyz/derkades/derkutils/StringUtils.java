@@ -46,6 +46,12 @@ public class StringUtils {
 		}
 	}
 	
+	/**
+	 * Adds <i>append</i> to <i>string</p> if <i>string</i> does not end with <i>append</i>.
+	 * @param string
+	 * @param append
+	 * @return
+	 */
 	public static String appendIfNotPresent(final String string, final String append) {
 		if (string.endsWith(append)) {
 			return string;
