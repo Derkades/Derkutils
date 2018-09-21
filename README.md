@@ -9,14 +9,8 @@ Maven:
     <dependency> <!-- Derkutils -->
         <groupId>xyz.derkades</groupId>
         <artifactId>Derkutils</artifactId>
-        <version>1.1.2</version>
+        <version>enter version here</version>
     </dependency>
 </dependencies>
-
-<repositories>
-    <repository>
-        <id>derkades</id>
-        <url>https://derkades.xyz/maven</url>
-    </repository>
-</repositories>
 ```
+Clone the GitHub repository and maven install it first.
