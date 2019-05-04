@@ -95,8 +95,8 @@ public abstract class IconMenu implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onInventoryClick(InventoryClickEvent event) {
-		if (event.getInventory().getTitle().equals(name) && (event.getWhoClicked().getUniqueId().equals(player.getUniqueId()))) {
+	public void onInventoryClick(InventoryClickEvent event) {		
+		if (event.getView().getTitle().equals(name) && (event.getWhoClicked().getUniqueId().equals(player.getUniqueId()))) {
 			event.setCancelled(true);
 			
 			if (event.getClick() != ClickType.LEFT)
@@ -122,7 +122,7 @@ public abstract class IconMenu implements Listener {
 	
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event){
-		if (event.getInventory().getTitle().equals(name) && (event.getPlayer().getUniqueId().equals(player.getUniqueId()))) {
+		if (event.getView().getTitle().equals(name) && (event.getPlayer().getUniqueId().equals(player.getUniqueId()))) {
 			
 			onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
 			

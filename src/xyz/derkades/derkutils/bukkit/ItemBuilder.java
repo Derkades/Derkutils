@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,7 +25,7 @@ public class ItemBuilder {
 	}
 	
 	public ItemBuilder(String skullOwner){
-		item = new ItemBuilder(Material.SKULL_ITEM).setDamage(3).setSkullOwner(skullOwner).create();
+		item = new ItemBuilder(Material.PLAYER_HEAD).setSkullOwner(skullOwner).create();
 	}
 	
 	@Deprecated
@@ -35,21 +36,6 @@ public class ItemBuilder {
 	
 	public ItemBuilder amount(int amount){
 		item.setAmount(amount);
-		return this;
-	}
-	
-	@Deprecated
-	public ItemBuilder setDamage(int i){
-		item.setDurability((short) i);
-		return this;
-	}
-	
-	public ItemBuilder data(int data){
-		return data((short) data);
-	}
-	
-	public ItemBuilder data(short data){
-		item.setDurability(data);
 		return this;
 	}
 	
@@ -127,9 +113,9 @@ public class ItemBuilder {
 		return this;
 	}
 	
-	public ItemBuilder skullOwner(String playerName){
+	public ItemBuilder skullOwner(OfflinePlayer player){
 		final SkullMeta meta = (SkullMeta) item.getItemMeta();
-		meta.setOwner(playerName);
+		meta.setOwningPlayer(player);
 		item.setItemMeta(meta);
 		return this;
 	}

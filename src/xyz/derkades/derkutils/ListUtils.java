@@ -148,5 +148,21 @@ public class ListUtils {
 	public static List<String> replaceInStringList(final List<String> list, final Object before, final Object after){
 		return replaceInStringList(list, new Object[] {before}, new Object[] {after});
 	}
+	
+	@SafeVarargs
+	public static <T> List<T> addToList(List<T> list, T... items) {
+		for (T item : items) 
+			list.add(item);
+		
+		return list;
+	}
+	
+	@SafeVarargs
+	public static <T> List<T> addToList(List<T> list, List<T>... listsToAdd){
+		for (List<T> listToAdd : listsToAdd) 
+			list.addAll(listToAdd);
+		
+		return list;
+	}
 
 }
