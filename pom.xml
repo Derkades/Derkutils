@@ -4,7 +4,7 @@
 
 	<groupId>xyz.derkades</groupId>
 	<artifactId>Derkutils</artifactId>
-	<version>1.4.0</version>
+	<version>1.5.0</version>
 	<packaging>jar</packaging>
 
 	<name>derkutils</name>
@@ -59,11 +59,4 @@
 		</dependency>
 
 	</dependencies>
-
-	<!--<repositories>
-		<repository>
-			<id>spigot-repo</id>
-			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-		</repository>
-	</repositories>-->
 </project>
