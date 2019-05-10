@@ -6,156 +6,140 @@ import java.util.List;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+
+import net.minecraft.server.v1_14_R1.NBTTagCompound;
+import net.minecraft.server.v1_14_R1.NBTTagList;
+import net.minecraft.server.v1_14_R1.NBTTagString;
 
 public class ItemBuilder {
 	
 	private ItemStack item;
 	
-	public ItemBuilder(Material material){
+	public ItemBuilder(final Material material){
 		item = new ItemStack(material);
 	}
 	
-	public ItemBuilder(ItemStack item){
+	public ItemBuilder(final ItemStack item){
 		this.item = item;
 	}
 	
-	public ItemBuilder(String skullOwner){
-		item = new ItemBuilder(Material.PLAYER_HEAD).setSkullOwner(skullOwner).create();
+	public ItemBuilder(final OfflinePlayer skullOwner){
+		item = new ItemBuilder(Material.PLAYER_HEAD).skullOwner(skullOwner).create();
 	}
 	
-	@Deprecated
-	public ItemBuilder setAmount(int amount){
+	public ItemBuilder amount(final int amount){
 		item.setAmount(amount);
 		return this;
 	}
 	
-	public ItemBuilder amount(int amount){
-		item.setAmount(amount);
-		return this;
-	}
-	
-	@Deprecated
-	public ItemBuilder setName(String name){
+	public ItemBuilder name(final String name){
 		final ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(name);
 		item.setItemMeta(meta);
 		return this;
 	}
 	
-	public ItemBuilder name(String name){
-		final ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(name);
-		item.setItemMeta(meta);
-		return this;
-	}
-	
-	public ItemBuilder coloredName(String name){
+	public ItemBuilder coloredName(final String name){
 		final ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(Colors.parseColors(name));
 		item.setItemMeta(meta);
 		return this;
 	}
 	
-	@Deprecated
-	public ItemBuilder setLore(String... lore){
+	public ItemBuilder lore(final String... lore){
 		final ItemMeta meta = item.getItemMeta();
 		meta.setLore(Arrays.asList(lore));
 		item.setItemMeta(meta);
 		return this;
 	}
 	
-	public ItemBuilder lore(String... lore){
-		final ItemMeta meta = item.getItemMeta();
-		meta.setLore(Arrays.asList(lore));
-		item.setItemMeta(meta);
-		return this;
-	}
-	
-	public ItemBuilder coloredLore(String... lore){
+	public ItemBuilder coloredLore(final String... lore){
 		final ItemMeta meta = item.getItemMeta();
 		meta.setLore(Colors.parseColors(Arrays.asList(lore)));
 		item.setItemMeta(meta);
 		return this;
 	}
 	
-	@Deprecated
-	public ItemBuilder setLore(List<String> lore){
+	public ItemBuilder lore(final List<String> lore){
 		final ItemMeta meta = item.getItemMeta();
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 		return this;
 	}
 	
-	public ItemBuilder lore(List<String> lore){
-		final ItemMeta meta = item.getItemMeta();
-		meta.setLore(lore);
-		item.setItemMeta(meta);
-		return this;
-	}
-	
-	public ItemBuilder coloredLore(List<String> lore){
+	public ItemBuilder coloredLore(final List<String> lore){
 		final ItemMeta meta = item.getItemMeta();
 		meta.setLore(Colors.parseColors(lore));
 		item.setItemMeta(meta);
 		return this;
 	}
 	
-	@Deprecated
-	public ItemBuilder setSkullOwner(String playerName){
-		final SkullMeta meta = (SkullMeta) item.getItemMeta();
-		meta.setOwner(playerName);
-		item.setItemMeta(meta);
-		return this;
-	}
-	
-	public ItemBuilder skullOwner(OfflinePlayer player){
+	public ItemBuilder skullOwner(final OfflinePlayer player){
 		final SkullMeta meta = (SkullMeta) item.getItemMeta();
 		meta.setOwningPlayer(player);
 		item.setItemMeta(meta);
 		return this;
 	}
-	
-	@Deprecated	
-	public ItemBuilder setLeatherArmorColor(Color color){
-		final LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
-		meta.setColor(color);
-		return this;
-	}
 
-	public ItemBuilder leatherArmorColor(Color color){
+	public ItemBuilder leatherArmorColor(final Color color){
 		final LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
 		meta.setColor(color);
 		return this;
 	}
 	
-	@Deprecated
-	public ItemBuilder addEnchantment(Enchantment type, int level){
-		return enchant(type, level);
-	}
-	
-	public ItemBuilder enchant(Enchantment type, int level){
+	public ItemBuilder enchant(final Enchantment type, final int level){
 		item.addEnchantment(type, level);
 		return this;
 	}
 	
-	public ItemBuilder unsafeEnchant(Enchantment type, int level){
+	public ItemBuilder unsafeEnchant(final Enchantment type, final int level){
 		final ItemMeta meta = item.getItemMeta();
 		meta.addEnchant(type, level, true);
 		return this;
 	}
 	
-	public ItemBuilder material(Material material){
+	public ItemBuilder material(final Material material){
 		item.setType(material);
 		return this;
 	}
 	
-	public ItemBuilder type(Material type){
+	public ItemBuilder type(final Material type){
 		item.setType(type);
+		return this;
+	}
+	
+	public ItemBuilder unbreakable() {
+		final ItemMeta meta = item.getItemMeta();
+		meta.setUnbreakable(true);
+		item.setItemMeta(meta);
+		return this;
+	}
+	
+	public ItemBuilder canDestroy(final String... minecraftItemNames) {
+		net.minecraft.server.v1_14_R1.ItemStack nms = CraftItemStack.asNMSCopy(item);
+		NBTTagCompound tag = nms.getTag();
+		
+		NBTTagList list = new NBTTagList();
+		Arrays.asList(minecraftItemNames).forEach(name -> list.add(new NBTTagString("minecraft:" + name)));
+		
+		tag.set("CanDestroy", list);
+		
+		item = CraftItemStack.asBukkitCopy(nms);
+		
+		return this;
+	}
+	
+	public ItemBuilder damage(final int damage) {
+		final Damageable damageable = (Damageable) item.getItemMeta();
+		damageable.setDamage(damage);
+		item.setItemMeta((ItemMeta) damageable);
 		return this;
 	}
 	
