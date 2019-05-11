@@ -1,15 +1,28 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.bukkit.Material;
-
-import xyz.derkades.derkutils.ListUtils;
 
 public class MaterialLists {
 	
-	public static final List<Material> TRAPDOORS = Arrays.asList(
+	public static boolean isInList(Material material, Material[]... materials) {
+		if (materials.length == 0) {
+			return false;
+		}
+		
+		boolean isInList = true;
+		
+		for (Material[] materia : materials) {
+			for (Material materi : materia) {
+				if (!material.equals(materi)) {
+					isInList = false;
+				}
+			}
+		}
+		
+		return isInList;
+	}
+	
+	public static final Material[] TRAPDOORS = {
 			Material.ACACIA_TRAPDOOR,
 			Material.BIRCH_TRAPDOOR,
 			Material.DARK_OAK_TRAPDOOR,
@@ -17,9 +30,9 @@ public class MaterialLists {
 			Material.JUNGLE_TRAPDOOR,
 			Material.OAK_TRAPDOOR,
 			Material.SPRUCE_TRAPDOOR
-	);
+	};
 	
-	public static final List<Material> FENCES = Arrays.asList(
+	public static final Material[] FENCES = {
 			Material.ACACIA_FENCE,
 			Material.BIRCH_FENCE,
 			Material.DARK_OAK_FENCE,
@@ -27,32 +40,32 @@ public class MaterialLists {
 			Material.NETHER_BRICK_FENCE,
 			Material.OAK_FENCE,
 			Material.SPRUCE_FENCE
-	);
+	};
 	
-	public static final List<Material> FENCE_GATES = Arrays.asList(
+	public static final Material[] FENCE_GATES = {
 			Material.ACACIA_FENCE_GATE,
 			Material.BIRCH_FENCE_GATE,
 			Material.DARK_OAK_FENCE_GATE,
 			Material.JUNGLE_FENCE_GATE,
 			Material.OAK_FENCE_GATE,
 			Material.SPRUCE_FENCE_GATE
-	);
+	};
 	
-	public static final List<Material> WALLS = Arrays.asList(
+	public static final Material[] WALLS = {
 			Material.COBBLESTONE_WALL, 
 			Material.MOSSY_COBBLESTONE_WALL
-	);
+	};
 	
-	public static final List<Material> DOORS = Arrays.asList(
+	public static final Material[] DOORS = {
 			Material.ACACIA_DOOR,
 			Material.BIRCH_DOOR,
 			Material.DARK_OAK_DOOR,
 			Material.JUNGLE_DOOR,
 			Material.OAK_DOOR,
 			Material.SPRUCE_DOOR
-	);
+	};
 	
-	public static final List<Material> STAINED_GLASS_BLOCKS = Arrays.asList(
+	public static final Material[] STAINED_GLASS_BLOCKS = {
 			Material.BLACK_STAINED_GLASS,
 			Material.BLUE_STAINED_GLASS,
 			Material.BROWN_STAINED_GLASS,
@@ -69,10 +82,9 @@ public class MaterialLists {
 			Material.RED_STAINED_GLASS,		
 			Material.WHITE_STAINED_GLASS,
 			Material.YELLOW_STAINED_GLASS
-			
-	);
+	};
 	
-	public static final List<Material> STAINED_GLASS_PANES = Arrays.asList(
+	public static final Material[] STAINED_GLASS_PANES = {
 			Material.BLACK_STAINED_GLASS_PANE,
 			Material.BLUE_STAINED_GLASS_PANE,
 			Material.BROWN_STAINED_GLASS_PANE,
@@ -89,36 +101,30 @@ public class MaterialLists {
 			Material.RED_STAINED_GLASS_PANE,
 			Material.WHITE_STAINED_GLASS_PANE,
 			Material.YELLOW_STAINED_GLASS_PANE
-	);
+	};
 	
-	public static final List<Material> GLASS = ListUtils.addToList(
-			STAINED_GLASS_BLOCKS,
-			STAINED_GLASS_PANES,
-			Arrays.asList(
-					Material.GLASS,
-					Material.GLASS_PANE)
-	);
-	
-	public static final List<Material> TORCHES = Arrays.asList(
+	public static final Material[] TORCHES = {
 			Material.TORCH, 
 			Material.REDSTONE_TORCH, 
 			Material.REDSTONE_WALL_TORCH, 
-			Material.WALL_TORCH);
+			Material.WALL_TORCH
+	};
 	
-	public static final List<Material> LEAVES = Arrays.asList(
+	public static final Material[] LEAVES = {
 			Material.ACACIA_LEAVES,
 			Material.BIRCH_LEAVES,
 			Material.DARK_OAK_LEAVES,
 			Material.JUNGLE_LEAVES,
 			Material.OAK_LEAVES,
 			Material.SPRUCE_LEAVES
-	);
+	};
 	
-	public static final List<Material> FLUIDS = Arrays.asList(
+	public static final Material[] FLUIDS = {
 			Material.WATER,
-			Material.LAVA);
+			Material.LAVA
+	};
 	
-	public static final List<Material> WOOLS = Arrays.asList(
+	public static final Material[] WOOLS = {
 			Material.BLACK_WOOL,
 			Material.BLUE_WOOL,
 			Material.BROWN_WOOL,
@@ -134,9 +140,10 @@ public class MaterialLists {
 			Material.PURPLE_WOOL,
 			Material.RED_WOOL,
 			Material.WHITE_WOOL,
-			Material.YELLOW_WOOL);
+			Material.YELLOW_WOOL
+	};
 	
-	public static final List<Material> DYES = Arrays.asList(
+	public static final Material[] DYES = {
 			Material.BLACK_DYE,
 			Material.BLUE_DYE,
 			Material.BROWN_DYE,
@@ -152,9 +159,10 @@ public class MaterialLists {
 			Material.PURPLE_DYE,
 			Material.RED_DYE,
 			Material.WHITE_DYE,
-			Material.YELLOW_DYE);
+			Material.YELLOW_DYE
+	};
 	
-	public static final List<Material> SIGNS = Arrays.asList(
+	public static final Material[] SIGNS = {
 			Material.ACACIA_SIGN,
 			Material.ACACIA_WALL_SIGN,
 			Material.BIRCH_SIGN,
@@ -166,9 +174,10 @@ public class MaterialLists {
 			Material.OAK_SIGN,
 			Material.OAK_WALL_SIGN,
 			Material.SPRUCE_SIGN,
-			Material.SPRUCE_WALL_SIGN);
+			Material.SPRUCE_WALL_SIGN
+	};
 	
-	public static final List<Material> TERRACOTTA_BLOCKS = Arrays.asList(
+	public static final Material[] TERRACOTTA_BLOCKS = {
 			Material.BLACK_TERRACOTTA,
 			Material.BLUE_TERRACOTTA,
 			Material.BROWN_TERRACOTTA,
@@ -184,9 +193,10 @@ public class MaterialLists {
 			Material.PURPLE_TERRACOTTA,
 			Material.RED_TERRACOTTA,
 			Material.WHITE_TERRACOTTA,
-			Material.YELLOW_TERRACOTTA);
+			Material.YELLOW_TERRACOTTA
+	};
 	
-	public static final List<Material> PARTIAL_BLOCKS = ListUtils.addToList(
+	/*public static final Material[] PARTIAL_BLOCKS = ListUtils.mergeArrays(
 			TRAPDOORS,
 			FENCES,
 			FENCE_GATES,
@@ -196,16 +206,16 @@ public class MaterialLists {
 			STAINED_GLASS_BLOCKS,
 			STAINED_GLASS_PANES,
 			SIGNS,
-			Arrays.asList(
+			new Material[] {
 				Material.ANVIL,
 				Material.GLASS,
-				Material.END_ROD)
+				Material.END_ROD}
 	);
 	
-	public static final List<Material> INTERACTABLE_BLOCKS = ListUtils.addToList(
+	public static final Material[] INTERACTABLE_BLOCKS = ListUtils.mergeArrays(
 			FENCE_GATES,
 			TRAPDOORS,
 			DOORS
-	);
+	);*/
 	
 }
