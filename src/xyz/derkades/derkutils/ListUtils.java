@@ -3,6 +3,7 @@ package xyz.derkades.derkutils;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -147,6 +148,15 @@ public class ListUtils {
 	
 	public static List<String> replaceInStringList(final List<String> list, final Object before, final Object after){
 		return replaceInStringList(list, new Object[] {before}, new Object[] {after});
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T[] mergeArrays(T[]... arrays) {
+		List<T> list = new ArrayList<>();
+		for (T[] array : arrays) {
+			list.addAll(Arrays.asList(array));
+		}
+		return (T[]) list.toArray();
 	}
 	
 	@SafeVarargs
