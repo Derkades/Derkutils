@@ -91,6 +91,7 @@ public class ItemBuilder {
 	public ItemBuilder leatherArmorColor(final Color color){
 		final LeatherArmorMeta meta = (LeatherArmorMeta) item.getItemMeta();
 		meta.setColor(color);
+		item.setItemMeta(meta);
 		return this;
 	}
 	
