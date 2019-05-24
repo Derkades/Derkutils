@@ -136,6 +136,20 @@ public class ItemBuilder {
 		return this;
 	}
 	
+	public ItemBuilder canPlaceOn(final String... minecraftItemNames) {
+		net.minecraft.server.v1_14_R1.ItemStack nms = CraftItemStack.asNMSCopy(item);
+		NBTTagCompound tag = nms.getTag();
+		
+		NBTTagList list = new NBTTagList();
+		Arrays.asList(minecraftItemNames).forEach(name -> list.add(new NBTTagString("minecraft:" + name)));
+		
+		tag.set("CanPlaceOn", list);
+		
+		item = CraftItemStack.asBukkitCopy(nms);
+		
+		return this;
+	}
+	
 	public ItemBuilder damage(final int damage) {
 		final Damageable damageable = (Damageable) item.getItemMeta();
 		damageable.setDamage(damage);
