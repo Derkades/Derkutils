@@ -9,12 +9,12 @@ public class MaterialLists {
 			return false;
 		}
 		
-		boolean isInList = true;
+		boolean isInList = false;
 		
 		for (Material[] materia : materials) {
 			for (Material materi : materia) {
-				if (!material.equals(materi)) {
-					isInList = false;
+				if (material.equals(materi)) {
+					isInList = true;
 				}
 			}
 		}
