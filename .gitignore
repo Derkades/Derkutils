@@ -63,3 +63,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 dependency-reduced-pom.xml
+
+
+.classpath
