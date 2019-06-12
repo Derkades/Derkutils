@@ -6,17 +6,16 @@ import java.util.List;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import net.minecraft.server.v1_14_R1.NBTTagCompound;
-import net.minecraft.server.v1_14_R1.NBTTagList;
-import net.minecraft.server.v1_14_R1.NBTTagString;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.NBTTagList;
+import net.minecraft.server.v1_8_R3.NBTTagString;
 
 public class ItemBuilder {
 	
@@ -31,7 +30,7 @@ public class ItemBuilder {
 	}
 	
 	public ItemBuilder(final OfflinePlayer skullOwner){
-		item = new ItemBuilder(Material.PLAYER_HEAD).skullOwner(skullOwner).create();
+		item = new ItemBuilder(Material.SKULL).skullOwner(skullOwner).create();
 	}
 	
 	public ItemBuilder amount(final int amount){
@@ -82,8 +81,12 @@ public class ItemBuilder {
 	}
 	
 	public ItemBuilder skullOwner(final OfflinePlayer player){
+		return skullOwner(player.getName());
+	}
+	
+	public ItemBuilder skullOwner(String ownerName) {
 		final SkullMeta meta = (SkullMeta) item.getItemMeta();
-		meta.setOwningPlayer(player);
+		meta.setOwner(ownerName);
 		item.setItemMeta(meta);
 		return this;
 	}
@@ -117,14 +120,24 @@ public class ItemBuilder {
 	}
 	
 	public ItemBuilder unbreakable() {
-		final ItemMeta meta = item.getItemMeta();
-		meta.setUnbreakable(true);
-		item.setItemMeta(meta);
+		net.minecraft.server.v1_8_R3.ItemStack nms = CraftItemStack.asNMSCopy(item);
+		NBTTagCompound tag = nms.getTag();
+		
+		if (tag == null) {
+			tag = new NBTTagCompound();
+		}
+	
+		tag.setBoolean("Unbreakable", true);
+		
+		nms.setTag(tag);
+		
+		item = CraftItemStack.asBukkitCopy(nms);
+		
 		return this;
 	}
 	
 	public ItemBuilder canDestroy(final String... minecraftItemNames) {
-		net.minecraft.server.v1_14_R1.ItemStack nms = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_8_R3.ItemStack nms = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound tag = nms.getTag();
 		
 		NBTTagList list = new NBTTagList();
@@ -138,7 +151,7 @@ public class ItemBuilder {
 	}
 	
 	public ItemBuilder canPlaceOn(final String... minecraftItemNames) {
-		net.minecraft.server.v1_14_R1.ItemStack nms = CraftItemStack.asNMSCopy(item);
+		net.minecraft.server.v1_8_R3.ItemStack nms = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound tag = nms.getTag();
 		
 		NBTTagList list = new NBTTagList();
@@ -152,9 +165,7 @@ public class ItemBuilder {
 	}
 	
 	public ItemBuilder damage(final int damage) {
-		final Damageable damageable = (Damageable) item.getItemMeta();
-		damageable.setDamage(damage);
-		item.setItemMeta((ItemMeta) damageable);
+		item.setDurability((short) damage);
 		return this;
 	}
 	
