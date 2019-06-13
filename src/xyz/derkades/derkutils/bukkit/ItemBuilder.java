@@ -29,11 +29,11 @@ public class ItemBuilder {
 	}
 	
 	public ItemBuilder(final OfflinePlayer skullOwner){
-		item = new ItemBuilder(Material.SKULL).skullOwner(skullOwner).create();
+		item = new ItemBuilder(Material.SKULL).damage(3).skullOwner(skullOwner).create();
 	}
 	
 	public ItemBuilder(final String ownerName) {
-		item = new ItemBuilder(Material.SKULL).skullOwner(ownerName).create();
+		item = new ItemBuilder(Material.SKULL).damage(3).skullOwner(ownerName).create();
 	}
 	
 	public ItemBuilder amount(final int amount){
