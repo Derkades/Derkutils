@@ -33,6 +33,10 @@ public class ItemBuilder {
 		item = new ItemBuilder(Material.SKULL).skullOwner(skullOwner).create();
 	}
 	
+	public ItemBuilder(final String ownerName) {
+		item = new ItemBuilder(Material.SKULL).skullOwner(ownerName).create();
+	}
+	
 	public ItemBuilder amount(final int amount){
 		item.setAmount(amount);
 		return this;
