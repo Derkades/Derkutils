@@ -125,16 +125,7 @@ public class ItemBuilder {
 	}
 	
 	public ItemBuilder canDestroy(final String... minecraftItemNames) {
-		net.minecraft.server.v1_14_R1.ItemStack nms = CraftItemStack.asNMSCopy(item);
-		NBTTagCompound tag = nms.getTag();
-		
-		NBTTagList list = new NBTTagList();
-		Arrays.asList(minecraftItemNames).forEach(name -> list.add(new NBTTagString("minecraft:" + name)));
-		
-		tag.set("CanDestroy", list);
-		
-		item = CraftItemStack.asBukkitCopy(nms);
-		
+		item = ReflectionUtil.addCanDestroy(item, minecraftItemNames);
 		return this;
 	}
 	
