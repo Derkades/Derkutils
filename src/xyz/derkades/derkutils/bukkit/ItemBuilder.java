@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import net.minecraft.server.v1_14_R1.NBTTagList;
 import net.minecraft.server.v1_14_R1.NBTTagString;
+import xyz.derkades.derkutils.bukkit.reflection.ReflectionUtil;
 
 public class ItemBuilder {
 	
@@ -138,16 +139,7 @@ public class ItemBuilder {
 	}
 	
 	public ItemBuilder canPlaceOn(final String... minecraftItemNames) {
-		net.minecraft.server.v1_14_R1.ItemStack nms = CraftItemStack.asNMSCopy(item);
-		NBTTagCompound tag = nms.getTag();
-		
-		NBTTagList list = new NBTTagList();
-		Arrays.asList(minecraftItemNames).forEach(name -> list.add(new NBTTagString("minecraft:" + name)));
-		
-		tag.set("CanPlaceOn", list);
-		
-		item = CraftItemStack.asBukkitCopy(nms);
-		
+		item = ReflectionUtil.addCanPlaceOn(item, minecraftItemNames);
 		return this;
 	}
 	
