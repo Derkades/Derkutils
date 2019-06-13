@@ -5,6 +5,6 @@ import java.util.List;
 public class ParameterBuilder {
 	
 	private List<Parameter> allParameters;
-	private Parameter selectedParameter;w
+	private Parameter selectedParameter;
 
 }

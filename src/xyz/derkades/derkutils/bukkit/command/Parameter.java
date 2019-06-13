@@ -9,7 +9,7 @@ public class Parameter<T> {
 	private List<ParameterConstraint> constraints;
 	
 	private T value;
-	private String stringvalue;
+	private String stringValue;
 	
 	public Parameter(String name) {
 		this.name = name;
@@ -24,7 +24,9 @@ public class Parameter<T> {
 		this.value = value;
 	}
 	
-	public void setValue(String value)
+	public void setStringValue(String stringValue) {
+		this.stringValue = stringValue;
+	}
 	
 	public void setType(ParameterType type) {
 		
