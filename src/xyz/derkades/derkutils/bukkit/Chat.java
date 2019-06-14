@@ -1,4 +1,4 @@
-package xyz.derkades.derkutils.bukkit.messages;
+package xyz.derkades.derkutils.bukkit;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -7,9 +7,8 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
-import xyz.derkades.derkutils.bukkit.Colors;
 
-public class TextComponentSerializer {
+public class Chat {
 
 	/**
 	 * TODO example
@@ -21,8 +20,12 @@ public class TextComponentSerializer {
 		for (final String key : section.getKeys(false)){
 			builder.append(Colors.toComponent(key));
 
+			if (!section.isConfigurationSection(key)) {
+				continue;
+			}
+
 			for (final String option : section.getConfigurationSection(key).getKeys(false)) {
-				final String value = section.getString(String.format("%s.%s", key, option));
+				final String value = section.getString(key + "." + option);
 
 				if (option == "hover") {
 					builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Colors.toComponent(value)));
@@ -47,5 +50,7 @@ public class TextComponentSerializer {
 		}
 		return builder.create();
 	}
+
+
 
 }
