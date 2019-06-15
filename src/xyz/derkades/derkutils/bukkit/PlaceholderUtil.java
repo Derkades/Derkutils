@@ -3,26 +3,27 @@ package xyz.derkades.derkutils.bukkit;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public class PlaceholderUtil {
 
-	public static String parsePlaceholders(String string, final Placeholder... placeholders) {
-		for (final Placeholder p : placeholders) string = p.parse(string);
+	public static String parsePlaceholders(String string, final Player player, final Placeholder... placeholders) {
+		for (final Placeholder p : placeholders) string = p.parse(string, player);
 		return string;
 	}
 
-	public static List<String> parsePlaceholders(List<String> strings, final Placeholder... placeholders) {
+	public static List<String> parsePlaceholders(List<String> strings, final Player player, final Placeholder... placeholders) {
 		for (final Placeholder p : placeholders) {
-			strings = p.parse(strings);
+			strings = p.parse(strings, player);
 		}
 		return strings;
 	}
 
 	public static String parsePapiPlaceholders(String string, final Player player, final Placeholder... placeholders) {
-		for (final Placeholder p : placeholders) string = p.parse(string);
+		for (final Placeholder p : placeholders) string = p.parse(string, player);
 
 		string = parsePapiPlaceholders(player, string);
 
@@ -31,7 +32,7 @@ public class PlaceholderUtil {
 
 	public static List<String> parsePapiPlaceholders(List<String> strings, final Player player, final Placeholder... placeholders) {
 		for (final Placeholder p : placeholders) {
-			strings = p.parse(strings);
+			strings = p.parse(strings, player);
 		}
 
 		strings = parsePapiPlaceholders(player, strings);
@@ -79,20 +80,20 @@ public class PlaceholderUtil {
 	public static class Placeholder {
 
 		private final String key;
-		private final String value;
+		private final Function<Player, String> parser;
 
-		public Placeholder(final String key, final String value) {
+		public Placeholder(final String key, final Function<Player, String> parser) {
 			this.key = key;
-			this.value = value;
+			this.parser = parser;
 		}
 
-		public String parse(final String string) {
-			return string.replace(this.key, this.value);
+		public String parse(final String string, final Player player) {
+			return string.replace(this.key, this.parser.apply(player));
 		}
 
-		public List<String> parse(final List<String> list) {
+		public List<String> parse(final List<String> list, final Player player) {
 			final List<String> newList = new ArrayList<>();
-			list.stream().map(this::parse).forEach(newList::add);
+			list.stream().map(s -> this.parse(s, player)).forEach(newList::add);
 			return newList;
 		}
 
