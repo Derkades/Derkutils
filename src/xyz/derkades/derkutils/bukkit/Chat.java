@@ -6,6 +6,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 import net.md_5.bungee.api.chat.HoverEvent;
 
 public class Chat {
@@ -18,7 +19,7 @@ public class Chat {
 	public static BaseComponent[] toComponent(final ConfigurationSection section) {
 		final ComponentBuilder builder = new ComponentBuilder("");
 		for (final String key : section.getKeys(false)){
-			builder.append(Colors.toComponent(key));
+			builder.append(Colors.toComponent(key), FormatRetention.NONE);
 
 			if (!section.isConfigurationSection(key)) {
 				continue;
