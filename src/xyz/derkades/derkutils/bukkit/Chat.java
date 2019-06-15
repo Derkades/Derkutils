@@ -63,6 +63,4 @@ public class Chat {
 		return builder.create();
 	}
 
-
-
 }
