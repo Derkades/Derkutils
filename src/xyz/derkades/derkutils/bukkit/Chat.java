@@ -27,21 +27,21 @@ public class Chat {
 			for (final String option : section.getConfigurationSection(key).getKeys(false)) {
 				final String value = section.getString(key + "." + option);
 
-				if (option == "hover") {
+				if (option.equals("hover")) {
 					builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Colors.toComponent(value)));
-				} else if (option == "url") {
+				} else if (option.equals("url")) {
 					builder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, value));
-				} else if (option == "command") {
+				} else if (option.equals("command")) {
 					builder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, value));
-				} else if (option == "color") {
+				} else if (option.equals("color")) {
 					builder.color(ChatColor.valueOf(value.toUpperCase()));
-				} else if (option == "bold") {
+				} else if (option.equals("bold")) {
 					builder.bold(Boolean.parseBoolean(value));
-				} else if (option == "underlined") {
+				} else if (option.equals("underlined")) {
 					builder.underlined(Boolean.parseBoolean(value));
-				} else if (option == "italic") {
+				} else if (option.equals("italic")) {
 					builder.italic(Boolean.parseBoolean(value));
-				} else if (option == "obfuscated") {
+				} else if (option.equals("obfuscated")) {
 					builder.obfuscated(Boolean.parseBoolean(value));
 				} else {
 					throw new IllegalArgumentException(String.format("Unsupported option for message %s: %s", key, option));
