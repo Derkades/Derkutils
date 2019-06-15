@@ -7,6 +7,7 @@ import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.ComponentBuilder.FormatRetention;
 import net.md_5.bungee.api.chat.HoverEvent;
 
 public class Chat {
@@ -28,7 +29,7 @@ public class Chat {
 					throw new IllegalArgumentException("Every list entry must contain a message");
 				}
 
-				builder.append(Colors.toComponent(map.get("text")));
+				builder.append(Colors.toComponent(map.get("text")), FormatRetention.NONE);
 
 				map.entrySet().stream().filter(e -> !e.getKey().equals("text")).forEach(e -> {
 					final String k = e.getKey();
