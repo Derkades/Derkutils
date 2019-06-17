@@ -55,4 +55,8 @@ public class DatabaseHandler {
 		return statement;
 	}
 
+	public Connection getConnection() {
+		return this.databaseConnection;
+	}
+
 }
