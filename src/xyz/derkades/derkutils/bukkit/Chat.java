@@ -1,8 +1,8 @@
 package xyz.derkades.derkutils.bukkit;
 
+import java.util.List;
 import java.util.Map;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import net.md_5.bungee.api.ChatColor;
@@ -17,14 +17,13 @@ public class Chat {
 
 	/**
 	 * TODO example
-	 * @param config Configuration file with the message
-	 * @param path Path to message in configuration
+	 * @param section Location of the message in the config
 	 * @return Formatted base component
 	 */
-	public static BaseComponent[] toComponent(final FileConfiguration config, final String path) {
+	public static BaseComponent[] toComponent(final List<?> configMessageComponentsList) {
 		final ComponentBuilder builder = new ComponentBuilder("");
 
-		config.getList(path).stream()
+		configMessageComponentsList.stream()
 			.filter(s -> s instanceof Map<?, ?>)
 			.forEach((s) -> {
 				@SuppressWarnings("unchecked")
@@ -67,18 +66,16 @@ public class Chat {
 		return builder.create();
 	}
 
+
 	/**
-	 * TODO javadoc
-	 * @param config Configuration file with the message
-	 * @param path Path to message in configuration
-	 * @param player
-	 * @param placeholders
-	 * @return
+	 * TODO example
+	 * @param section Location of the message in the config
+	 * @return Formatted base component
 	 */
-	public static BaseComponent[] toComponentWithPlaceholders(final FileConfiguration config, final String path, final Player player, final Placeholder... placeholders) {
+	public static BaseComponent[] toComponentWithPlaceholders(final List<?> configMessageComponentsList, final Player player, final Placeholder... placeholders) {
 		final ComponentBuilder builder = new ComponentBuilder("");
 
-		config.getList(path).stream()
+		configMessageComponentsList.stream()
 			.filter(s -> s instanceof Map<?, ?>)
 			.forEach((s) -> {
 				@SuppressWarnings("unchecked")
