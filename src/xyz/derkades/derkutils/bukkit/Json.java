@@ -5,13 +5,13 @@
  */
 package xyz.derkades.derkutils.bukkit;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONValue;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 
 /**
  * Simple JSON message creation in minecraft
@@ -20,15 +20,15 @@ import java.util.ArrayList;
  */
 public class Json {
 
-    private ArrayList<JsonMessage> messages = new ArrayList<>();
+    private final ArrayList<JsonMessage> messages = new ArrayList<>();
 
     /**
      * Appends a JsonMessage to the current Json array
      * @param msg JsonMessage
      * @return this class
      */
-    public Json append(JsonMessage msg) {
-        messages.add(msg);
+    public Json append(final JsonMessage msg) {
+        this.messages.add(msg);
         return this;
     }
 
@@ -38,8 +38,8 @@ public class Json {
      * @param index index in the Json array
      * @return this class
      */
-    public Json set(JsonMessage msg, int index) {
-        messages.add(index, msg);
+    public Json set(final JsonMessage msg, final int index) {
+        this.messages.add(index, msg);
         return this;
     }
 
@@ -48,14 +48,14 @@ public class Json {
      * @param players Array or object of a player
      * @return this class
      */
-    public Json send(Player... players) {
-        if(messages.size() > 0) {
+    public Json send(final Player... players) {
+        if(this.messages.size() > 0) {
             try {
-                for(Player p : players) {
-                    Object serializer = Class.forName("net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().substring(23) + ".ChatSerializer").getMethod("a", String.class).invoke(null, toString());
-                    Object packet = Class.forName("net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().substring(23) + "PacketPlayOutChat").getConstructor(Class.forName("net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().substring(23) + "IChatBaseComponent")).newInstance(serializer);
-                    Object handle = p.getClass().getMethod("getHandle").invoke(p);
-                    Object connection = handle.getClass().getField("playerConnection").get(handle);
+                for(final Player p : players) {
+                    final Object serializer = Class.forName("net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().substring(23) + ".ChatSerializer").getMethod("a", String.class).invoke(null, this.toString());
+                    final Object packet = Class.forName("net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().substring(23) + "PacketPlayOutChat").getConstructor(Class.forName("net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().substring(23) + "IChatBaseComponent")).newInstance(serializer);
+                    final Object handle = p.getClass().getMethod("getHandle").invoke(p);
+                    final Object connection = handle.getClass().getField("playerConnection").get(handle);
                     connection.getClass().getMethod("sendPacket", Class.forName("net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().substring(23) + "Packet")).invoke(connection, packet);
                 }
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | NoSuchFieldException | ClassNotFoundException | InstantiationException ex) {
@@ -70,7 +70,7 @@ public class Json {
      * @return this class
      */
     public Json send() {
-        send(Bukkit.getOnlinePlayers().toArray(new Player[Bukkit.getOnlinePlayers().size()]));
+        this.send(Bukkit.getOnlinePlayers().toArray(new Player[Bukkit.getOnlinePlayers().size()]));
         return this;
     }
 
@@ -80,9 +80,9 @@ public class Json {
      */
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("[\"\"");
-        if(messages.size() > 0) {
-            for(JsonMessage jm : messages) {
+        final StringBuilder builder = new StringBuilder("[\"\"");
+        if(this.messages.size() > 0) {
+            for(final JsonMessage jm : this.messages) {
                 builder.append(jm.toString());
             }
         }
@@ -94,7 +94,7 @@ public class Json {
      * @param text text to escape
      * @return escaped String
      */
-    public static String escape(String text) {
+    public static String escape(final String text) {
         return JSONValue.escape(text);
     }
 
@@ -113,15 +113,15 @@ public class Json {
         private ChatColor color = ChatColor.WHITE;
         private ChatFormatting formatting = ChatFormatting.RESET;
 
-        private Object[] hoverAction = {};
-        private Object[] clickAction = {};
+        private final Object[] hoverAction = {};
+        private final Object[] clickAction = {};
 
         /**
          * Sets the text in the Json message
          * @param text Text
          * @return this class
          */
-        public JsonMessage text(String text) {
+        public JsonMessage text(final String text) {
             this.text = text;
             return this;
         }
@@ -131,7 +131,7 @@ public class Json {
          * @param color Color
          * @return this class
          */
-        public JsonMessage color(ChatColor color) {
+        public JsonMessage color(final ChatColor color) {
             this.color = color;
             return this;
         }
@@ -141,7 +141,7 @@ public class Json {
          * @param formatting Formatting
          * @return this class
          */
-        public JsonMessage formatting(ChatFormatting formatting) {
+        public JsonMessage formatting(final ChatFormatting formatting) {
             this.formatting = formatting;
             return this;
         }
@@ -152,9 +152,9 @@ public class Json {
          * @param value hover value
          * @return this class
          */
-        public JsonMessage onHover(HoverAction action, String value) {
-            hoverAction[0] = action;
-            hoverAction[1] = value;
+        public JsonMessage onHover(final HoverAction action, final String value) {
+            this.hoverAction[0] = action;
+            this.hoverAction[1] = value;
             return this;
         }
 
@@ -164,9 +164,9 @@ public class Json {
          * @param value click value
          * @return this class
          */
-        public JsonMessage onClick(ClickAction action, String value) {
-            clickAction[0] = action;
-            clickAction[1] = value;
+        public JsonMessage onClick(final ClickAction action, final String value) {
+            this.clickAction[0] = action;
+            this.clickAction[1] = value;
             return this;
         }
 
@@ -176,18 +176,18 @@ public class Json {
          */
         @Override
         public String toString() {
-            StringBuilder builder = new StringBuilder(",{\"text\":\"" + Json.escape(text) + "\",\"color\":\"" + color.name().toLowerCase() + "\",");
-            if(formatting != ChatFormatting.RESET) {
-                builder.append("\"").append(formatting.color.name().toLowerCase()).append("\":true,");
+            final StringBuilder builder = new StringBuilder(",{\"text\":\"" + Json.escape(this.text) + "\",\"color\":\"" + this.color.name().toLowerCase() + "\",");
+            if(this.formatting != ChatFormatting.RESET) {
+                builder.append("\"").append(this.formatting.color.name().toLowerCase()).append("\":true,");
             }
-            if(clickAction.length > 0) {
-                builder.append("\"clickEvent\":{\"action\":\"").append(((ClickAction) clickAction[0]).name().toLowerCase()).append("\",\"value\":\"").append(Json.escape((String) clickAction[1])).append("\"},");
+            if(this.clickAction.length > 0) {
+                builder.append("\"clickEvent\":{\"action\":\"").append(((ClickAction) this.clickAction[0]).name().toLowerCase()).append("\",\"value\":\"").append(Json.escape((String) this.clickAction[1])).append("\"},");
             }
-            if(hoverAction.length > 0) {
-                if(hoverAction[0] != HoverAction.SHOW_TEXT) {
-                    builder.append("\"hoverEvent\":{\"action\":\"").append(((HoverAction) hoverAction[0]).name().toLowerCase()).append("\",\"value\":\"").append(hoverAction[1]).append("\"},");
+            if(this.hoverAction.length > 0) {
+                if(this.hoverAction[0] != HoverAction.SHOW_TEXT) {
+                    builder.append("\"hoverEvent\":{\"action\":\"").append(((HoverAction) this.hoverAction[0]).name().toLowerCase()).append("\",\"value\":\"").append(this.hoverAction[1]).append("\"},");
                 } else {
-                    builder.append("\"hoverEvent\":{\"action\":\"").append(((HoverAction) hoverAction[0]).name().toLowerCase()).append("\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"").append(Json.escape((String) hoverAction[1])).append("\"}]}},"); // TODO: Maybe make also customizeable
+                    builder.append("\"hoverEvent\":{\"action\":\"").append(((HoverAction) this.hoverAction[0]).name().toLowerCase()).append("\",\"value\":{\"text\":\"\",\"extra\":[{\"text\":\"").append(Json.escape((String) this.hoverAction[1])).append("\"}]}},");
                 }
             }
             String json = builder.toString();
@@ -216,14 +216,14 @@ public class Json {
         public static final ChatFormatting UNDERLINE = new ChatFormatting(ChatColor.UNDERLINE);
         public static final ChatFormatting RESET = new ChatFormatting(ChatColor.RESET);
 
-        private ChatColor color;
+        private final ChatColor color;
 
-        public ChatFormatting(ChatColor color) {
+        public ChatFormatting(final ChatColor color) {
             this.color = color;
         }
 
         public ChatColor getColor() {
-            return color;
+            return this.color;
         }
 
     }
