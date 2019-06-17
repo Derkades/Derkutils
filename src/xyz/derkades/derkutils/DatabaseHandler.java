@@ -11,7 +11,7 @@ public class DatabaseHandler {
 	private final boolean debug;
 	private final Connection databaseConnection;
 
-	DatabaseHandler(final String host, final int port, final String database, final String user, final String password, final boolean debug) throws SQLException {
+	public DatabaseHandler(final String host, final int port, final String database, final String user, final String password, final boolean debug) throws SQLException {
 		this.debug = debug;
 
 		final Properties properties = new Properties();
@@ -23,7 +23,7 @@ public class DatabaseHandler {
 		this.databaseConnection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, properties);
 	}
 
-	DatabaseHandler(final String host, final int port, final String database, final String user, final String password) throws SQLException {
+	public DatabaseHandler(final String host, final int port, final String database, final String user, final String password) throws SQLException {
 		this(host, port, database, user, password, false);
 	}
 
