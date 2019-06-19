@@ -93,13 +93,17 @@ public class Chat {
 					final String v = e.getValue();
 
 					if (k.equals("hover")) {
-						builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Colors.toComponent(v)));
+						builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Colors.toComponent(PlaceholderUtil.parsePapiPlaceholders(
+								v, player, placeholders))));
 					} else if (k.equals("url")) {
-						builder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, v));
+						builder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, PlaceholderUtil.parsePapiPlaceholders(
+								v, player, placeholders)));
 					} else if (k.equals("run_command")) {
-						builder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, v));
+						builder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, PlaceholderUtil.parsePapiPlaceholders(
+								v, player, placeholders)));
 					} else if (k.equals("suggest_command")) {
-						builder.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, v));
+						builder.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, PlaceholderUtil.parsePapiPlaceholders(
+								v, player, placeholders)));
 					} else if (k.equals("color")) {
 						builder.color(ChatColor.valueOf(v.toUpperCase()));
 					} else if (k.equals("bold")) {
@@ -111,7 +115,8 @@ public class Chat {
 					} else if (k.equals("obfuscated")) {
 						builder.obfuscated(Boolean.parseBoolean(v));
 					} else if (k.equals("insert") || k.equals("chat_append")) {
-						builder.insertion(v);
+						builder.insertion(PlaceholderUtil.parsePapiPlaceholders(
+								v, player, placeholders));
 					} else {
 						throw new IllegalArgumentException(String.format("Unsupported option for message %s: %s", k, v));
 					}
@@ -145,13 +150,17 @@ public class Chat {
 					final String v = e.getValue();
 
 					if (k.equals("hover")) {
-						builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Colors.toComponent(v)));
+						builder.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Colors.toComponent(
+								PlaceholderUtil.parsePlaceholders(v, placeholders))));
 					} else if (k.equals("url")) {
-						builder.event(new ClickEvent(ClickEvent.Action.OPEN_URL, v));
+						builder.event(new ClickEvent(ClickEvent.Action.OPEN_URL,
+								PlaceholderUtil.parsePlaceholders(v, placeholders)));
 					} else if (k.equals("run_command")) {
-						builder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, v));
+						builder.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND,
+								PlaceholderUtil.parsePlaceholders(v, placeholders)));
 					} else if (k.equals("suggest_command")) {
-						builder.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, v));
+						builder.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,
+								PlaceholderUtil.parsePlaceholders(v, placeholders)));
 					} else if (k.equals("color")) {
 						builder.color(ChatColor.valueOf(v.toUpperCase()));
 					} else if (k.equals("bold")) {
@@ -163,7 +172,8 @@ public class Chat {
 					} else if (k.equals("obfuscated")) {
 						builder.obfuscated(Boolean.parseBoolean(v));
 					} else if (k.equals("insert") || k.equals("chat_append")) {
-						builder.insertion(v);
+						builder.insertion(
+								PlaceholderUtil.parsePlaceholders(v, placeholders));
 					} else {
 						throw new IllegalArgumentException(String.format("Unsupported option for message %s: %s", k, v));
 					}
