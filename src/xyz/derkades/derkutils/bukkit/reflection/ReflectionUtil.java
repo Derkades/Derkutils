@@ -35,28 +35,28 @@ public class ReflectionUtil {
 			return -1;
 		}
 	}
-	
-	public static ItemStack addCanPlaceOn(ItemStack item, String... minecraftItemNames) {
+
+	public static ItemStack addCanPlaceOn(final ItemStack item, final String... minecraftItemNames) {
 		try {
 			final Class<?> craftItemStackClass = getMinecraftClass("org.bukkit.craftbukkit.%s.inventory.CraftItemStack");
 			final Object nmsItemStack = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class).invoke(null, item);
 			final Class<?> nbtClass = getMinecraftClass("net.minecraft.server.%s.NBTTagCompound");
-			Object nbt = nmsItemStack.getClass().getMethod("getTag").invoke(null);
+			Object nbt = nmsItemStack.getClass().getMethod("getTag").invoke(nmsItemStack);
 			if (nbt == null) {
 				nbt = nbtClass.getConstructor().newInstance();
 			}
-			Object nbtList = getMinecraftClass("net.minecraft.server.%s.NBTTagList").getConstructor().newInstance();
+			final Object nbtList = getMinecraftClass("net.minecraft.server.%s.NBTTagList").getConstructor().newInstance();
 			for (String minecraftItemName : minecraftItemNames) {
 				if (!minecraftItemName.contains("minecraft")) {
 					minecraftItemName = "minecraft:" + minecraftItemName;
 				}
-				
-				Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
+
+				final Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
 				nbtList.getClass().getMethod("add", nbtString.getClass()).invoke(nbtList, nbtString);
 			}
 			nbtClass.getMethod("set", String.class, nbtList.getClass()).invoke(nbt, "CanPlaceOn", nbtList);
 			nmsItemStack.getClass().getMethod("setTag", nbtClass).invoke(nmsItemStack, nbt);
-			Object bukkitItemStack = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStack.getClass()).invoke(null, nmsItemStack);
+			final Object bukkitItemStack = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStack.getClass()).invoke(null, nmsItemStack);
 			return (ItemStack) bukkitItemStack;
 		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
 				InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException e) {
@@ -64,28 +64,28 @@ public class ReflectionUtil {
 			return null;
 		}
 	}
-	
-	public static ItemStack addCanDestroy(ItemStack item, String... minecraftItemNames) {
+
+	public static ItemStack addCanDestroy(final ItemStack item, final String... minecraftItemNames) {
 		try {
 			final Class<?> craftItemStackClass = getMinecraftClass("org.bukkit.craftbukkit.%s.inventory.CraftItemStack");
 			final Object nmsItemStack = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class).invoke(null, item);
 			final Class<?> nbtClass = getMinecraftClass("net.minecraft.server.%s.NBTTagCompound");
-			Object nbt = nmsItemStack.getClass().getMethod("getTag").invoke(null);
+			Object nbt = nmsItemStack.getClass().getMethod("getTag").invoke(nmsItemStack);
 			if (nbt == null) {
 				nbt = nbtClass.getConstructor().newInstance();
 			}
-			Object nbtList = getMinecraftClass("net.minecraft.server.%s.NBTTagList").getConstructor().newInstance();
+			final Object nbtList = getMinecraftClass("net.minecraft.server.%s.NBTTagList").getConstructor().newInstance();
 			for (String minecraftItemName : minecraftItemNames) {
 				if (!minecraftItemName.contains("minecraft")) {
 					minecraftItemName = "minecraft:" + minecraftItemName;
 				}
-				
-				Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
+
+				final Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
 				nbtList.getClass().getMethod("add", nbtString.getClass()).invoke(nbtList, nbtString);
 			}
 			nbtClass.getMethod("set", String.class, nbtList.getClass()).invoke(nbt, "CanDestroy", nbtList);
 			nmsItemStack.getClass().getMethod("setTag", nbtClass).invoke(nmsItemStack, nbt);
-			Object bukkitItemStack = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStack.getClass()).invoke(null, nmsItemStack);
+			final Object bukkitItemStack = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStack.getClass()).invoke(null, nmsItemStack);
 			return (ItemStack) bukkitItemStack;
 		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
 				InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException e) {
