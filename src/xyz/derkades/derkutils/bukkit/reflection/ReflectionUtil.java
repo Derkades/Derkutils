@@ -45,6 +45,7 @@ public class ReflectionUtil {
 			if (nbt == null) {
 				nbt = nbtClass.getConstructor().newInstance();
 			}
+
 			final Object nbtList = getMinecraftClass("net.minecraft.server.%s.NBTTagList").getConstructor().newInstance();
 			for (String minecraftItemName : minecraftItemNames) {
 				if (!minecraftItemName.contains("minecraft")) {
@@ -52,9 +53,10 @@ public class ReflectionUtil {
 				}
 
 				final Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
-				nbtList.getClass().getMethod("add", nbtString.getClass()).invoke(nbtList, nbtString);
+				nbtList.getClass().getMethod("add", Object.class).invoke(nbtList, nbtString);
 			}
-			nbtClass.getMethod("set", String.class, nbtList.getClass()).invoke(nbt, "CanPlaceOn", nbtList);
+
+			nbtClass.getMethod("set", String.class, getMinecraftClass("net.minecraft.server.%s.NBTBase")).invoke(nbt, "CanPlaceOn", nbtList);
 			nmsItemStack.getClass().getMethod("setTag", nbtClass).invoke(nmsItemStack, nbt);
 			final Object bukkitItemStack = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStack.getClass()).invoke(null, nmsItemStack);
 			return (ItemStack) bukkitItemStack;
@@ -81,10 +83,10 @@ public class ReflectionUtil {
 				}
 
 				final Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
-				nbtList.getClass().getMethod("add", nbtString.getClass()).invoke(nbtList, nbtString);
+				nbtList.getClass().getMethod("add", Object.class).invoke(nbtList, nbtString);
 			}
 			nbtClass.getMethod("set", String.class, nbtList.getClass()).invoke(nbt, "CanDestroy", nbtList);
-			nmsItemStack.getClass().getMethod("setTag", nbtClass).invoke(nmsItemStack, nbt);
+			nmsItemStack.getClass().getMethod("setTag", getMinecraftClass("net.minecraft.server.%s.NBTBase")).invoke(nmsItemStack, nbt);
 			final Object bukkitItemStack = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStack.getClass()).invoke(null, nmsItemStack);
 			return (ItemStack) bukkitItemStack;
 		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
