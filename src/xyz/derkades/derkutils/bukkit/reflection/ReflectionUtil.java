@@ -85,8 +85,8 @@ public class ReflectionUtil {
 				final Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
 				nbtList.getClass().getMethod("add", Object.class).invoke(nbtList, nbtString);
 			}
-			nbtClass.getMethod("set", String.class, nbtList.getClass()).invoke(nbt, "CanDestroy", nbtList);
-			nmsItemStack.getClass().getMethod("setTag", getMinecraftClass("net.minecraft.server.%s.NBTBase")).invoke(nmsItemStack, nbt);
+			nbtClass.getMethod("set", String.class, getMinecraftClass("net.minecraft.server.%s.NBTBase")).invoke(nbt, "CanDestroy", nbtList);
+			nmsItemStack.getClass().getMethod("setTag", nbtClass).invoke(nmsItemStack, nbt);
 			final Object bukkitItemStack = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStack.getClass()).invoke(null, nmsItemStack);
 			return (ItemStack) bukkitItemStack;
 		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
