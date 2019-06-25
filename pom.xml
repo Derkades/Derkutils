@@ -4,7 +4,7 @@
 
 	<groupId>xyz.derkades</groupId>
 	<artifactId>Derkutils</artifactId>
-	<version>1.5.1-legacy</version>
+	<version>1.5.2-legacy</version>
 	<packaging>jar</packaging>
 
 	<name>derkutils</name>
