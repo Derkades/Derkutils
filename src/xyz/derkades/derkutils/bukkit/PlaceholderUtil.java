@@ -74,7 +74,7 @@ public class PlaceholderUtil {
 
 		try {
 			return (List<String>) Class.forName("me.clip.placeholderapi.PlaceholderAPI")
-					.getMethod("setPlaceholders", Player.class, ((List<String>) new ArrayList<String>()).getClass())
+					.getMethod("setPlaceholders", Player.class, List.class)
 					.invoke(null, player, string);
 		} catch (final ClassNotFoundException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | NoSuchMethodException | SecurityException e) {
