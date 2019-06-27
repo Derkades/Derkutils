@@ -5,28 +5,42 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Event fired when a player clicks on an item in an {@link IconMenu}.
+ * This event extends PlayerEvent for convenience, but it is not a bukkit event.
+ */
 public class OptionClickEvent extends PlayerEvent {
 
-	private int position;
-	private ItemStack item;
+	private final int position;
+	private final ItemStack item;
 
-	OptionClickEvent(Player player, int position, ItemStack item) {
+	OptionClickEvent(final Player player, final int position, final ItemStack item) {
 		super(player);
-		
+
 		this.position = position;
 		this.item = item;
 	}
 
+	/**
+	 * @return Slot number of the item clicked
+	 */
 	public int getPosition() {
-		return position;
+		return this.position;
 	}
 
+	/**
+	 * @return Display name of the item clicked.
+	 * @throws NullPointerException When item does not have a display name
+	 */
 	public String getName() {
-		return item.getItemMeta().getDisplayName();
+		return this.item.getItemMeta().getDisplayName();
 	}
 
+	/**
+	 * @return The clicked item stack
+	 */
 	public ItemStack getItemStack() {
-		return item;
+		return this.item;
 	}
 
 	@Override
