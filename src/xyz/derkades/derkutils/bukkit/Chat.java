@@ -93,14 +93,18 @@ public class Chat {
 					throw new IllegalArgumentException("Every list entry must contain a message");
 				}
 
-				final List<BaseComponent> messagePartComponents = Arrays.asList(
+				List<BaseComponent> messagePartComponents = Arrays.asList(
 						TextComponent.fromLegacyText(
 								PlaceholderUtil.parsePapiPlaceholders(
 										Colors.parseColors(map.get("text")), player, placeholders)));
 
-				map.entrySet().stream().filter(e -> !e.getKey().equals("text")).forEach(e -> {
+				for (final Map.Entry<String, String> e : map.entrySet()){
 					final String k = e.getKey();
 					final String v = e.getValue();
+
+					if (k.equals("text")) {
+						return;
+					}
 
 					final List<BaseComponent> newMessagePartComponents = new ArrayList<>();
 
@@ -132,11 +136,11 @@ public class Chat {
 						} else {
 							throw new IllegalArgumentException(String.format("Unsupported option for message %s: %s", k, v));
 						}
+						newMessagePartComponents.add(messagePartComponent);
 					}
 
-					messagePartComponents.clear();
-					messagePartComponents.addAll(newMessagePartComponents);
-				});
+					messagePartComponents = newMessagePartComponents;
+				}
 				message.addAll(messagePartComponents);
 			});
 		return message.toArray(new BaseComponent[] {});
@@ -159,14 +163,18 @@ public class Chat {
 					throw new IllegalArgumentException("Every list entry must contain a message");
 				}
 
-				final List<BaseComponent> messagePartComponents = Arrays.asList(
+				List<BaseComponent> messagePartComponents = Arrays.asList(
 						TextComponent.fromLegacyText(
 								PlaceholderUtil.parsePlaceholders(
 										Colors.parseColors(map.get("text")), placeholders)));
 
-				map.entrySet().stream().filter(e -> !e.getKey().equals("text")).forEach(e -> {
+				for (final Map.Entry<String, String> e : map.entrySet()){
 					final String k = e.getKey();
 					final String v = e.getValue();
+
+					if (k.equals("text")) {
+						return;
+					}
 
 					final List<BaseComponent> newMessagePartComponents = new ArrayList<>();
 
@@ -198,11 +206,11 @@ public class Chat {
 						} else {
 							throw new IllegalArgumentException(String.format("Unsupported option for message %s: %s", k, v));
 						}
+						newMessagePartComponents.add(messagePartComponent);
 					}
 
-					messagePartComponents.clear();
-					messagePartComponents.addAll(newMessagePartComponents);
-				});
+					messagePartComponents = newMessagePartComponents;
+				}
 				message.addAll(messagePartComponents);
 			});
 		return message.toArray(new BaseComponent[] {});
