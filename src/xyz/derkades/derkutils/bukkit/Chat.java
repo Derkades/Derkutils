@@ -34,44 +34,49 @@ public class Chat {
 					throw new IllegalArgumentException("Every list entry must contain a message");
 				}
 
-				final List<BaseComponent> messagePartComponents = Arrays.asList(Colors.toComponent(map.get("text")));
+				final BaseComponent[] messageParts =
+						TextComponent.fromLegacyText(
+										Colors.parseColors(map.get("text")));
 
-				map.entrySet().stream().filter(e -> !e.getKey().equals("text")).forEach(e -> {
+				for (final Map.Entry<String, String> e : map.entrySet()){
 					final String k = e.getKey();
 					final String v = e.getValue();
 
-					final List<BaseComponent> newMessagePartComponents = new ArrayList<>();
+					if (k.equals("text")) {
+						return;
+					}
 
-					for (final BaseComponent messagePartComponent : messagePartComponents) {
+					for (int i = 0; i < messageParts.length; i++) {
+						final BaseComponent messagePart = messageParts[i];
 						if (k.equals("hover")) {
-							messagePartComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Colors.toComponent(v)));
+							messagePart.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+									TextComponent.fromLegacyText(
+													Colors.parseColors(v))));
 						} else if (k.equals("url")) {
-							messagePartComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, v));
+							messagePart.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, v));
 						} else if (k.equals("run_command")) {
-							messagePartComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, v));
+							messagePart.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, v));
 						} else if (k.equals("suggest_command")) {
-							messagePartComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, v));
+							messagePart.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, v));
 						} else if (k.equals("color")) {
-							messagePartComponent.setColor(ChatColor.valueOf(v.toUpperCase()));
+							messagePart.setColor(ChatColor.valueOf(v.toUpperCase()));
 						} else if (k.equals("bold")) {
-							messagePartComponent.setBold(Boolean.parseBoolean(v));
+							messagePart.setBold(Boolean.parseBoolean(v));
 						} else if (k.equals("underlined")) {
-							messagePartComponent.setUnderlined(Boolean.parseBoolean(v));
+							messagePart.setUnderlined(Boolean.parseBoolean(v));
 						} else if (k.equals("italic")) {
-							messagePartComponent.setItalic(Boolean.parseBoolean(v));
+							messagePart.setItalic(Boolean.parseBoolean(v));
 						} else if (k.equals("obfuscated")) {
-							messagePartComponent.setObfuscated(Boolean.parseBoolean(v));
+							messagePart.setObfuscated(Boolean.parseBoolean(v));
 						} else if (k.equals("insert") || k.equals("chat_append")) {
-							messagePartComponent.setInsertion(v);
+							messagePart.setInsertion(v);
 						} else {
 							throw new IllegalArgumentException(String.format("Unsupported option for message %s: %s", k, v));
 						}
+						messageParts[i] = messagePart;
 					}
-
-					messagePartComponents.clear();
-					messagePartComponents.addAll(newMessagePartComponents);
-				});
-				message.addAll(messagePartComponents);
+				}
+				message.addAll(Arrays.asList(messageParts));
 			});
 		return message.toArray(new BaseComponent[] {});
 	}
@@ -93,10 +98,10 @@ public class Chat {
 					throw new IllegalArgumentException("Every list entry must contain a message");
 				}
 
-				List<BaseComponent> messagePartComponents = Arrays.asList(
+				final BaseComponent[] messageParts =
 						TextComponent.fromLegacyText(
 								PlaceholderUtil.parsePapiPlaceholders(
-										Colors.parseColors(map.get("text")), player, placeholders)));
+										Colors.parseColors(map.get("text")), player, placeholders));
 
 				for (final Map.Entry<String, String> e : map.entrySet()){
 					final String k = e.getKey();
@@ -106,42 +111,39 @@ public class Chat {
 						return;
 					}
 
-					final List<BaseComponent> newMessagePartComponents = new ArrayList<>();
-
-					for (final BaseComponent messagePartComponent : messagePartComponents) {
+					for (int i = 0; i < messageParts.length; i++) {
+						final BaseComponent messagePart = messageParts[i];
 						if (k.equals("hover")) {
-							messagePartComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+							messagePart.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 									TextComponent.fromLegacyText(
 											PlaceholderUtil.parsePapiPlaceholders(
 													Colors.parseColors(v), player, placeholders))));
 						} else if (k.equals("url")) {
-							messagePartComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+							messagePart.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
 									PlaceholderUtil.parsePapiPlaceholders(v, player, placeholders)));
 						} else if (k.equals("run_command")) {
-							messagePartComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, v));
+							messagePart.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, v));
 						} else if (k.equals("suggest_command")) {
-							messagePartComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, v));
+							messagePart.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, v));
 						} else if (k.equals("color")) {
-							messagePartComponent.setColor(ChatColor.valueOf(v.toUpperCase()));
+							messagePart.setColor(ChatColor.valueOf(v.toUpperCase()));
 						} else if (k.equals("bold")) {
-							messagePartComponent.setBold(Boolean.parseBoolean(v));
+							messagePart.setBold(Boolean.parseBoolean(v));
 						} else if (k.equals("underlined")) {
-							messagePartComponent.setUnderlined(Boolean.parseBoolean(v));
+							messagePart.setUnderlined(Boolean.parseBoolean(v));
 						} else if (k.equals("italic")) {
-							messagePartComponent.setItalic(Boolean.parseBoolean(v));
+							messagePart.setItalic(Boolean.parseBoolean(v));
 						} else if (k.equals("obfuscated")) {
-							messagePartComponent.setObfuscated(Boolean.parseBoolean(v));
+							messagePart.setObfuscated(Boolean.parseBoolean(v));
 						} else if (k.equals("insert") || k.equals("chat_append")) {
-							messagePartComponent.setInsertion(v);
+							messagePart.setInsertion(v);
 						} else {
 							throw new IllegalArgumentException(String.format("Unsupported option for message %s: %s", k, v));
 						}
-						newMessagePartComponents.add(messagePartComponent);
+						messageParts[i] = messagePart;
 					}
-
-					messagePartComponents = newMessagePartComponents;
 				}
-				message.addAll(messagePartComponents);
+				message.addAll(Arrays.asList(messageParts));
 			});
 		return message.toArray(new BaseComponent[] {});
 	}
@@ -163,10 +165,10 @@ public class Chat {
 					throw new IllegalArgumentException("Every list entry must contain a message");
 				}
 
-				List<BaseComponent> messagePartComponents = Arrays.asList(
+				final BaseComponent[] messageParts =
 						TextComponent.fromLegacyText(
 								PlaceholderUtil.parsePlaceholders(
-										Colors.parseColors(map.get("text")), placeholders)));
+										Colors.parseColors(map.get("text")), placeholders));
 
 				for (final Map.Entry<String, String> e : map.entrySet()){
 					final String k = e.getKey();
@@ -176,42 +178,39 @@ public class Chat {
 						return;
 					}
 
-					final List<BaseComponent> newMessagePartComponents = new ArrayList<>();
-
-					for (final BaseComponent messagePartComponent : messagePartComponents) {
+					for (int i = 0; i < messageParts.length; i++) {
+						final BaseComponent messagePart = messageParts[i];
 						if (k.equals("hover")) {
-							messagePartComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+							messagePart.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 									TextComponent.fromLegacyText(
 											PlaceholderUtil.parsePlaceholders(
 													Colors.parseColors(v), placeholders))));
 						} else if (k.equals("url")) {
-							messagePartComponent.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+							messagePart.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
 									PlaceholderUtil.parsePlaceholders(v, placeholders)));
 						} else if (k.equals("run_command")) {
-							messagePartComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, v));
+							messagePart.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, v));
 						} else if (k.equals("suggest_command")) {
-							messagePartComponent.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, v));
+							messagePart.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, v));
 						} else if (k.equals("color")) {
-							messagePartComponent.setColor(ChatColor.valueOf(v.toUpperCase()));
+							messagePart.setColor(ChatColor.valueOf(v.toUpperCase()));
 						} else if (k.equals("bold")) {
-							messagePartComponent.setBold(Boolean.parseBoolean(v));
+							messagePart.setBold(Boolean.parseBoolean(v));
 						} else if (k.equals("underlined")) {
-							messagePartComponent.setUnderlined(Boolean.parseBoolean(v));
+							messagePart.setUnderlined(Boolean.parseBoolean(v));
 						} else if (k.equals("italic")) {
-							messagePartComponent.setItalic(Boolean.parseBoolean(v));
+							messagePart.setItalic(Boolean.parseBoolean(v));
 						} else if (k.equals("obfuscated")) {
-							messagePartComponent.setObfuscated(Boolean.parseBoolean(v));
+							messagePart.setObfuscated(Boolean.parseBoolean(v));
 						} else if (k.equals("insert") || k.equals("chat_append")) {
-							messagePartComponent.setInsertion(v);
+							messagePart.setInsertion(v);
 						} else {
 							throw new IllegalArgumentException(String.format("Unsupported option for message %s: %s", k, v));
 						}
-						newMessagePartComponents.add(messagePartComponent);
+						messageParts[i] = messagePart;
 					}
-
-					messagePartComponents = newMessagePartComponents;
 				}
-				message.addAll(messagePartComponents);
+				message.addAll(Arrays.asList(messageParts));
 			});
 		return message.toArray(new BaseComponent[] {});
 	}
