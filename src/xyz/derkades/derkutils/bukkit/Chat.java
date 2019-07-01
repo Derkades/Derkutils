@@ -43,7 +43,7 @@ public class Chat {
 					final String v = e.getValue();
 
 					if (k.equals("text")) {
-						return;
+						continue;
 					}
 
 					for (int i = 0; i < messageParts.length; i++) {
@@ -98,8 +98,6 @@ public class Chat {
 					throw new IllegalArgumentException("Every list entry must contain a message");
 				}
 
-				System.out.println("Text: " + map.get("text"));
-
 				final BaseComponent[] messageParts =
 						TextComponent.fromLegacyText(
 								PlaceholderUtil.parsePapiPlaceholders(
@@ -110,11 +108,8 @@ public class Chat {
 					final String v = e.getValue();
 
 					if (k.equals("text")) {
-						return;
+						continue;
 					}
-
-					System.out.println("k: " + k);
-					System.out.println("v: " + v);
 
 					for (int i = 0; i < messageParts.length; i++) {
 						final BaseComponent messagePart = messageParts[i];
@@ -148,6 +143,7 @@ public class Chat {
 						messageParts[i] = messagePart;
 					}
 				}
+
 				message.addAll(Arrays.asList(messageParts));
 			});
 		return message.toArray(new BaseComponent[] {});
@@ -180,7 +176,7 @@ public class Chat {
 					final String v = e.getValue();
 
 					if (k.equals("text")) {
-						return;
+						continue;
 					}
 
 					for (int i = 0; i < messageParts.length; i++) {
