@@ -98,6 +98,8 @@ public class Chat {
 					throw new IllegalArgumentException("Every list entry must contain a message");
 				}
 
+				System.out.println("Text: " + map.get("text"));
+
 				final BaseComponent[] messageParts =
 						TextComponent.fromLegacyText(
 								PlaceholderUtil.parsePapiPlaceholders(
@@ -110,6 +112,9 @@ public class Chat {
 					if (k.equals("text")) {
 						return;
 					}
+
+					System.out.println("k: " + k);
+					System.out.println("v: " + v);
 
 					for (int i = 0; i < messageParts.length; i++) {
 						final BaseComponent messagePart = messageParts[i];
