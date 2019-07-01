@@ -53,7 +53,8 @@ public class PlaceholderUtil {
 					.getMethod("setPlaceholders", Player.class, String.class).invoke(null, player, string);
 		} catch (final ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
 				InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
+			return string;
 		}
 	}
 
@@ -69,10 +70,11 @@ public class PlaceholderUtil {
 
 		try {
 			return (List<String>) Class.forName("me.clip.placeholderapi.PlaceholderAPI")
-					.getMethod("setPlaceholders", Player.class, ((List<String>) new ArrayList<String>()).getClass()).invoke(null, player, string);
+					.getMethod("setPlaceholders", Player.class, List.class).invoke(null, player, string);
 		} catch (final ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
 				InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException(e);
+			e.printStackTrace();
+			return string;
 		}
 	}
 
