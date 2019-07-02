@@ -1,7 +1,7 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.ChatColor;
 
@@ -17,11 +17,7 @@ public class Colors {
 	 * @return Converted list
 	 */
 	public static List<String> parseColors(final List<String> list){
-		final List<String> parsedStrings = new ArrayList<>();
-		for (final String string : list){
-			parsedStrings.add(parseColors(string));
-		}
-		return parsedStrings;
+		return list.stream().map(Colors::parseColors).collect(Collectors.toList());
 	}
 
 	/**
