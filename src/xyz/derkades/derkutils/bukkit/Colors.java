@@ -42,4 +42,13 @@ public class Colors {
 		return TextComponent.fromLegacyText(Colors.parseColors(string));
 	}
 
+	/**
+	 * Converts all & characters belonging to a color code in a string to ChatColor.COLOR_CHAR, and
+	 * then uses {@link ChatColor#stripColor} to remove all color codes.
+	 * @param string String to convert
+	 */
+	public static String stripColors(final String string){
+		return ChatColor.stripColor(Colors.parseColors(string));
+	}
+
 }
