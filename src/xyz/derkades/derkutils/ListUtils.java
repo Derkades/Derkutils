@@ -56,7 +56,7 @@ public class ListUtils {
 	 * @throws SQLException
 	 */
 	public static List<String> getStringListFromResultSet(final ResultSet resultSet, final String column) throws SQLException {
-		final List<String> list = new ArrayList<String>();
+		final List<String> list = new ArrayList<>();
 
 		while (resultSet.next()){
 			list.add(resultSet.getString(column));
@@ -194,6 +194,15 @@ public class ListUtils {
 		final List<Integer> list = getNumbersList(min, max);
 		Collections.shuffle(list);
 		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> T[] combineArrays(final T[]... arrays) {
+		final List<T> list = new ArrayList<>();
+		for (final T[] array : arrays) {
+			list.addAll(Arrays.asList(array));
+		}
+		return (T[]) list.toArray();
 	}
 
 }
