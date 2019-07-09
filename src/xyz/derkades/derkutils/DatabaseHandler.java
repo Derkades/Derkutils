@@ -13,7 +13,15 @@ public class DatabaseHandler {
 	private final boolean debug;
 	private final Connection databaseConnection;
 
+	private final String host;
+	private final int port;
+	private final String database;
+
 	public DatabaseHandler(final String host, final int port, final String database, final String user, final String password, final boolean debug) throws SQLException {
+		this.host = host;
+		this.port = port;
+		this.database = database;
+
 		this.debug = debug;
 
 		final Properties properties = new Properties();
@@ -27,6 +35,18 @@ public class DatabaseHandler {
 
 	public DatabaseHandler(final String host, final int port, final String database, final String user, final String password) throws SQLException {
 		this(host, port, database, user, password, false);
+	}
+
+	public String getHost() {
+		return this.host;
+	}
+
+	public int getPort() {
+		return this.port;
+	}
+
+	public String getDatabase() {
+		return this.database;
 	}
 
 	public PreparedStatement prepareStatement(final String sql, final Object... parameters) throws SQLException {
