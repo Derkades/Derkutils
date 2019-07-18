@@ -55,8 +55,7 @@ public abstract class IconMenu implements Listener {
 	 * Called when the menu closes
 	 * @param event
 	 */
-	public void onClose(final MenuCloseEvent event) {
-	}
+	public void onClose(final MenuCloseEvent event) {}
 
 	/**
 	 * Sets the name of the menu. Has no effect after the menu has been opened.
