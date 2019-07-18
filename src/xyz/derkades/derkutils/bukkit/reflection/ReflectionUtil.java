@@ -66,7 +66,7 @@ public class ReflectionUtil {
 		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
 				InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException e) {
 			e.printStackTrace();
-			return null;
+			return item;
 		}
 	}
 
@@ -95,7 +95,7 @@ public class ReflectionUtil {
 		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
 				InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException e) {
 			e.printStackTrace();
-			return null;
+			return item;
 		}
 	}
 	
