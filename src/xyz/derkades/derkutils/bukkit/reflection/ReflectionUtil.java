@@ -1,8 +1,11 @@
 package xyz.derkades.derkutils.bukkit.reflection;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -93,6 +96,17 @@ public class ReflectionUtil {
 				InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public static void registerCommand(String name, Command command) {
+		try {
+			Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+			field.setAccessible(true);
+			CommandMap map = (CommandMap) field.get(Bukkit.getServer());
+			map.register(name, command);
+		} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException(e);
 		}
 	}
 
