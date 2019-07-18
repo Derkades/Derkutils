@@ -9,28 +9,54 @@ import org.bukkit.plugin.Plugin;
 
 public class Command {
 	
-	private final List<Subcommand> subcommands;
+	private final String name;
+	private final String description;
+	private final String usage;
+	private final String[] aliases;
+	private final List<Command> subcommands;
 	private CommandCallback noSubcommandCallback;
 	
-	
-	public Command(Plugin plugin, String name, String description, String usage, CommandConfig config, String... aliases) {
-		this.subcommands = new ArrayList<>();
+	public Command(String name, String description, String usage, String... aliases) {
+		this.name = name;
+		this.description = description;
+		this.usage = usage;
+		this.aliases = aliases;
 		
-		// TODO Register command
+		this.subcommands = new ArrayList<>();
 	}
 	
-	public Command(Plugin plugin, String name, String description, String usage, String... aliases) {
-		this(plugin, name, description, usage, CommandConfig.DEFAULT, aliases);
+	public Command(String name, String description, String... aliases) {
+		this(name, description, null, aliases);
 	}
 	
-	public Command(Plugin plugin, String name, String description, String... aliases) {
-		this(plugin, name, description, null, CommandConfig.DEFAULT, aliases);
+	public Command(String name, String... aliases) {
+		this(name, null, aliases);
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	public String getUsage() {
+		return usage;
+	}
+	
+	public String[] getAliases() {
+		return aliases;
+	}
+	
+	public Command[] getSubCommands() {
+		return this.subcommands.toArray(new Command[] {});
 	}
 	
 	/**
 	 * Add a subcommand. If multiple subcommands with the same name are provided, one will be chosen arbitrarily.
 	 */
-	public void addCallback(Subcommand subcommand) {
+	public void addCallback(Command subcommand) {
 		subcommands.add(subcommand);
 	}
 	
@@ -54,7 +80,7 @@ public class Command {
 				}
 			}
 			
-			for (Subcommand subcommand : subcommands) {
+			for (Command subcommand : subcommands) {
 				
 			}
 			

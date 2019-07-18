@@ -1,5 +1,6 @@
 package xyz.derkades.derkutils.bukkit.command;
 
+@Deprecated
 public class Subcommand {
 	
 	private String name;
