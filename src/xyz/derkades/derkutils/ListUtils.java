@@ -1,5 +1,6 @@
 package xyz.derkades.derkutils;
 
+import java.lang.reflect.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,6 +8,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import org.apache.commons.lang.ArrayUtils;
 
 public class ListUtils {
 
@@ -93,7 +96,7 @@ public class ListUtils {
 	 * @param list
 	 * @return A random element from the provided collection
 	 */
-	public static <T> T getRandomValueFromList(final Collection<? extends T> list) {
+	public static <T> T getRandomValueFromList(final Collection<T> list) {
 		if (list == null) {
 			throw new IllegalArgumentException("List must not be null");
 		}
@@ -203,6 +206,49 @@ public class ListUtils {
 			list.addAll(Arrays.asList(array));
 		}
 		return (T[]) list.toArray();
+	}
+	
+	/**
+	 * Removes the first element from the list {@code amount} times. If {@code amount} is greater than {@code list.size()}, the list is cleared.
+	 * @param <T>
+	 * @param amount Amount of times to remove the first element from {@code list}
+	 * @param list
+	 * @return
+	 */
+	public static <T> void removeLeadingElementsFromList(int amount, List<T> list){
+		if (amount > list.size()) {
+			list.clear();
+		}
+		
+		for (int i = 0; i < amount; i++) {
+			list.remove(0);
+		}
+	}
+	
+	/**
+	 * @deprecated Untested
+	 */
+	@Deprecated
+	public static <T> T[] removeLeadingElementsFromArray(int amount, T[] array) {
+		@SuppressWarnings("unchecked")
+		T[] copy = (T[]) Array.newInstance(array.getClass(), array.length - amount);
+		for (int i = amount - 1; i < array.length - amount; i++) {
+			copy[i] = array[i + amount];
+		}
+		return copy;
+	}
+	
+	public static <T> List<T> copyArrayToList(T[] array){
+		List<T> list = new ArrayList<>();
+		for (T element : array) {
+			list.add(element);
+		}
+		return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T[] subarray(T[] array, int startIndexInclusive, int endIndexExclusive){
+		return (T[]) ArrayUtils.subarray(array, startIndexInclusive, endIndexExclusive);
 	}
 
 }

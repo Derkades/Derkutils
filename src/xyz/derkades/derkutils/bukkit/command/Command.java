@@ -15,6 +15,7 @@ public class Command {
 	final List<Command> subcommands;
 	final List<Parameter<?>> parameters;
 	Consumer<List<Parameter<?>>> callback;
+	final HelpMessageHandler helpHandler;
 	
 	public Command(String name, String description, String usage, String... aliases) {
 		this.name = name;
@@ -23,6 +24,7 @@ public class Command {
 		this.aliases = aliases;
 		this.subcommands = new ArrayList<>();
 		this.parameters = new ArrayList<>();
+		this.helpHandler = new DefaultHelpMessageHandler(this);
 	}
 	
 	public Command(String name, String description, String... aliases) {
@@ -49,10 +51,6 @@ public class Command {
 		return aliases;
 	}
 	
-//	public Command[] getSubCommands() {
-//		return this.subcommands.toArray(new Command[] {});
-//	}
-	
 	/**
 	 * Add a subcommand. If multiple subcommands with the same name are provided, one will be chosen arbitrarily.
 	 */
@@ -61,8 +59,13 @@ public class Command {
 	}
 	
 	/**
-	 * Callback used when no arguments are provided
-	 * Will overwrite the previously set callback.
+	 * Callback used when no arguments are provided. This method
+	 * will overwrite a previously set callback. If a callback 
+	 * is not set, the command <strong>must</strong> have subcommands.
+	 * If this command does not have subcommands, it must have a
+	 * callback. If the command does have subcommands, providing a 
+	 * callback is optional but can be useful, for instance if you 
+	 * want to display a custom help message.
 	 */
 	public void setCallback(Consumer<List<Parameter<?>>> callback) {
 		this.callback = callback;
@@ -76,5 +79,4 @@ public class Command {
 		this.parameters.add(parameter);
 	}
 	
-
 }
