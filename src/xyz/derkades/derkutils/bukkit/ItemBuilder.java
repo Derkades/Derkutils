@@ -1,5 +1,6 @@
 package xyz.derkades.derkutils.bukkit;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,7 +16,9 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import xyz.derkades.derkutils.bukkit.reflection.ReflectionUtil;
 
-public class ItemBuilder {
+public class ItemBuilder implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	
 	private ItemStack item;
 	
