@@ -8,38 +8,37 @@ public class DoubleParameter extends Parameter<Double> {
 	private Integer min;
 	private Integer max;
 	
-	public DoubleParameter(String name) {
+	public DoubleParameter(final String name) {
 		super(name);
 		
 		this.addConstraint(new DoubleConstraint());
 	}
 	
-	public void setMinimum(int min) {
+	public void setMinimum(final int min) {
 		this.min = min;
 	}
 	
-	public void setMaximum(int max) {
+	public void setMaximum(final int max) {
 		this.max = max;
 	}
 
 	@Override
-	protected Double parse(String string) {
+	protected Double parse(final String string) {
 		return Double.valueOf(string);
 	}
 
 	@Override
-	protected String getConstraintMessage() {
-		if (min == null || max == null) {
+	public String getConstraintMessage() {
+		if (this.min == null || this.max == null)
 			return "Number";
-		} else if (min != null && max == null) {
-			return "Number greater than " + min;
-		} else if (min != null && max != null) {
-			return "Number greater " + min +" and less than " + max;
-		} else if (min == null && max != null) {
-			return "Number less than " + max;
-		} else {
+		else if (this.min != null && this.max == null)
+			return "Number greater than " + this.min;
+		else if (this.min != null && this.max != null)
+			return "Number greater " + this.min +" and less than " + this.max;
+		else if (this.min == null && this.max != null)
+			return "Number less than " + this.max;
+		else
 			throw new AssertionException();
-		}
 	}
 
 }

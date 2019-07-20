@@ -2,7 +2,6 @@ package xyz.derkades.derkutils.bukkit.command;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -20,7 +19,7 @@ public class Command {
 	Consumer<List<Parameter<?>>> callback;
 	final HelpMessageHandler helpHandler;
 	
-	public Command(Command parent, String name, String description, String usage, String... aliases) {
+	public Command(final Command parent, final HelpMessageHandler helpHandler, final String name, final String description, final String usage, final String... aliases) {
 		this.parent = parent;
 		this.name = name;
 		this.description = description;
@@ -28,42 +27,41 @@ public class Command {
 		this.aliases = aliases;
 		this.subcommands = new ArrayList<>();
 		this.parameters = new ArrayList<>();
-		this.helpHandler = new DefaultHelpMessageHandler();
+		this.helpHandler = helpHandler;
 	}
 	
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	public String getDescription() {
-		return description;
+		return this.description;
 	}
 	
 	public String getUsage() {
-		return usage;
+		return this.usage;
 	}
 	
 	public String[] getAliases() {
-		return aliases;
+		return this.aliases;
 	}
 	
 	public boolean isSubcommand() {
-		return parent != null;
+		return this.parent != null;
 	}
 	
 	public Command getParentCommand() {
-		if (!this.isSubcommand()) {
+		if (!this.isSubcommand())
 			throw new UnsupportedOperationException("Command must be a subcommand to use Command::getParent");
-		}
 		
-		return parent;
+		return this.parent;
 	}
 	
 	/**
 	 * Add a subcommand. If multiple subcommands with the same name are provided, one will be chosen arbitrarily.
 	 */
-	public void addSubcommand(Command subcommand) {
-		subcommands.add(subcommand);
+	public void addSubcommand(final Command subcommand) {
+		this.subcommands.add(subcommand);
 	}
 	
 	/**
@@ -75,7 +73,7 @@ public class Command {
 	 * callback is optional but can be useful, for instance if you 
 	 * want to display a custom help message.
 	 */
-	public void setCallback(Consumer<List<Parameter<?>>> callback) {
+	public void setCallback(final Consumer<List<Parameter<?>>> callback) {
 		this.callback = callback;
 	}
 	
@@ -83,12 +81,12 @@ public class Command {
 	 * Add a parameter to this command. Should be called in the constructor.
 	 * @param parameter Parameter to add
 	 */
-	public void addParameter(Parameter<?> parameter) {
+	public void addParameter(final Parameter<?> parameter) {
 		this.parameters.add(parameter);
 	}
 
 	public String getParametersString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		this.parameters.forEach((p) -> builder.append(p.toString()));
 		return builder.toString();
 	}
@@ -100,14 +98,14 @@ public class Command {
 	 * Parameter syntax is defined by {@link Parameter#toString()}
 	 */
 	public String getUsageString() {
-		List<String> parentCommandNames = new ArrayList<>();
+		final List<String> parentCommandNames = new ArrayList<>();
 		Command command = this;
 		while (command.isSubcommand()) {
 			command = command.getParentCommand();
 			parentCommandNames.add(command.getName() + " ");
 		}
 		
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		parentCommandNames.stream().sorted(Comparator.reverseOrder()).forEach(builder::append);
 		builder.append(this.getParametersString());
 		return builder.toString();

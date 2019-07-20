@@ -7,20 +7,20 @@ import xyz.derkades.derkutils.constraints.Constraint;
 
 public abstract class Parameter<T> {
 	
-	private String name;
-	private List<Constraint> constraints;
+	private final String name;
+	private final List<Constraint> constraints;
 	
 	private T value;
 	
 	private final boolean optional;
 	
-	public Parameter(String name) {
+	public Parameter(final String name) {
 		this.name = name;
 		this.constraints = new ArrayList<>();
 		this.optional = false;
 	}
 	
-	public Parameter(String name, T def) {
+	public Parameter(final String name, final T def) {
 		this.name = name;
 		this.constraints = new ArrayList<>();
 		this.value = def;
@@ -28,36 +28,35 @@ public abstract class Parameter<T> {
 	}
 	
 	public T getValue() {
-		return value;
+		return this.value;
 	}
 	
-	public void setStringValue(String value) throws ParameterParseException {
+	public void setStringValue(final String value) throws ParameterParseException {
 		this.value = this.parse(value);
 	}
 	
-	public void addConstraint(Constraint constraint) {
-		constraints.add(constraint);
+	public void addConstraint(final Constraint constraint) {
+		this.constraints.add(constraint);
 	}
 	
 	public String getName() {
-		return name;
+		return this.name;
 	}
 	
 	public boolean isOptional() {
-		return optional;
+		return this.optional;
 	}
 	
 	@Override
 	public String toString() {
-		if (this.optional) {
+		if (this.optional)
 			return "[" + this.name + "]";
-		} else {
+		else
 			return "<" + this.name + ">";
-		}
 	}
 	
 	protected abstract T parse(String string) throws ParameterParseException;
 	
-	protected abstract String getConstraintMessage();
+	public abstract String getConstraintMessage();
 
 }

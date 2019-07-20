@@ -2,21 +2,21 @@ package xyz.derkades.derkutils.bukkit.command.parameter;
 
 public class StringParameter extends Parameter<String> {
 
-	public StringParameter(String name) {
+	public StringParameter(final String name) {
 		super(name);
 	}
 	
-	public StringParameter(String name, String def) {
+	public StringParameter(final String name, final String def) {
 		super(name, def);
 	}
 
 	@Override
-	protected String parse(String string) throws ParameterParseException {
+	protected String parse(final String string) throws ParameterParseException {
 		return string;
 	}
 
 	@Override
-	protected String getConstraintMessage() {
+	public String getConstraintMessage() {
 		return "String";
 	}
 
