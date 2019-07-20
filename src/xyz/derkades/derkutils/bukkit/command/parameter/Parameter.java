@@ -47,6 +47,15 @@ public abstract class Parameter<T> {
 		return optional;
 	}
 	
+	@Override
+	public String toString() {
+		if (this.optional) {
+			return "[" + this.name + "]";
+		} else {
+			return "<" + this.name + ">";
+		}
+	}
+	
 	protected abstract T parse(String string) throws ParameterParseException;
 	
 	protected abstract String getConstraintMessage();

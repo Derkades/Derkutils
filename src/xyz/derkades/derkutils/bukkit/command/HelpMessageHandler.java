@@ -1,11 +1,21 @@
 package xyz.derkades.derkutils.bukkit.command;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 
 import xyz.derkades.derkutils.bukkit.command.parameter.Parameter;
 import xyz.derkades.derkutils.bukkit.command.parameter.ParameterParseException;
 
 public abstract class HelpMessageHandler {
+	
+	protected final Command parentCommand;
+	
+	public HelpMessageHandler(Command parentCommand) {
+		this.parentCommand = parentCommand;
+	}
 	
 	public abstract void sendInvalidSubCommandHelpMessage(Command command, 
 			CommandSender sender, String label, String[] args, 

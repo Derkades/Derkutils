@@ -1,6 +1,8 @@
 package xyz.derkades.derkutils.bukkit.command;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -8,6 +10,7 @@ import xyz.derkades.derkutils.bukkit.command.parameter.Parameter;
 
 public class Command {
 	
+	private final Command parent;
 	private final String name;
 	private final String description;
 	private final String usage;
@@ -17,22 +20,15 @@ public class Command {
 	Consumer<List<Parameter<?>>> callback;
 	final HelpMessageHandler helpHandler;
 	
-	public Command(String name, String description, String usage, String... aliases) {
+	public Command(Command parent, String name, String description, String usage, String... aliases) {
+		this.parent = parent;
 		this.name = name;
 		this.description = description;
 		this.usage = usage;
 		this.aliases = aliases;
 		this.subcommands = new ArrayList<>();
 		this.parameters = new ArrayList<>();
-		this.helpHandler = new DefaultHelpMessageHandler(this);
-	}
-	
-	public Command(String name, String description, String... aliases) {
-		this(name, description, null, aliases);
-	}
-	
-	public Command(String name, String... aliases) {
-		this(name, null, aliases);
+		this.helpHandler = new DefaultHelpMessageHandler();
 	}
 	
 	public String getName() {
@@ -49,6 +45,18 @@ public class Command {
 	
 	public String[] getAliases() {
 		return aliases;
+	}
+	
+	public boolean isSubcommand() {
+		return parent != null;
+	}
+	
+	public Command getParentCommand() {
+		if (!this.isSubcommand()) {
+			throw new UnsupportedOperationException("Command must be a subcommand to use Command::getParent");
+		}
+		
+		return parent;
 	}
 	
 	/**
@@ -77,6 +85,32 @@ public class Command {
 	 */
 	public void addParameter(Parameter<?> parameter) {
 		this.parameters.add(parameter);
+	}
+
+	public String getParametersString() {
+		StringBuilder builder = new StringBuilder();
+		this.parameters.forEach((p) -> builder.append(p.toString()));
+		return builder.toString();
+	}
+	
+	/**
+	 * 
+	 * @return Usage string, without slash prefix, including any parent commands or parameters. Example (where {@code this::getName() == "subcommandtwo"}): 
+	 * <pre>{@code parent subcommandone subcommandtwo <param> [optparam]}</pre>
+	 * Parameter syntax is defined by {@link Parameter#toString()}
+	 */
+	public String getUsageString() {
+		List<String> parentCommandNames = new ArrayList<>();
+		Command command = this;
+		while (command.isSubcommand()) {
+			command = command.getParentCommand();
+			parentCommandNames.add(command.getName() + " ");
+		}
+		
+		StringBuilder builder = new StringBuilder();
+		parentCommandNames.stream().sorted(Comparator.reverseOrder()).forEach(builder::append);
+		builder.append(this.getParametersString());
+		return builder.toString();
 	}
 	
 }
