@@ -9,9 +9,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.UnknownDependencyException;
 
-import de.tr7zw.itemnbtapi.NBTItem;
+import de.tr7zw.nbtapi.NBTItem;
 
 public class IllegalItems implements Listener {
 	
@@ -27,9 +26,6 @@ public class IllegalItems implements Listener {
 	public IllegalItems(final Plugin plugin, final boolean debug) {
 		this.plugin = plugin;
 		this.debug = debug;
-		
-		if (Bukkit.getPluginManager().getPlugin("NBTApi") == null)
-			throw new UnknownDependencyException("NBTApi must be installed to use illegal items");
 		
 		Bukkit.getPluginManager().registerEvents(this, plugin);
 		

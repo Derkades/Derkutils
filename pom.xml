@@ -59,19 +59,5 @@
 			<version>2.5</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.github.tr7zw</groupId>
-			<artifactId>Item-NBT-API</artifactId>
-			<version>1.8.3</version>
-			<scope>provided</scope>
-		</dependency>
-
 	</dependencies>
-
-	<repositories>
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
-	</repositories>
 </project>
