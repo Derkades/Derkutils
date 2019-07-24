@@ -1,20 +1,14 @@
 package de.tr7zw.nbtapi.utils;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.ServicePriority;
-
-import javax.net.ssl.HttpsURLConnection;
-
 import static de.tr7zw.nbtapi.utils.MinecraftVersion.logger;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -26,6 +20,19 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.zip.GZIPOutputStream;
 
+import javax.net.ssl.HttpsURLConnection;
+
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 /**
  * bStats collects some data for plugin authors.
  * <p>
@@ -36,7 +43,7 @@ import java.util.zip.GZIPOutputStream;
 public class ApiMetricsLite {
 
 	private static final String PLUGINNAME = "ItemNBTAPI"; // DO NOT CHANGE THE NAME! else it won't link the data on bStats
-	private static final String PLUGINVERSION = "2.0.0"; // In case you fork the nbt-api for internal use in your network, plugins and so on, you *may* add that to the version here. (2.x.x-Timolia or something like that?)
+	private static final String PLUGINVERSION = "2.0.0-Derkutils"; // In case you fork the nbt-api for internal use in your network, plugins and so on, you *may* add that to the version here. (2.x.x-Timolia or something like that?)
 	// Not sure how good of an idea that is, so maybe just leave it as is ¯\_(ツ)_/¯
 
 	// The version of this bStats class
@@ -66,27 +73,22 @@ public class ApiMetricsLite {
 	// The plugin
 	private Plugin plugin;
 
-	/**
-	 * Class constructor.
-	 *
-	 */
 	public ApiMetricsLite() {
-
 		// The register method just uses any enabled plugin it can find to register. This *shouldn't* cause any problems, since the plugin isn't used any other way.
 		// Register our service
-		for(Plugin plug : Bukkit.getPluginManager().getPlugins()) {
-				plugin = plug;
-				if(plugin != null)
+		for(final Plugin plug : Bukkit.getPluginManager().getPlugins()) {
+				this.plugin = plug;
+				if(this.plugin != null) {
 					break;
+				}
 		}
-		if(plugin == null) {
+		if(this.plugin == null)
 			return;// Didn't find any plugin that could work
-		}
 
 		// Get the config file
-		File bStatsFolder = new File(plugin.getDataFolder().getParentFile(), "bStats");
-		File configFile = new File(bStatsFolder, "config.yml");
-		YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+		final File bStatsFolder = new File(this.plugin.getDataFolder().getParentFile(), "bStats");
+		final File configFile = new File(bStatsFolder, "config.yml");
+		final YamlConfiguration config = YamlConfiguration.loadConfiguration(configFile);
 
 		// Check if the config file exists
 		if (!config.isSet("serverUuid")) {
@@ -111,35 +113,35 @@ public class ApiMetricsLite {
 					).copyDefaults(true);
 			try {
 				config.save(configFile);
-			} catch (IOException ignored) { }
+			} catch (final IOException ignored) { }
 		}
 
 		// Load the data
 		serverUUID = config.getString("serverUuid");
 		logFailedRequests = config.getBoolean("logFailedRequests", false);
-		enabled = config.getBoolean("enabled", true);
+		this.enabled = config.getBoolean("enabled", true);
 		logSentData = config.getBoolean("logSentData", false);
 		logResponseStatusText = config.getBoolean("logResponseStatusText", false);
-		if (enabled) {
+		if (this.enabled) {
 			boolean found = false;
 			// Search for all other bStats Metrics classes to see if we are the first one
-			for (Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
+			for (final Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
 				try {
 					service.getField("NBT_BSTATS_VERSION"); // Create only one instance of the nbt-api bstats.
 					return;
-				} catch (NoSuchFieldException ignored) { }
+				} catch (final NoSuchFieldException ignored) { }
 				try {
 					service.getField("B_STATS_VERSION"); // Our identifier :)
 					found = true; // We aren't the first
 					break;
-				} catch (NoSuchFieldException ignored) { }
+				} catch (final NoSuchFieldException ignored) { }
 			}
 			// Register our service
-			Bukkit.getServicesManager().register(ApiMetricsLite.class, this, plugin, ServicePriority.Normal);
+			Bukkit.getServicesManager().register(ApiMetricsLite.class, this, this.plugin, ServicePriority.Normal);
 			if (!found) {
-				logger.info("[NBTAPI] Using the plugin '" + plugin.getName() + "' to create a bStats instance!");
+				logger.info("[NBTAPI] Using the plugin '" + this.plugin.getName() + "' to create a bStats instance!");
 				// We are the first!
-				startSubmitting();
+				this.startSubmitting();
 			}
 		}
 	}
@@ -150,7 +152,7 @@ public class ApiMetricsLite {
 	 * @return Whether bStats is enabled or not.
 	 */
 	public boolean isEnabled() {
-		return enabled;
+		return this.enabled;
 	}
 
 	/**
@@ -161,13 +163,13 @@ public class ApiMetricsLite {
 		timer.scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {
-				if (!plugin.isEnabled()) { // Plugin was disabled
+				if (!ApiMetricsLite.this.plugin.isEnabled()) { // Plugin was disabled
 					timer.cancel();
 					return;
 				}
 				// Nevertheless we want our code to run in the Bukkit main thread, so we have to use the Bukkit scheduler
 				// Don't be afraid! The connection to the bStats server is still async, only the stats collection is sync ;)
-				Bukkit.getScheduler().runTask(plugin, () -> submitData());
+				Bukkit.getScheduler().runTask(ApiMetricsLite.this.plugin, () -> ApiMetricsLite.this.submitData());
 			}
 		}, 1000l * 60l * 5l, 1000l * 60l * 30l);
 		// Submit the data every 30 minutes, first time after 5 minutes to give other plugins enough time to start
@@ -182,7 +184,7 @@ public class ApiMetricsLite {
 	 * @return The plugin specific data.
 	 */
 	public JsonObject getPluginData() {
-		JsonObject data = new JsonObject();
+		final JsonObject data = new JsonObject();
 
 		data.addProperty("pluginName", PLUGINNAME); // Append the name of the plugin
 		data.addProperty("pluginVersion", PLUGINVERSION); // Append the version of the plugin
@@ -202,25 +204,25 @@ public class ApiMetricsLite {
 		try {
 			// Around MC 1.8 the return type was changed to a collection from an array,
 			// This fixes java.lang.NoSuchMethodError: org.bukkit.Bukkit.getOnlinePlayers()Ljava/util/Collection;
-			Method onlinePlayersMethod = Class.forName("org.bukkit.Server").getMethod("getOnlinePlayers");
+			final Method onlinePlayersMethod = Class.forName("org.bukkit.Server").getMethod("getOnlinePlayers");
 			playerAmount = onlinePlayersMethod.getReturnType().equals(Collection.class)
 					? ((Collection<?>) onlinePlayersMethod.invoke(Bukkit.getServer())).size()
 							: ((Player[]) onlinePlayersMethod.invoke(Bukkit.getServer())).length;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			playerAmount = Bukkit.getOnlinePlayers().size(); // Just use the new method if the Reflection failed
 		}
-		int onlineMode = Bukkit.getOnlineMode() ? 1 : 0;
-		String bukkitVersion = Bukkit.getVersion();
-		String bukkitName = Bukkit.getName();
+		final int onlineMode = Bukkit.getOnlineMode() ? 1 : 0;
+		final String bukkitVersion = Bukkit.getVersion();
+		final String bukkitName = Bukkit.getName();
 
 		// OS/Java specific data
-		String javaVersion = System.getProperty("java.version");
-		String osName = System.getProperty("os.name");
-		String osArch = System.getProperty("os.arch");
-		String osVersion = System.getProperty("os.version");
-		int coreCount = Runtime.getRuntime().availableProcessors();
+		final String javaVersion = System.getProperty("java.version");
+		final String osName = System.getProperty("os.name");
+		final String osArch = System.getProperty("os.arch");
+		final String osVersion = System.getProperty("os.version");
+		final int coreCount = Runtime.getRuntime().availableProcessors();
 
-		JsonObject data = new JsonObject();
+		final JsonObject data = new JsonObject();
 
 		data.addProperty("serverUUID", serverUUID);
 
@@ -242,30 +244,30 @@ public class ApiMetricsLite {
 	 * Collects the data and sends it afterwards.
 	 */
 	private void submitData() {
-		final JsonObject data = getServerData();
+		final JsonObject data = this.getServerData();
 
-		JsonArray pluginData = new JsonArray();
+		final JsonArray pluginData = new JsonArray();
 		// Search for all other bStats Metrics classes to get their plugin data
-		for (Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
+		for (final Class<?> service : Bukkit.getServicesManager().getKnownServices()) {
 			try {
 				service.getField("B_STATS_VERSION"); // Our identifier :)
 
-				for (RegisteredServiceProvider<?> provider : Bukkit.getServicesManager().getRegistrations(service)) {
+				for (final RegisteredServiceProvider<?> provider : Bukkit.getServicesManager().getRegistrations(service)) {
 					try {
-						Object plugin = provider.getService().getMethod("getPluginData").invoke(provider.getProvider());
+						final Object plugin = provider.getService().getMethod("getPluginData").invoke(provider.getProvider());
 						if (plugin instanceof JsonObject) {
 							pluginData.add((JsonObject) plugin);
 						} else { // old bstats version compatibility
 							try {
-								Class<?> jsonObjectJsonSimple = Class.forName("org.json.simple.JSONObject");
+								final Class<?> jsonObjectJsonSimple = Class.forName("org.json.simple.JSONObject");
 								if (plugin.getClass().isAssignableFrom(jsonObjectJsonSimple)) {
-									Method jsonStringGetter = jsonObjectJsonSimple.getDeclaredMethod("toJSONString");
+									final Method jsonStringGetter = jsonObjectJsonSimple.getDeclaredMethod("toJSONString");
 									jsonStringGetter.setAccessible(true);
-									String jsonString = (String) jsonStringGetter.invoke(plugin);
-									JsonObject object = new JsonParser().parse(jsonString).getAsJsonObject();
+									final String jsonString = (String) jsonStringGetter.invoke(plugin);
+									final JsonObject object = new JsonParser().parse(jsonString).getAsJsonObject();
 									pluginData.add(object);
 								}
-							} catch (ClassNotFoundException e) {
+							} catch (final ClassNotFoundException e) {
 								// minecraft version 1.14+
 								if (logFailedRequests) {
 									logger.log(Level.WARNING, "[NBTAPI][BSTATS] Encountered exception while posting request!", e);
@@ -278,25 +280,22 @@ public class ApiMetricsLite {
 					} catch (NullPointerException | NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
 					}
 				}
-			} catch (NoSuchFieldException ignored) { }
+			} catch (final NoSuchFieldException ignored) { }
 		}
 
 		data.add("plugins", pluginData);
 
 		// Create a new thread for the connection to the bStats server
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					// Send the data
-					sendData(plugin, data);
-				} catch (Exception e) {
-					// Something went wrong! :(
-					if (logFailedRequests) {
-						logger.log(Level.WARNING, "[NBTAPI][BSTATS] Could not submit plugin stats of " + plugin.getName(), e);
-						// Not using the plugins logger since the plugin isn't the plugin containing the NBT-Api most of the time
-						//plugin.getLogger().log(Level.WARNING, "Could not submit plugin stats of " + plugin.getName(), e);
-					}
+		new Thread(() -> {
+			try {
+				// Send the data
+				sendData(ApiMetricsLite.this.plugin, data);
+			} catch (final Exception e) {
+				// Something went wrong! :(
+				if (logFailedRequests) {
+					logger.log(Level.WARNING, "[NBTAPI][BSTATS] Could not submit plugin stats of " + ApiMetricsLite.this.plugin.getName(), e);
+					// Not using the plugins logger since the plugin isn't the plugin containing the NBT-Api most of the time
+					//plugin.getLogger().log(Level.WARNING, "Could not submit plugin stats of " + plugin.getName(), e);
 				}
 			}
 		}).start();
@@ -309,22 +308,20 @@ public class ApiMetricsLite {
 	 * @param data The data to send.
 	 * @throws Exception If the request failed.
 	 */
-	private static void sendData(Plugin plugin, JsonObject data) throws Exception {
-		if (data == null) {
+	private static void sendData(final Plugin plugin, final JsonObject data) throws Exception {
+		if (data == null)
 			throw new IllegalArgumentException("Data cannot be null!");
-		}
-		if (Bukkit.isPrimaryThread()) {
+		if (Bukkit.isPrimaryThread())
 			throw new IllegalAccessException("This method must not be called from the main thread!");
-		}
 		if (logSentData) {
 			System.out.println("[NBTAPI][BSTATS] Sending data to bStats: " + data.toString());
 			// Not using the plugins logger since the plugin isn't the plugin containing the NBT-Api most of the time
 			//plugin.getLogger().info("Sending data to bStats: " + data.toString());
 		}
-		HttpsURLConnection connection = (HttpsURLConnection) new URL(URL).openConnection();
+		final HttpsURLConnection connection = (HttpsURLConnection) new URL(URL).openConnection();
 
 		// Compress the data to save bandwidth
-		byte[] compressedData = compress(data.toString());
+		final byte[] compressedData = compress(data.toString());
 
 		// Add headers
 		connection.setRequestMethod("POST");
@@ -337,15 +334,15 @@ public class ApiMetricsLite {
 
 		// Send data
 		connection.setDoOutput(true);
-		DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
+		final DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
 		outputStream.write(compressedData);
 		outputStream.flush();
 		outputStream.close();
 
-		InputStream inputStream = connection.getInputStream();
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+		final InputStream inputStream = connection.getInputStream();
+		final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		String line;
 		while ((line = bufferedReader.readLine()) != null) {
 			builder.append(line);
@@ -366,11 +363,10 @@ public class ApiMetricsLite {
 	 * @throws IOException If the compression failed.
 	 */
 	private static byte[] compress(final String str) throws IOException {
-		if (str == null) {
+		if (str == null)
 			return new byte[0];
-		}
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		GZIPOutputStream gzip = new GZIPOutputStream(outputStream);
+		final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		final GZIPOutputStream gzip = new GZIPOutputStream(outputStream);
 		gzip.write(str.getBytes(StandardCharsets.UTF_8));
 		gzip.close();
 		return outputStream.toByteArray();
