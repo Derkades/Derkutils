@@ -5,8 +5,8 @@ package xyz.derkades.derkutils;
  * @param <T>
  */
 @FunctionalInterface
-public interface ThrowingSupplier<T> {
+public interface ThrowingSupplier<T, E extends Exception> {
 
-	public T get() throws Exception;
+	public T get() throws E;
 
 }

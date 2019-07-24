@@ -15,7 +15,7 @@ public class BukkitFuture<T> {
 	private final List<Consumer<T>> onCompleteCallbacks;
 	private final List<Consumer<Exception>> onExceptionCallbacks;
 
-	public BukkitFuture(final Plugin plugin, final ThrowingSupplier<T> action) {
+	public BukkitFuture(final Plugin plugin, final ThrowingSupplier<T, Exception> action) {
 		this.plugin = plugin;
 		this.onCompleteCallbacks = new ArrayList<>();
 		this.onExceptionCallbacks = new ArrayList<>();
@@ -25,7 +25,11 @@ public class BukkitFuture<T> {
 				final T result = action.get();
 				Bukkit.getScheduler().runTask(this.plugin, () -> this.onCompleteCallbacks.forEach((c) -> c.accept(result)));
 			} catch (final Exception e) {
-				Bukkit.getScheduler().runTask(this.plugin, () -> this.onExceptionCallbacks.forEach((c) -> c.accept(e)));
+				if (this.onExceptionCallbacks.isEmpty())
+					throw new RuntimeException(e);
+				else {
+					Bukkit.getScheduler().runTask(this.plugin, () -> this.onExceptionCallbacks.forEach((c) -> c.accept(e)));
+				}
 			}
 		});
 	}
