@@ -17,13 +17,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import xyz.derkades.derkutils.bukkit.IllegalItems;
+
 public abstract class IconMenu implements Listener {
 
 	private String name;
 	private int size;
 	private final Plugin plugin;
-	private final Player player;
+	protected final Player player;
 
+	private final IllegalItems illegalItems;
+	
 	public Map<Integer, ItemStack> items;
 	private Inventory inventory;
 
@@ -42,6 +46,8 @@ public abstract class IconMenu implements Listener {
 		this.items = new HashMap<>();
 
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+		
+		this.illegalItems = new IllegalItems(plugin);
 	}
 
 	/**
@@ -83,9 +89,22 @@ public abstract class IconMenu implements Listener {
 	}
 
 	/**
-	 * Opens the menu
+	 * Opens the menu, even when a menu is already open. This can cause issues, be careful!
 	 */
 	public void open() {
+		this.open(true);
+	}
+	
+	/**
+	 * Opens a menu
+	 * @param force Whether the menu should be opened if a menu is already open. This can cause issues, be careful!
+	 */
+	public void open(final boolean force) {
+		if (!force && this.player.getOpenInventory() == null) {
+			System.out.println(String.format("Not opening menu '%s' to %s, because they already have a menu open. Use IconMenu#open(true) to force open the menu.", 
+					this.name, this.player.getName()));
+			return;
+		}
 		this.inventory = Bukkit.createInventory(this.player, this.size, this.name);
 		this.refreshItems();
 		this.player.openInventory(this.inventory);
@@ -97,6 +116,8 @@ public abstract class IconMenu implements Listener {
 	public void refreshItems() {
 		this.inventory.clear();
 		for (final Map.Entry<Integer, ItemStack> menuItem : this.items.entrySet()){
+			ItemStack item = menuItem.getValue();
+			item = this.illegalItems.setIllegal(item, true);
 			this.inventory.setItem(menuItem.getKey(), menuItem.getValue());
 		}
 	}
