@@ -3,6 +3,7 @@ package xyz.derkades.derkutils.bukkit;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -54,7 +55,7 @@ public class IllegalItems implements Listener {
 		HandlerList.unregisterAll(this);
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onInventoryClick(final InventoryClickEvent event) {
 		if (event.getClickedInventory().getType() == InventoryType.PLAYER) {
 			final ItemStack item = event.getCurrentItem();
