@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
+
 public class ListUtils {
 	
 	/**
@@ -173,6 +175,11 @@ public class ListUtils {
 			list.addAll(listToAdd);
 		
 		return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T> T[] subarray(T[] array, int startIndexInclusive, int endIndexExclusive){
+		return (T[]) ArrayUtils.subarray(array, startIndexInclusive, endIndexExclusive);
 	}
 
 }
