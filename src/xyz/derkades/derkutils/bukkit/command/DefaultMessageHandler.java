@@ -117,4 +117,9 @@ public class DefaultMessageHandler extends MessageHandler {
 		sender.sendMessage("You don't have permission to execute this command. (" + permission + ")");
 	}
 
+	@Override
+	public void sendNotPlayerMessage(final Command command, final CommandSender sender, final String label, final String[] args) {
+		sender.sendMessage("You must execute this command as a player");
+	}
+
 }

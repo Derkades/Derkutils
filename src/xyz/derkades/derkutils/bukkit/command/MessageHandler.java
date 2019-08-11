@@ -34,4 +34,8 @@ public abstract class MessageHandler {
 	public abstract void sendNoPermissionMessage(Command command,
 			CommandSender sender, String label, String[] args,
 			String permission);
+
+	public abstract void sendNotPlayerMessage(Command command,
+			CommandSender sender, String label, String[] args);
+
 }

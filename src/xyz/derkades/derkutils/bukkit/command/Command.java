@@ -3,7 +3,6 @@ package xyz.derkades.derkutils.bukkit.command;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
 
 import org.bukkit.command.CommandSender;
 
@@ -18,9 +17,10 @@ public class Command {
 	private final String[] aliases;
 	final List<Command> subcommands;
 	final List<Parameter<?>> parameters;
-	Consumer<List<Parameter<?>>> callback;
+	CommandCallback callback;
 	final MessageHandler messageHandler;
 	String permission;
+	boolean requirePlayer = false;
 
 	public Command(final Command parent, final MessageHandler helpHandler, final String name, final String description, final String usage, final String... aliases) {
 		this.parent = parent;
@@ -76,7 +76,7 @@ public class Command {
 	 * callback is optional but can be useful, for instance if you
 	 * want to display a custom help message.
 	 */
-	public void setCallback(final Consumer<List<Parameter<?>>> callback) {
+	public void setCallback(final CommandCallback callback) {
 		this.callback = callback;
 	}
 
@@ -120,6 +120,10 @@ public class Command {
 
 	public void setPermission(final String permission) {
 		this.permission = permission;
+	}
+
+	public void setRequirePlayer(final boolean requirePlayer) {
+		this.requirePlayer = requirePlayer;
 	}
 
 }

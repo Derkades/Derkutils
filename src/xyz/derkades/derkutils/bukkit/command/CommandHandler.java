@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import xyz.derkades.derkutils.ListUtils;
@@ -31,6 +32,7 @@ public class CommandHandler extends org.bukkit.command.Command {
 	public boolean execute(final CommandSender sender, final String label, final String[] args) {
 		if (!this.command.hasPermission(sender)) {
 			this.command.messageHandler.sendNoPermissionMessage(this.command, sender, label, args, this.command.permission);
+			return true;
 		}
 
 		Command subcommand = this.command; // This variable is called "subcommand", but if 'this.command' does not have any subcommands 'subcommand' will be same as 'this.command'
@@ -62,43 +64,48 @@ public class CommandHandler extends org.bukkit.command.Command {
 			return true;
 		}
 
-		if (subcommand == this.command) {
-			// No valid subcommand found
-			subcommand.messageHandler.sendSubcommandsMessage(subcommand, sender, label, args);
-			return true;
-		} else {
-			if (!subcommand.hasPermission(sender)) {
-				subcommand.messageHandler.sendNoPermissionMessage(this.command, sender, label, args, this.command.permission);
-			}
-
-			final String[] parameterStrings = ListUtils.subarray(args, 0, layer);
-			final List<Parameter<?>> parameters = subcommand.parameters;
-			if (args.length - layer > parameters.size()) {
-				// The number of arguments provided, exluding subcommands, is larger than the number of parameters
-				// TODO Send too many parameters message
-				return true;
-			}
-
-			for (int i = 0; i < parameters.size(); i++) {
-				final Parameter<?> parameter = parameters.get(i);
-				if (parameter.isOptional() || (parameterStrings.length > (i + 1))) { // If this parameter was specified, or if the parameter is optional
-					// Try parsing the parameter
-					final String specifiedParameter = parameterStrings[i];
-					try {
-						parameter.setStringValue(specifiedParameter);
-					} catch (final ParameterParseException e) {
-						subcommand.messageHandler.sendInvalidParameterMessage(subcommand, sender, label, args, parameter, e);
-						return true;
-					}
-				} else {
-					subcommand.messageHandler.sendMissingParameterMessage(subcommand, sender, label, args, parameter);
-					return true;
-				}
-			}
-
-			subcommand.callback.accept(parameters);
+		if (!subcommand.hasPermission(sender)) {
+			subcommand.messageHandler.sendNoPermissionMessage(this.command, sender, label, args,
+					this.command.permission);
 			return true;
 		}
+
+		if (subcommand.requirePlayer && !(sender instanceof Player)) {
+			subcommand.messageHandler.sendNotPlayerMessage(subcommand, sender, label, args);
+			return true;
+		}
+
+		final String[] parameterStrings = ListUtils.subarray(args, 0, layer);
+		final List<Parameter<?>> parameters = subcommand.parameters;
+		if (args.length - layer > parameters.size()) {
+			// The number of arguments provided, exluding subcommands, is larger than the
+			// number of parameters
+			// TODO Send too many parameters message
+			return true;
+		}
+
+		for (int i = 0; i < parameters.size(); i++) {
+			final Parameter<?> parameter = parameters.get(i);
+
+			// If this parameter was specified, or if the parameter is optional
+			if (parameter.isOptional() || (parameterStrings.length > (i + 1))) {
+				// Try parsing the parameter
+				final String specifiedParameter = parameterStrings[i];
+				try {
+					parameter.setStringValue(specifiedParameter);
+				} catch (final ParameterParseException e) {
+					subcommand.messageHandler.sendInvalidParameterMessage(subcommand, sender, label, args, parameter,
+							e);
+					return true;
+				}
+			} else {
+				subcommand.messageHandler.sendMissingParameterMessage(subcommand, sender, label, args, parameter);
+				return true;
+			}
+		}
+
+		subcommand.callback.accept(sender, parameters);
+		return true;
 	}
 
 }
