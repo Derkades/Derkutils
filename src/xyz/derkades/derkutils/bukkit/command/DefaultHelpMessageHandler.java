@@ -14,16 +14,14 @@ import xyz.derkades.derkutils.bukkit.command.parameter.ParameterParseException;
 
 public class DefaultHelpMessageHandler extends HelpMessageHandler {
 
-	public DefaultHelpMessageHandler(final Command parentCommand) {
-		super(parentCommand);
-	}
+	DefaultHelpMessageHandler(){}
 
 	@Override
 	public void sendInvalidSubCommandHelpMessage(final Command command, final CommandSender sender, final String label, final String[] args,
 			final String invalidSubcommandName) {
-		
+
 		final List<String> usageStrings = new ArrayList<>();
-		
+
 		if (command.subcommands.isEmpty()) { // This shouldn't ever happen.. right?
 			usageStrings.add("/" + command.getUsageString());
 		} else {
@@ -31,7 +29,7 @@ public class DefaultHelpMessageHandler extends HelpMessageHandler {
 				usageStrings.add("/" + subcommand.getUsageString());
 			}
 		}
-		
+
 		final ComponentBuilder builder = new ComponentBuilder("Invalid subcommand").color(ChatColor.RED);
 		for (final String usageString : usageStrings) {
 			builder.append("\n -" + usageString).color(ChatColor.GRAY)
@@ -75,7 +73,7 @@ public class DefaultHelpMessageHandler extends HelpMessageHandler {
 	@Override
 	public void sendSubcommandsMessage(final Command command, final CommandSender sender, final String label, final String[] args) {
 		final List<String> usageStrings = new ArrayList<>();
-		
+
 		if (command.subcommands.isEmpty()) { // This shouldn't ever happen.. right?
 			usageStrings.add("/" + command.getUsageString());
 		} else {
@@ -83,7 +81,7 @@ public class DefaultHelpMessageHandler extends HelpMessageHandler {
 				usageStrings.add("/" + subcommand.getUsageString());
 			}
 		}
-		
+
 		final ComponentBuilder builder = new ComponentBuilder("Subcommands:").color(ChatColor.WHITE);
 		for (final String usageString : usageStrings) {
 			builder.append("\n -" + usageString).color(ChatColor.GRAY)
