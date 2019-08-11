@@ -5,9 +5,13 @@ import org.bukkit.command.CommandSender;
 import xyz.derkades.derkutils.bukkit.command.parameter.Parameter;
 import xyz.derkades.derkutils.bukkit.command.parameter.ParameterParseException;
 
-public abstract class HelpMessageHandler {
+public abstract class MessageHandler {
 
-	public static final HelpMessageHandler DEFAULT = new DefaultHelpMessageHandler();
+	protected final Command parentCommand;
+
+	public MessageHandler(final Command parentCommand) {
+		this.parentCommand = parentCommand;
+	}
 
 	public abstract void sendInvalidSubCommandHelpMessage(Command command,
 			CommandSender sender, String label, String[] args,
@@ -25,6 +29,13 @@ public abstract class HelpMessageHandler {
 			Parameter<?> parameter, ParameterParseException e);
 
 	public abstract void sendSubcommandsMessage(Command command,
+			CommandSender sender, String label, String[] args);
+
+	public abstract void sendNoPermissionMessage(Command command,
+			CommandSender sender, String label, String[] args,
+			String permission);
+
+	public abstract void sendNotPlayerMessage(Command command,
 			CommandSender sender, String label, String[] args);
 
 }

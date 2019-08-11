@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -12,9 +13,11 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import xyz.derkades.derkutils.bukkit.command.parameter.Parameter;
 import xyz.derkades.derkutils.bukkit.command.parameter.ParameterParseException;
 
-public class DefaultHelpMessageHandler extends HelpMessageHandler {
+public class DefaultMessageHandler extends MessageHandler {
 
-	DefaultHelpMessageHandler(){}
+	public DefaultMessageHandler(final Command parentCommand) {
+		super(parentCommand);
+	}
 
 	@Override
 	public void sendInvalidSubCommandHelpMessage(final Command command, final CommandSender sender, final String label, final String[] args,
@@ -42,32 +45,50 @@ public class DefaultHelpMessageHandler extends HelpMessageHandler {
 	public void sendMissingParameterMessage(final Command command, final CommandSender sender, final String label, final String[] args,
 			final Parameter<?> parameter) {
 		final String correctUsage = "/" + command.getUsage();
-		sender.spigot().sendMessage(new ComponentBuilder(String.format("Missing parameter %s (%s)!", parameter.toString(), parameter.getConstraintMessage())).color(ChatColor.RED)
-				.append(correctUsage).color(ChatColor.GRAY)
-				.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, correctUsage))
-				.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to run " + correctUsage).color(ChatColor.GRAY).create()))
-				.create());
+		if (sender instanceof Player) {
+			final Player player = (Player) sender;
+			player.spigot().sendMessage(new ComponentBuilder(String.format("Missing parameter %s (%s)!", parameter.toString(), parameter.getConstraintMessage())).color(ChatColor.RED)
+					.append(correctUsage).color(ChatColor.GRAY)
+					.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, correctUsage))
+					.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to run " + correctUsage).color(ChatColor.GRAY).create()))
+					.create());
+		} else {
+			sender.sendMessage(String.format(ChatColor.RED + "Missing parameter %s (%s)!", parameter.toString(), parameter.getConstraintMessage()));
+		}
+
+
 	}
 
 	@Override
 	public void sendTooManyParametersMessage(final Command command, final CommandSender sender, final String label, final String[] args) {
 		final String correctUsage = "/" + command.getUsage();
-		sender.spigot().sendMessage(new ComponentBuilder("Too many paremeters! ").color(ChatColor.RED)
-				.append(correctUsage).color(ChatColor.GRAY)
-				.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, correctUsage))
-				.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to run " + correctUsage).color(ChatColor.GRAY).create()))
-				.create());
+
+		if (sender instanceof Player) {
+			final Player player = (Player) sender;
+			player.spigot().sendMessage(new ComponentBuilder("Too many paremeters! ").color(ChatColor.RED)
+					.append(correctUsage).color(ChatColor.GRAY)
+					.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, correctUsage))
+					.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to run " + correctUsage).color(ChatColor.GRAY).create()))
+					.create());
+		} else {
+			sender.sendMessage(ChatColor.RED + "Too many paremeters!");
+		}
+
 	}
 
 	@Override
 	public void sendInvalidParameterMessage(final Command command, final CommandSender sender, final String label, final String[] args,
 			final Parameter<?> parameter, final ParameterParseException e) {
 		final String correctUsage = "/" + command.getUsage();
-		sender.spigot().sendMessage(new ComponentBuilder(String.format("Invalid parameter %s!\nThis parameter must be \'%s\'!", parameter.toString(), parameter.getConstraintMessage())).color(ChatColor.RED)
-				.append(correctUsage).color(ChatColor.GRAY)
-				.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, correctUsage))
-				.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to run " + correctUsage).color(ChatColor.GRAY).create()))
-				.create());
+		if (sender instanceof Player) {
+			final Player player = (Player) sender;
+			player.spigot().sendMessage(new ComponentBuilder(String.format("Invalid parameter %s!\nThis parameter must be \'%s\'!", parameter.toString(), parameter.getConstraintMessage())).color(ChatColor.RED)
+					.append(correctUsage).color(ChatColor.GRAY)
+					.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, correctUsage))
+					.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to run " + correctUsage).color(ChatColor.GRAY).create()))
+					.create());
+		}
+		sender.sendMessage(String.format(ChatColor.RED + "Invalid parameter %s!\nThis parameter must be \'%s\'!", parameter.toString(), parameter.getConstraintMessage()));
 	}
 
 	@Override
@@ -88,6 +109,17 @@ public class DefaultHelpMessageHandler extends HelpMessageHandler {
 					.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, usageString))
 					.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to run " + usageString).color(ChatColor.GRAY).create()));
 		}
+	}
+
+	@Override
+	public void sendNoPermissionMessage(final Command command, final CommandSender sender, final String label, final String[] args,
+			final String permission) {
+		sender.sendMessage("You don't have permission to execute this command. (" + permission + ")");
+	}
+
+	@Override
+	public void sendNotPlayerMessage(final Command command, final CommandSender sender, final String label, final String[] args) {
+		sender.sendMessage("You must execute this command as a player");
 	}
 
 }
