@@ -13,18 +13,18 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import xyz.derkades.derkutils.bukkit.command.parameter.Parameter;
 import xyz.derkades.derkutils.bukkit.command.parameter.ParameterParseException;
 
-public class DefaultHelpMessageHandler extends HelpMessageHandler {
+public class DefaultMessageHandler extends MessageHandler {
 
-	public DefaultHelpMessageHandler(final Command parentCommand) {
+	public DefaultMessageHandler(final Command parentCommand) {
 		super(parentCommand);
 	}
 
 	@Override
 	public void sendInvalidSubCommandHelpMessage(final Command command, final CommandSender sender, final String label, final String[] args,
 			final String invalidSubcommandName) {
-		
+
 		final List<String> usageStrings = new ArrayList<>();
-		
+
 		if (command.subcommands.isEmpty()) { // This shouldn't ever happen.. right?
 			usageStrings.add("/" + command.getUsageString());
 		} else {
@@ -32,7 +32,7 @@ public class DefaultHelpMessageHandler extends HelpMessageHandler {
 				usageStrings.add("/" + subcommand.getUsageString());
 			}
 		}
-		
+
 		final ComponentBuilder builder = new ComponentBuilder("Invalid subcommand").color(ChatColor.RED);
 		for (final String usageString : usageStrings) {
 			builder.append("\n -" + usageString).color(ChatColor.GRAY)
@@ -46,7 +46,7 @@ public class DefaultHelpMessageHandler extends HelpMessageHandler {
 			final Parameter<?> parameter) {
 		final String correctUsage = "/" + command.getUsage();
 		if (sender instanceof Player) {
-			Player player = (Player) sender;
+			final Player player = (Player) sender;
 			player.spigot().sendMessage(new ComponentBuilder(String.format("Missing parameter %s (%s)!", parameter.toString(), parameter.getConstraintMessage())).color(ChatColor.RED)
 					.append(correctUsage).color(ChatColor.GRAY)
 					.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, correctUsage))
@@ -55,16 +55,16 @@ public class DefaultHelpMessageHandler extends HelpMessageHandler {
 		} else {
 			sender.sendMessage(String.format(ChatColor.RED + "Missing parameter %s (%s)!", parameter.toString(), parameter.getConstraintMessage()));
 		}
-		
-		
+
+
 	}
 
 	@Override
 	public void sendTooManyParametersMessage(final Command command, final CommandSender sender, final String label, final String[] args) {
 		final String correctUsage = "/" + command.getUsage();
-		
+
 		if (sender instanceof Player) {
-			Player player = (Player) sender;
+			final Player player = (Player) sender;
 			player.spigot().sendMessage(new ComponentBuilder("Too many paremeters! ").color(ChatColor.RED)
 					.append(correctUsage).color(ChatColor.GRAY)
 					.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, correctUsage))
@@ -73,7 +73,7 @@ public class DefaultHelpMessageHandler extends HelpMessageHandler {
 		} else {
 			sender.sendMessage(ChatColor.RED + "Too many paremeters!");
 		}
-		
+
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class DefaultHelpMessageHandler extends HelpMessageHandler {
 			final Parameter<?> parameter, final ParameterParseException e) {
 		final String correctUsage = "/" + command.getUsage();
 		if (sender instanceof Player) {
-			Player player = (Player) sender;
+			final Player player = (Player) sender;
 			player.spigot().sendMessage(new ComponentBuilder(String.format("Invalid parameter %s!\nThis parameter must be \'%s\'!", parameter.toString(), parameter.getConstraintMessage())).color(ChatColor.RED)
 					.append(correctUsage).color(ChatColor.GRAY)
 					.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, correctUsage))
@@ -94,7 +94,7 @@ public class DefaultHelpMessageHandler extends HelpMessageHandler {
 	@Override
 	public void sendSubcommandsMessage(final Command command, final CommandSender sender, final String label, final String[] args) {
 		final List<String> usageStrings = new ArrayList<>();
-		
+
 		if (command.subcommands.isEmpty()) { // This shouldn't ever happen.. right?
 			usageStrings.add("/" + command.getUsageString());
 		} else {
@@ -102,13 +102,19 @@ public class DefaultHelpMessageHandler extends HelpMessageHandler {
 				usageStrings.add("/" + subcommand.getUsageString());
 			}
 		}
-		
+
 		final ComponentBuilder builder = new ComponentBuilder("Subcommands:").color(ChatColor.WHITE);
 		for (final String usageString : usageStrings) {
 			builder.append("\n -" + usageString).color(ChatColor.GRAY)
 					.event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, usageString))
 					.event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to run " + usageString).color(ChatColor.GRAY).create()));
 		}
+	}
+
+	@Override
+	public void sendNoPermissionMessage(final Command command, final CommandSender sender, final String label, final String[] args,
+			final String permission) {
+		sender.sendMessage("You don't have permission to execute this command. (" + permission + ")");
 	}
 
 }
