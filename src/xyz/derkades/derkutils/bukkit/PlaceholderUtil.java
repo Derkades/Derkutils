@@ -21,7 +21,7 @@ public class PlaceholderUtil {
 		return strings;
 	}
 
-	public static String parsePapiPlaceholders(String string, final Player player, final Placeholder... placeholders) {
+	public static String parsePapiPlaceholders(final Player player, String string, final Placeholder... placeholders) {
 		for (final Placeholder p : placeholders) string = p.parse(string);
 
 		string = parsePapiPlaceholders(player, string);
@@ -29,7 +29,7 @@ public class PlaceholderUtil {
 		return string;
 	}
 
-	public static List<String> parsePapiPlaceholders(List<String> strings, final Player player, final Placeholder... placeholders) {
+	public static List<String> parsePapiPlaceholders(final Player player, List<String> strings, final Placeholder... placeholders) {
 		for (final Placeholder p : placeholders) {
 			strings = p.parse(strings);
 		}
