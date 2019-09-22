@@ -86,9 +86,26 @@ public class ItemBuilder {
 	}
 
 	public ItemBuilder skullOwner(final String ownerName) {
-		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
-		meta.setOwner(ownerName);
-		this.item.setItemMeta(meta);
+		if (ownerName.length() <= 16) {
+			final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
+			meta.setOwner(ownerName);
+			this.item.setItemMeta(meta);
+		}
+		else
+		{
+			SkullMeta headMeta = (SkullMeta)item.getItemMeta();
+			GameProfile profile = new GameProfile(UUID.randomUUID(), (String)null);
+			profile.getProperties().put("textures", new Property("textures", ownerName));
+
+			try {
+				Field profileField = headMeta.getClass().getDeclaredField("profile");
+				profileField.setAccessible(true);
+				profileField.set(headMeta, profile);
+			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException var7) {
+				var7.printStackTrace();
+			}
+			item.setItemMeta(headMeta);
+		}
 		return this;
 	}
 
