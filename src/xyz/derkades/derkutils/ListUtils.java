@@ -74,17 +74,14 @@ public class ListUtils {
 	 * @see #getRandomValueFromList(List)
 	 */
 	public static <T> T getRandomValueFromArray(final T[] array){
-		if (array == null) {
+		if (array == null)
 			throw new IllegalArgumentException("Array must not be null");
-		}
 
-		if (array.length == 1) {
+		if (array.length == 1)
 			return array[0];
-		}
 
-		if (array.length == 0) {
+		if (array.length == 0)
 			throw new IllegalArgumentException("Array must not be empty");
-		}
 
 		final int size = array.length;
 		final int index = Random.getRandomInteger(0, size - 1);
@@ -97,17 +94,14 @@ public class ListUtils {
 	 * @return A random element from the provided collection
 	 */
 	public static <T> T getRandomValueFromList(final Collection<T> list) {
-		if (list == null) {
+		if (list == null)
 			throw new IllegalArgumentException("List must not be null");
-		}
 
-		if (list.size() == 0) {
+		if (list.size() == 0)
 			throw new IllegalArgumentException("List must not be empty");
-		}
 
-		if (list.size() == 1) {
+		if (list.size() == 1)
 			return (T) list.toArray()[0];
-		}
 
 		final int size = list.size();
 		final int index = Random.getRandomInteger(0, size - 1); //Size -1 because if the list has 1 entry (entry 0) the length is 1.
@@ -134,9 +128,8 @@ public class ListUtils {
 	 * @return ["Hello there", "Lorem dolor"]
 	 */
 	public static List<String> replaceInStringList(final List<String> list, final Object[] before, final Object[] after) {
-		if (before.length != after.length) {
+		if (before.length != after.length)
 			throw new IllegalArgumentException("before[] length must be equal to after[] length");
-		}
 
 		final List<String> newList = new ArrayList<>();
 
@@ -165,16 +158,18 @@ public class ListUtils {
 
 	@SafeVarargs
 	public static <T> List<T> addToList(final List<T> list, final T... items) {
-		for (final T item : items)
+		for (final T item : items) {
 			list.add(item);
+		}
 
 		return list;
 	}
 
 	@SafeVarargs
 	public static <T> List<T> addToList(final List<T> list, final List<T>... listsToAdd){
-		for (final List<T> listToAdd : listsToAdd)
+		for (final List<T> listToAdd : listsToAdd) {
 			list.addAll(listToAdd);
+		}
 
 		return list;
 	}
@@ -207,7 +202,7 @@ public class ListUtils {
 		}
 		return (T[]) list.toArray();
 	}
-	
+
 	/**
 	 * Removes the first element from the list {@code amount} times. If {@code amount} is greater than {@code list.size()}, the list is cleared.
 	 * @param <T>
@@ -215,40 +210,46 @@ public class ListUtils {
 	 * @param list
 	 * @return
 	 */
-	public static <T> void removeLeadingElementsFromList(int amount, List<T> list){
+	public static <T> void removeLeadingElementsFromList(final int amount, final List<T> list){
 		if (amount > list.size()) {
 			list.clear();
 		}
-		
+
 		for (int i = 0; i < amount; i++) {
 			list.remove(0);
 		}
 	}
-	
+
 	/**
 	 * @deprecated Untested
 	 */
 	@Deprecated
-	public static <T> T[] removeLeadingElementsFromArray(int amount, T[] array) {
+	public static <T> T[] removeLeadingElementsFromArray(final int amount, final T[] array) {
 		@SuppressWarnings("unchecked")
+		final
 		T[] copy = (T[]) Array.newInstance(array.getClass(), array.length - amount);
 		for (int i = amount - 1; i < array.length - amount; i++) {
 			copy[i] = array[i + amount];
 		}
 		return copy;
 	}
-	
-	public static <T> List<T> copyArrayToList(T[] array){
-		List<T> list = new ArrayList<>();
-		for (T element : array) {
+
+	public static <T> List<T> copyArrayToList(final T[] array){
+		final List<T> list = new ArrayList<>();
+		for (final T element : array) {
 			list.add(element);
 		}
 		return list;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public static <T> T[] subarray(T[] array, int startIndexInclusive, int endIndexExclusive){
+	public static <T> T[] subarray(final T[] array, final int startIndexInclusive, final int endIndexExclusive){
 		return (T[]) ArrayUtils.subarray(array, startIndexInclusive, endIndexExclusive);
+	}
+
+	public static <T> List<T> inFirstNotSecond(final List<T> first, final List<T> second){
+		first.removeAll(second);
+		return first;
 	}
 
 }
