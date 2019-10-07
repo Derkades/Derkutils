@@ -252,4 +252,9 @@ public class ListUtils {
 		return first;
 	}
 
+	public static <T> List<T> inFirstAndSecond(final List<T> first, final List<T> second){
+		first.removeIf((a) -> !second.contains(a));
+		return first;
+	}
+
 }
