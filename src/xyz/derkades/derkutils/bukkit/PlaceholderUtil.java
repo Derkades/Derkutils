@@ -10,8 +10,9 @@ import org.bukkit.entity.Player;
 public class PlaceholderUtil {
 
 	public static String parsePlaceholders(String string, final Placeholder... placeholders) {
-		for (final Placeholder p : placeholders)
+		for (final Placeholder p : placeholders) {
 			string = p.parse(string);
+		}
 		return string;
 	}
 
@@ -22,17 +23,17 @@ public class PlaceholderUtil {
 		return strings;
 	}
 
-	public static String parsePapiPlaceholders(String string, final Player player, final Placeholder... placeholders) {
-		for (final Placeholder p : placeholders)
+	public static String parsePapiPlaceholders(final Player player, String string, final Placeholder... placeholders) {
+		for (final Placeholder p : placeholders) {
 			string = p.parse(string);
+		}
 
 		string = parsePapiPlaceholders(player, string);
 
 		return string;
 	}
 
-	public static List<String> parsePapiPlaceholders(List<String> strings, final Player player,
-			final Placeholder... placeholders) {
+	public static List<String> parsePapiPlaceholders(final Player player, List<String> strings, final Placeholder... placeholders) {
 		for (final Placeholder p : placeholders) {
 			strings = p.parse(strings);
 		}
@@ -44,7 +45,6 @@ public class PlaceholderUtil {
 
 	/**
 	 * Parses PlaceholderAPI placeholders in a string if the plugin is installed
-	 *
 	 * @return
 	 */
 	public static String parsePapiPlaceholders(final Player player, final String string) {
@@ -55,15 +55,15 @@ public class PlaceholderUtil {
 		try {
 			return (String) Class.forName("me.clip.placeholderapi.PlaceholderAPI")
 					.getMethod("setPlaceholders", Player.class, String.class).invoke(null, player, string);
-		} catch (final ClassNotFoundException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException(e);
+		} catch (final ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
+				InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+			return string;
 		}
 	}
 
 	/**
 	 * Parses PlaceholderAPI placeholders in a string if the plugin is installed
-	 *
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
@@ -74,11 +74,11 @@ public class PlaceholderUtil {
 
 		try {
 			return (List<String>) Class.forName("me.clip.placeholderapi.PlaceholderAPI")
-					.getMethod("setPlaceholders", Player.class, List.class)
-					.invoke(null, player, string);
-		} catch (final ClassNotFoundException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException(e);
+					.getMethod("setPlaceholders", Player.class, List.class).invoke(null, player, string);
+		} catch (final ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
+				InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+			return string;
 		}
 	}
 
