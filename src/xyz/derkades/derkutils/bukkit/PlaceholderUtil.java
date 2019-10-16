@@ -1,8 +1,8 @@
 package xyz.derkades.derkutils.bukkit;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -10,7 +10,9 @@ import org.bukkit.entity.Player;
 public class PlaceholderUtil {
 
 	public static String parsePlaceholders(String string, final Placeholder... placeholders) {
-		for (final Placeholder p : placeholders) string = p.parse(string);
+		for (final Placeholder p : placeholders) {
+			string = p.parse(string);
+		}
 		return string;
 	}
 
@@ -22,7 +24,9 @@ public class PlaceholderUtil {
 	}
 
 	public static String parsePapiPlaceholders(final Player player, String string, final Placeholder... placeholders) {
-		for (final Placeholder p : placeholders) string = p.parse(string);
+		for (final Placeholder p : placeholders) {
+			string = p.parse(string);
+		}
 
 		string = parsePapiPlaceholders(player, string);
 
@@ -93,9 +97,7 @@ public class PlaceholderUtil {
 		}
 
 		public List<String> parse(final List<String> list) {
-			final List<String> newList = new ArrayList<>();
-			list.stream().map(this::parse).forEach(newList::add);
-			return newList;
+			return list.stream().map(this::parse).collect(Collectors.toList());
 		}
 
 	}
