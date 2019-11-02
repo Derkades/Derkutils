@@ -29,7 +29,7 @@ public class Chat {
 			.filter(s -> s instanceof Map<?, ?>)
 			.forEach((s) -> {
 				@SuppressWarnings("unchecked")
-				final Map<String, String> map = ((Map<String, String>) s);
+				final Map<String, String> map = (Map<String, String>) s;
 				if (!map.containsKey("text")) {
 					throw new IllegalArgumentException("Every list entry must contain a message");
 				}
@@ -93,7 +93,7 @@ public class Chat {
 			.filter(s -> s instanceof Map<?, ?>)
 			.forEach((s) -> {
 				@SuppressWarnings("unchecked")
-				final Map<String, String> map = ((Map<String, String>) s);
+				final Map<String, String> map = (Map<String, String>) s;
 				if (!map.containsKey("text")) {
 					throw new IllegalArgumentException("Every list entry must contain a message");
 				}
@@ -101,7 +101,7 @@ public class Chat {
 				final BaseComponent[] messageParts =
 						TextComponent.fromLegacyText(
 								PlaceholderUtil.parsePapiPlaceholders(
-										Colors.parseColors(map.get("text")), player, placeholders));
+										player, Colors.parseColors(map.get("text")), placeholders));
 
 				for (final Map.Entry<String, String> e : map.entrySet()){
 					final String k = e.getKey();
@@ -117,10 +117,10 @@ public class Chat {
 							messagePart.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 									TextComponent.fromLegacyText(
 											PlaceholderUtil.parsePapiPlaceholders(
-													Colors.parseColors(v), player, placeholders))));
+													player, Colors.parseColors(v), placeholders))));
 						} else if (k.equals("url")) {
 							messagePart.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-									PlaceholderUtil.parsePapiPlaceholders(v, player, placeholders)));
+									PlaceholderUtil.parsePapiPlaceholders(player, v, placeholders)));
 						} else if (k.equals("run_command")) {
 							messagePart.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, v));
 						} else if (k.equals("suggest_command")) {
@@ -161,7 +161,7 @@ public class Chat {
 			.filter(s -> s instanceof Map<?, ?>)
 			.forEach((s) -> {
 				@SuppressWarnings("unchecked")
-				final Map<String, String> map = ((Map<String, String>) s);
+				final Map<String, String> map = (Map<String, String>) s;
 				if (!map.containsKey("text")) {
 					throw new IllegalArgumentException("Every list entry must contain a message");
 				}
