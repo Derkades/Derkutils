@@ -1,9 +1,11 @@
 package xyz.derkades.derkutils.bukkit;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -17,6 +19,9 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 
 import de.tr7zw.nbtapi.NBTItem;
 import xyz.derkades.derkutils.bukkit.reflection.ReflectionUtil;
@@ -89,6 +94,21 @@ public class ItemBuilder implements Serializable {
 	public ItemBuilder skullOwner(final OfflinePlayer player){
 		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
 		meta.setOwningPlayer(player);
+		this.item.setItemMeta(meta);
+		return this;
+	}
+
+	public ItemBuilder skullTexture(final String texture) {
+		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
+		final GameProfile profile = new GameProfile(UUID.randomUUID(), (String)null);
+		profile.getProperties().put("textures", new Property("textures", texture));
+		try {
+			final Field profileField = meta.getClass().getDeclaredField("profile");
+			profileField.setAccessible(true);
+			profileField.set(meta, profile);
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException e) {
+			e.printStackTrace();
+		}
 		this.item.setItemMeta(meta);
 		return this;
 	}
@@ -174,10 +194,11 @@ public class ItemBuilder implements Serializable {
 		}
 
 		final String oldName = this.item.getItemMeta().getDisplayName();
-		if (oldName.contains(key))
+		if (oldName.contains(key)) {
 			return this.name(oldName.replace(key, value.get()));
-		else
+		} else {
 			return this;
+		}
 	}
 
 	public ItemBuilder namePlaceholdersOptional(final Map<String, Supplier<String>> placeholders) {
@@ -216,10 +237,11 @@ public class ItemBuilder implements Serializable {
 		}
 
 		return this.lore(this.item.getItemMeta().getLore().stream().map((s) -> {
-			if (s.contains(key))
+			if (s.contains(key)) {
 				return s.replace(key, value.get());
-			else
+			} else {
 				return s;
+			}
 		}).collect(Collectors.toList()));
 	}
 
