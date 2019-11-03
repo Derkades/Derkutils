@@ -1,11 +1,15 @@
 package xyz.derkades.derkutils.bukkit;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -91,9 +95,26 @@ public class ItemBuilder {
 	}
 
 	public ItemBuilder skullOwner(final String ownerName) {
-		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
-		meta.setOwner(ownerName);
-		this.item.setItemMeta(meta);
+		if (ownerName.length() <= 16) {
+			final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
+			meta.setOwner(ownerName);
+			this.item.setItemMeta(meta);
+		}
+		else
+		{
+			SkullMeta headMeta = (SkullMeta)item.getItemMeta();
+			GameProfile profile = new GameProfile(UUID.randomUUID(), (String)null);
+			profile.getProperties().put("textures", new Property("textures", ownerName));
+
+			try {
+				Field profileField = headMeta.getClass().getDeclaredField("profile");
+				profileField.setAccessible(true);
+				profileField.set(headMeta, profile);
+			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException var7) {
+				var7.printStackTrace();
+			}
+			item.setItemMeta(headMeta);
+		}
 		return this;
 	}
 
