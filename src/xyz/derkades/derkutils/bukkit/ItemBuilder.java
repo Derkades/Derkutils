@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -34,10 +33,6 @@ public class ItemBuilder {
 
 	public ItemBuilder(final ItemStack item){
 		this.item = item;
-	}
-
-	public ItemBuilder(final OfflinePlayer skullOwner){
-		this.item = new ItemBuilder(Material.SKULL_ITEM).damage(3).skullOwner(skullOwner).create();
 	}
 
 	public ItemBuilder(final String ownerName) {
@@ -91,25 +86,22 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemBuilder skullOwner(final OfflinePlayer player){
-		return this.skullOwner(player.getName());
+	public ItemBuilder skullOwner(final String playerName){
+		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
+		meta.setOwner(playerName);
+		return this;
 	}
 
-	public ItemBuilder skullOwner(final String ownerName) {
+	public ItemBuilder skullTexture(final String texture) {
 		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
-		if (ownerName.length() <= 16) {
-			meta.setOwner(ownerName);
-		} else {
-			// Custom texture
-			final GameProfile profile = new GameProfile(UUID.randomUUID(), (String)null);
-			profile.getProperties().put("textures", new Property("textures", ownerName));
-			try {
-				final Field profileField = meta.getClass().getDeclaredField("profile");
-				profileField.setAccessible(true);
-				profileField.set(meta, profile);
-			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException e) {
-				e.printStackTrace();
-			}
+		final GameProfile profile = new GameProfile(UUID.randomUUID(), (String)null);
+		profile.getProperties().put("textures", new Property("textures", texture));
+		try {
+			final Field profileField = meta.getClass().getDeclaredField("profile");
+			profileField.setAccessible(true);
+			profileField.set(meta, profile);
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException e) {
+			e.printStackTrace();
 		}
 		this.item.setItemMeta(meta);
 		return this;
