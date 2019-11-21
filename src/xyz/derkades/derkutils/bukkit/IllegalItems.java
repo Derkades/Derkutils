@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import net.md_5.bungee.api.ChatColor;
 
 public class IllegalItems implements Listener {
@@ -31,12 +31,13 @@ public class IllegalItems implements Listener {
 
 	public boolean isIllegal(final ItemStack item) {
 		final NBTItem nbt = new NBTItem(item);
-		if (!nbt.hasNBTData())
+		if (!nbt.hasNBTData()) {
 			return false;
-		else if (!nbt.hasKey(NBT_KEY))
+		} else if (!nbt.hasKey(NBT_KEY)) {
 			return false;
-		else
+		} else {
 			return nbt.getBoolean(NBT_KEY);
+		}
 	}
 
 	public void unregister() {

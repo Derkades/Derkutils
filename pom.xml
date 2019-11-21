@@ -59,5 +59,21 @@
 			<version>2.5</version>
 		</dependency>
 
+		<dependency>
+			<groupId>de.tr7zw</groupId>
+			<artifactId>item-nbt-api</artifactId>
+			<version>2.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>codemc-repo</id>
+			<url>https://repo.codemc.org/repository/maven-public/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+	
 </project>

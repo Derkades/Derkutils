@@ -23,7 +23,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
-import de.tr7zw.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import xyz.derkades.derkutils.bukkit.reflection.ReflectionUtil;
 
 public class ItemBuilder implements Serializable {
