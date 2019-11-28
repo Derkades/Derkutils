@@ -1,9 +1,7 @@
 package xyz.derkades.derkutils.bukkit.menu;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -11,43 +9,55 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import xyz.derkades.derkutils.bukkit.IllegalItems;
 
 public abstract class IconMenu implements Listener {
 
 	private String name;
 	private int size;
-	private final Plugin plugin;
 	protected final Player player;
 
-	private final IllegalItems illegalItems;
-	
-	public Map<Integer, ItemStack> items;
-	private Inventory inventory;
+	private final Inventory inventory;
+	private InventoryView view;
 
 	/**
-	 * Creates a new menu instance. To add items to this menu, add them to the {@link #items} hashmap.
+	 * Creates a new menu instance.
+	 * <ul>
+	 * <li>To add items, use the {@link IconMenu#addItem(int, ItemStack)} method</li>
+	 * <li>The menu should be opened in the same tick as it's created. Do this using {@link #open()}.
 	 * @param plugin Bukkit plugin instance
 	 * @param name Name of the menu
 	 * @param size Number of slots. Must be a multiple of 9 that is greater than 0 and less than 10.
 	 * @param player Player that this menu will be opened for when {@link #open()} is called
 	 */
-	public IconMenu(final Plugin plugin, final String name, final int size, final Player player){
-		this.plugin = plugin;
-		this.size = size;
+	public IconMenu(final Plugin plugin, final String name, final int rows, final Player player){
+		this.size = rows * 9;
 		this.name = name;
 		this.player = player;
-		this.items = new HashMap<>();
 
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
-		
-		this.illegalItems = new IllegalItems(plugin);
+		this.inventory = Bukkit.createInventory(this.player, this.size, this.name);
+		this.player.openInventory(this.inventory);
+
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				// Unregister listeners for the menu if the player has opened a different
+				// menu, which means that this menu must be closed.
+				if (!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view)) {
+					IconMenu.this.view.close(); // maybe not necessary
+					HandlerList.unregisterAll();
+					IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
+					this.cancel();
+				}
+			}
+
+		}.runTaskTimer(plugin, 1, 1);
 	}
 
 	/**
@@ -84,83 +94,52 @@ public abstract class IconMenu implements Listener {
 	 */
 	public void close() {
 		this.onClose(new MenuCloseEvent(this.player, CloseReason.FORCE_CLOSE));
-		HandlerList.unregisterAll(this);
-		this.player.closeInventory();
+		this.view.close();
 	}
 
-	/**
-	 * Opens the menu, even when a menu is already open. This can cause issues, be careful!
-	 */
-	public void open() {
-		this.open(true);
-	}
-	
-	/**
-	 * Opens a menu
-	 * @param force Whether the menu should be opened if a menu is already open. This can cause issues, be careful!
-	 */
-	public void open(final boolean force) {
-		if (!force && this.player.getOpenInventory() == null) {
-			System.out.println(String.format("Not opening menu '%s' to %s, because they already have a menu open. Use IconMenu#open(true) to force open the menu.", 
-					this.name, this.player.getName()));
-			return;
-		}
-		this.inventory = Bukkit.createInventory(this.player, this.size, this.name);
-		this.refreshItems();
-		this.player.openInventory(this.inventory);
+	public void addItem(final int slot, final ItemStack item) {
+		this.inventory.setItem(slot, item);
 	}
 
-	/**
-	 * Update the menu with the {@link #items} map
-	 */
-	public void refreshItems() {
+	public boolean hasItem(final int slot) {
+		return this.inventory.getItem(slot) != null &&
+				this.inventory.getItem(slot).getType() != Material.AIR;
+	}
+
+	public void clear() {
 		this.inventory.clear();
-		for (final Map.Entry<Integer, ItemStack> menuItem : this.items.entrySet()){
-			ItemStack item = menuItem.getValue();
-			item = this.illegalItems.setIllegal(item, true);
-			this.inventory.setItem(menuItem.getKey(), menuItem.getValue());
-		}
+	}
+
+	public Inventory getInventory() {
+		return this.inventory;
+	}
+
+	public InventoryView getInventoryView() {
+		return this.view;
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onInventoryClick(final InventoryClickEvent event) {
-		if (event.getView().getTitle().equals(this.name) && (event.getWhoClicked().getUniqueId().equals(this.player.getUniqueId()))) {
+		if (event.getView().equals(this.view)) {
 			event.setCancelled(true);
 
-			if (event.getClick() != ClickType.LEFT)
+			if (event.getClick() != ClickType.LEFT) {
 				return;
+			}
 
 			final int slot = event.getRawSlot();
 
 			final Player clicker = (Player) event.getWhoClicked();
 
-			if (slot >= 0 && slot < this.size && this.items.containsKey(slot)) {
-				final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, this.items.get(slot)));
+			if (slot >= 0 && slot < this.size && this.hasItem(slot)) {
+				final ItemStack item = this.inventory.getItem(slot);
+
+				final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, item));
 				if (close) {
-					new BukkitRunnable() {
-						@Override
-						public void run() {
-							IconMenu.this.onClose(new MenuCloseEvent(IconMenu.this.player, CloseReason.ITEM_CLICK));
-							IconMenu.this.close();
-						}
-					}.runTaskLater(this.plugin, 1);
+					IconMenu.this.onClose(new MenuCloseEvent(IconMenu.this.player, CloseReason.ITEM_CLICK));
+					this.view.close();
 				}
 			}
-		}
-	}
-
-	@EventHandler
-	public void onInventoryClose(final InventoryCloseEvent event){
-		if (event.getView().getTitle().equals(this.name) && (event.getPlayer().getUniqueId().equals(this.player.getUniqueId()))) {
-
-			this.onClose(new MenuCloseEvent(this.player, CloseReason.PLAYER_CLOSED));
-
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					HandlerList.unregisterAll(IconMenu.this);
-				}
-			}.runTaskLater(this.plugin, 1);
 		}
 	}
 
