@@ -22,7 +22,7 @@ public abstract class IconMenu implements Listener {
 	protected final Player player;
 
 	private final Inventory inventory;
-	private InventoryView view;
+	private final InventoryView view;
 
 	/**
 	 * Creates a new menu instance.
@@ -41,7 +41,7 @@ public abstract class IconMenu implements Listener {
 
 		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
 		this.inventory = Bukkit.createInventory(this.player, this.size, this.name);
-		this.player.openInventory(this.inventory);
+		this.view = this.player.openInventory(this.inventory);
 
 		new BukkitRunnable() {
 
