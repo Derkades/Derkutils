@@ -18,7 +18,7 @@ package xyz.derkades.derkutils;
 public class AssertionException extends RuntimeException {
 
 	private static final long serialVersionUID = -1519059134126795928L;
-	
+
 	//public AssertionException(String message) {
 	//	super(message);
 	//}

@@ -20,7 +20,7 @@ public class Command {
 	CommandCallback callback;
 	final MessageHandler messageHandler;
 	String permission;
-	boolean requirePlayer = false;
+	boolean requirePlayer;
 
 	public Command(final Command parent, final MessageHandler helpHandler, final String name, final String description, final String usage, final String... aliases) {
 		this.parent = parent;

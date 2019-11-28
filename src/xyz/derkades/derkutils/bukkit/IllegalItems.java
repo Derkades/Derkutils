@@ -46,7 +46,7 @@ public class IllegalItems implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onInventoryClick(final InventoryClickEvent event) {
-		if (event.getClickedInventory() == null) {
+		if (event.getClickedInventory() == null) { // when clicking outside of the inventory while it is open
 			return;
 		}
 

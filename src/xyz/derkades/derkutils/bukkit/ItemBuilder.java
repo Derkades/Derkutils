@@ -120,8 +120,7 @@ public class ItemBuilder {
 	}
 
 	public ItemBuilder unsafeEnchant(final Enchantment type, final int level){
-		final ItemMeta meta = this.item.getItemMeta();
-		meta.addEnchant(type, level, true);
+		this.item.addUnsafeEnchantment(type, level);
 		return this;
 	}
 

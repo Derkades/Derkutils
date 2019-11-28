@@ -16,6 +16,14 @@ import org.bukkit.entity.Player;
 public class UUIDFetcher {
 
 	/**
+	 * @param player The player
+	 * @return The UUID of the given player
+	 */
+	public static UUID getUUID(Player player) {
+		return getUUID(player.getName());
+	}
+
+	/**
 	 * @param playerName The name of the player
 	 * @return The UUID of the given player
 	 */
