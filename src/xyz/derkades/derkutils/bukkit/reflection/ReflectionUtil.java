@@ -38,85 +38,16 @@ public class ReflectionUtil {
 			return -1;
 		}
 	}
-	
-	public static ItemStack addCanPlaceOn(ItemStack item, String... minecraftItemNames) {
-		try {
-			final Class<?> craftItemStackClass = getMinecraftClass("org.bukkit.craftbukkit.%s.inventory.CraftItemStack");
-			final Object nmsItemStack = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class).invoke(null, item);
-			final Class<?> nbtClass = getMinecraftClass("net.minecraft.server.%s.NBTTagCompound");
-			Object nbt = nmsItemStack.getClass().getMethod("getTag").invoke(null);
-			if (nbt == null) {
-				nbt = nbtClass.getConstructor().newInstance();
-			}
-			Object nbtList = getMinecraftClass("net.minecraft.server.%s.NBTTagList").getConstructor().newInstance();
-			for (String minecraftItemName : minecraftItemNames) {
-				if (!minecraftItemName.contains("minecraft")) {
-					minecraftItemName = "minecraft:" + minecraftItemName;
-				}
-				
-				Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
-				nbtList.getClass().getMethod("add", nbtString.getClass()).invoke(nbtList, nbtString);
-			}
-			nbtClass.getMethod("set", String.class, nbtList.getClass()).invoke(nbt, "CanPlaceOn", nbtList);
-			nmsItemStack.getClass().getMethod("setTag", nbtClass).invoke(nmsItemStack, nbt);
-			Object bukkitItemStack = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStack.getClass()).invoke(null, nmsItemStack);
-			return (ItemStack) bukkitItemStack;
-		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
-				InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public static ItemStack addCanDestroy(ItemStack item, String... minecraftItemNames) {
-		try {
-			final Class<?> craftItemStackClass = getMinecraftClass("org.bukkit.craftbukkit.%s.inventory.CraftItemStack");
-			final Object nmsItemStack = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class).invoke(null, item);
-			final Class<?> nbtClass = getMinecraftClass("net.minecraft.server.%s.NBTTagCompound");
-			Object nbt = nmsItemStack.getClass().getMethod("getTag").invoke(null);
-			if (nbt == null) {
-				nbt = nbtClass.getConstructor().newInstance();
-			}
-			Object nbtList = getMinecraftClass("net.minecraft.server.%s.NBTTagList").getConstructor().newInstance();
-			for (String minecraftItemName : minecraftItemNames) {
-				if (!minecraftItemName.contains("minecraft")) {
-					minecraftItemName = "minecraft:" + minecraftItemName;
-				}
-				
-				Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
-				nbtList.getClass().getMethod("add", nbtString.getClass()).invoke(nbtList, nbtString);
-			}
-			nbtClass.getMethod("set", String.class, nbtList.getClass()).invoke(nbt, "CanDestroy", nbtList);
-			nmsItemStack.getClass().getMethod("setTag", nbtClass).invoke(nmsItemStack, nbt);
-			Object bukkitItemStack = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStack.getClass()).invoke(null, nmsItemStack);
-			return (ItemStack) bukkitItemStack;
-		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
-				InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	public static void registerCommand(String name, Command command) {
-		try {
-			Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
-			field.setAccessible(true);
-			CommandMap map = (CommandMap) field.get(Bukkit.getServer());
-			map.register(name, command);
-		} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 	public static ItemStack addCanPlaceOn(final ItemStack item, final String... minecraftItemNames) {
 		try {
 			final Class<?> craftItemStackClass = getMinecraftClass("org.bukkit.craftbukkit.%s.inventory.CraftItemStack");
 			final Object nmsItemStack = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class).invoke(null, item);
 			final Class<?> nbtClass = getMinecraftClass("net.minecraft.server.%s.NBTTagCompound");
-			Object nbt = nmsItemStack.getClass().getMethod("getTag").invoke(nmsItemStack);
+			Object nbt = nmsItemStack.getClass().getMethod("getTag").invoke(null);
 			if (nbt == null) {
 				nbt = nbtClass.getConstructor().newInstance();
 			}
-
 			final Object nbtList = getMinecraftClass("net.minecraft.server.%s.NBTTagList").getConstructor().newInstance();
 			for (String minecraftItemName : minecraftItemNames) {
 				if (!minecraftItemName.contains("minecraft")) {
@@ -124,17 +55,16 @@ public class ReflectionUtil {
 				}
 
 				final Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
-				nbtList.getClass().getMethod("add", Object.class).invoke(nbtList, nbtString);
+				nbtList.getClass().getMethod("add", nbtString.getClass()).invoke(nbtList, nbtString);
 			}
-
-			nbtClass.getMethod("set", String.class, getMinecraftClass("net.minecraft.server.%s.NBTBase")).invoke(nbt, "CanPlaceOn", nbtList);
+			nbtClass.getMethod("set", String.class, nbtList.getClass()).invoke(nbt, "CanPlaceOn", nbtList);
 			nmsItemStack.getClass().getMethod("setTag", nbtClass).invoke(nmsItemStack, nbt);
 			final Object bukkitItemStack = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStack.getClass()).invoke(null, nmsItemStack);
 			return (ItemStack) bukkitItemStack;
 		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
 				InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException e) {
 			e.printStackTrace();
-			return item;
+			return null;
 		}
 	}
 
@@ -143,7 +73,7 @@ public class ReflectionUtil {
 			final Class<?> craftItemStackClass = getMinecraftClass("org.bukkit.craftbukkit.%s.inventory.CraftItemStack");
 			final Object nmsItemStack = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class).invoke(null, item);
 			final Class<?> nbtClass = getMinecraftClass("net.minecraft.server.%s.NBTTagCompound");
-			Object nbt = nmsItemStack.getClass().getMethod("getTag").invoke(nmsItemStack);
+			Object nbt = nmsItemStack.getClass().getMethod("getTag").invoke(null);
 			if (nbt == null) {
 				nbt = nbtClass.getConstructor().newInstance();
 			}
@@ -154,24 +84,24 @@ public class ReflectionUtil {
 				}
 
 				final Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
-				nbtList.getClass().getMethod("add", Object.class).invoke(nbtList, nbtString);
+				nbtList.getClass().getMethod("add", nbtString.getClass()).invoke(nbtList, nbtString);
 			}
-			nbtClass.getMethod("set", String.class, getMinecraftClass("net.minecraft.server.%s.NBTBase")).invoke(nbt, "CanDestroy", nbtList);
+			nbtClass.getMethod("set", String.class, nbtList.getClass()).invoke(nbt, "CanDestroy", nbtList);
 			nmsItemStack.getClass().getMethod("setTag", nbtClass).invoke(nmsItemStack, nbt);
 			final Object bukkitItemStack = craftItemStackClass.getMethod("asBukkitCopy", nmsItemStack.getClass()).invoke(null, nmsItemStack);
 			return (ItemStack) bukkitItemStack;
 		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
 				InvocationTargetException | NoSuchMethodException | SecurityException | InstantiationException e) {
 			e.printStackTrace();
-			return item;
+			return null;
 		}
 	}
-	
-	public static void registerCommand(String name, Command command) {
+
+	public static void registerCommand(final String name, final Command command) {
 		try {
-			Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+			final Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 			field.setAccessible(true);
-			CommandMap map = (CommandMap) field.get(Bukkit.getServer());
+			final CommandMap map = (CommandMap) field.get(Bukkit.getServer());
 			map.register(name, command);
 		} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
