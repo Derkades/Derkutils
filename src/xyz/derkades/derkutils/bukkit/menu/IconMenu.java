@@ -51,7 +51,7 @@ public abstract class IconMenu implements Listener {
 				// menu, which means that this menu must be closed.
 				if (!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view)) {
 					IconMenu.this.view.close(); // maybe not necessary
-					HandlerList.unregisterAll();
+					HandlerList.unregisterAll(IconMenu.this);
 					IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
 					this.cancel();
 				}
