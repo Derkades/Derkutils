@@ -18,7 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public abstract class IconMenu implements Listener {
 
 	private String name;
-	private int size;
+	private final int size;
 	protected final Player player;
 
 	private final Inventory inventory;
@@ -81,12 +81,8 @@ public abstract class IconMenu implements Listener {
 		this.name = name;
 	}
 
-	/**
-	 * Sets the size of the menu, a multiple of 9. Has no effect after the menu has been opened
-	 * @param size
-	 */
-	public void setSize(final int size){
-		this.size = size;
+	public int getSize() {
+		return this.size;
 	}
 
 	/**
