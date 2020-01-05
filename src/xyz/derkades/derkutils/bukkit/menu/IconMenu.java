@@ -49,7 +49,9 @@ public abstract class IconMenu implements Listener {
 			public void run() {
 				// Unregister listeners for the menu if the player has opened a different
 				// menu, which means that this menu must be closed.
-				if (!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view)) {
+				if (IconMenu.this.view.getPlayer() == null ||
+						IconMenu.this.view.getPlayer().getOpenInventory() == null ||
+						!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view)) {
 					IconMenu.this.view.close(); // maybe not necessary
 					HandlerList.unregisterAll(IconMenu.this);
 					IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
