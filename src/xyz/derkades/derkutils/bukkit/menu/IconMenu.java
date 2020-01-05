@@ -18,7 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public abstract class IconMenu implements Listener {
 
 	private String name;
-	private int size;
+	private final int size;
 	protected final Player player;
 
 	private final Inventory inventory;
@@ -49,7 +49,9 @@ public abstract class IconMenu implements Listener {
 			public void run() {
 				// Unregister listeners for the menu if the player has opened a different
 				// menu, which means that this menu must be closed.
-				if (!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view)) {
+				if (IconMenu.this.view.getPlayer() == null ||
+						IconMenu.this.view.getPlayer().getOpenInventory() == null ||
+						!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view)) {
 					IconMenu.this.view.close(); // maybe not necessary
 					HandlerList.unregisterAll(IconMenu.this);
 					IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
@@ -81,12 +83,8 @@ public abstract class IconMenu implements Listener {
 		this.name = name;
 	}
 
-	/**
-	 * Sets the size of the menu, a multiple of 9. Has no effect after the menu has been opened
-	 * @param size
-	 */
-	public void setSize(final int size){
-		this.size = size;
+	public int getSize() {
+		return this.size;
 	}
 
 	/**
