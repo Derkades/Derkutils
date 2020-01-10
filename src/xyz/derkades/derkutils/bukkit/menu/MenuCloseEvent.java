@@ -1,28 +1,26 @@
 package xyz.derkades.derkutils.bukkit.menu;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 
 /**
- * Event fired when an {@link IconMenu} is closed. This is not a bukkit event, even though it extends PlayerEvent.
+ * Event fired when an {@link IconMenu} is closed.
  */
-public class MenuCloseEvent extends PlayerEvent {
+public class MenuCloseEvent {
 
 	private final CloseReason reason;
+	private final Player player;
 
 	MenuCloseEvent(final Player player, final CloseReason reason) {
-		super(player);
+		this.player = player;
 		this.reason = reason;
+	}
+
+	public Player getPlayer() {
+		return this.player;
 	}
 
 	public CloseReason getReason() {
 		return this.reason;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return null;
 	}
 
 }
