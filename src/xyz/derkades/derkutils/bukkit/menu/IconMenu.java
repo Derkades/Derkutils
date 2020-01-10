@@ -47,20 +47,12 @@ public abstract class IconMenu implements Listener {
 
 			@Override
 			public void run() {
-				// Some people were getting NPEs, not sure why.
-				// now that should happen anymore, hopefully.
+				// Unregister listeners for the menu if the player has opened a different
+				// menu, which means that this menu must be closed.
 				if (IconMenu.this.view == null ||
 						IconMenu.this.view.getPlayer() == null ||
 						IconMenu.this.view.getPlayer().getOpenInventory() == null ||
-						player == null) {
-					HandlerList.unregisterAll(IconMenu.this);
-					this.cancel();
-					return;
-				}
-
-				// Unregister listeners for the menu if the player has opened a different
-				// menu, which means that this menu must be closed.
-				if (!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view)) {
+						!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view)) {
 					IconMenu.this.view.close(); // maybe not necessary
 					HandlerList.unregisterAll(IconMenu.this);
 					IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
