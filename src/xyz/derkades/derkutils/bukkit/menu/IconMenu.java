@@ -53,9 +53,9 @@ public abstract class IconMenu implements Listener {
 						IconMenu.this.view.getPlayer() == null ||
 						IconMenu.this.view.getPlayer().getOpenInventory() == null ||
 						!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view)) {
-					if (IconMenu.this.view != null) {
-						IconMenu.this.view.close();
-					}
+//					if (IconMenu.this.view != null) {
+//						IconMenu.this.view.close();
+//					}
 					HandlerList.unregisterAll(IconMenu.this);
 					IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
 					this.cancel();
