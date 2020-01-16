@@ -1,7 +1,6 @@
 package xyz.derkades.derkutils.bukkit;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -20,9 +19,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
-
+import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTCompoundList;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import xyz.derkades.derkutils.bukkit.reflection.ReflectionUtil;
 
@@ -99,17 +97,25 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder skullTexture(final String texture) {
-		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
-		final GameProfile profile = new GameProfile(UUID.randomUUID(), (String)null);
-		profile.getProperties().put("textures", new Property("textures", texture));
-		try {
-			final Field profileField = meta.getClass().getDeclaredField("profile");
-			profileField.setAccessible(true);
-			profileField.set(meta, profile);
-		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException e) {
-			e.printStackTrace();
-		}
-		this.item.setItemMeta(meta);
+//		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
+//		final GameProfile profile = new GameProfile(UUID.randomUUID(), (String)null);
+//		profile.getProperties().put("textures", new Property("textures", texture));
+//		try {
+//			final Field profileField = meta.getClass().getDeclaredField("profile");
+//			profileField.setAccessible(true);
+//			profileField.set(meta, profile);
+//		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException e) {
+//			e.printStackTrace();
+//		}
+//		this.item.setItemMeta(meta);
+		final NBTItem nbt = new NBTItem(this.item);
+		final NBTCompound skullOwner = nbt.addCompound("SkullOwner");
+		skullOwner.setString("Id", UUID.randomUUID().toString());
+		final NBTCompound properties = skullOwner.addCompound("Properties");
+		final NBTCompoundList textures = properties.getCompoundList("textures");
+		final NBTCompound texture2 = textures.addCompound();
+		texture2.setString("Value", texture);
+		this.item = nbt.getItem();
 		return this;
 	}
 
