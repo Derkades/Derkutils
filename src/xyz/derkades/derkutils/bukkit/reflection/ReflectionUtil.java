@@ -99,15 +99,18 @@ public class ReflectionUtil {
 		}
 	}
 	
-	public static void registerCommand(String name, Command command) {
+	public static CommandMap getCommandMap() {
 		try {
 			Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 			field.setAccessible(true);
-			CommandMap map = (CommandMap) field.get(Bukkit.getServer());
-			map.register(name, command);
+			return (CommandMap) field.get(Bukkit.getServer());
 		} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static void registerCommand(String name, Command command) {
+		getCommandMap().register(name, command);
 	}
 
 }
