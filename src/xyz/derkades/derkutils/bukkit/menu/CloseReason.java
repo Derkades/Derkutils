@@ -13,8 +13,13 @@ public enum CloseReason {
 	FORCE_CLOSE,
 	
 	/**
-	 * When the menu has been closed because {@link IconMenu#onOptionClick(OptionClickEvent)} has returned true
+	 * When the menu has been closed because {@link IconMenu#onOptionClick(OptionClickEvent)} has returned true.
 	 */
 	ITEM_CLICK,
+	
+	/**
+	 * When the menu is no longer open because the player has left the server.
+	 */
+	PLAYER_QUIT,
 	
 }
