@@ -9,6 +9,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -23,6 +24,7 @@ public abstract class IconMenu implements Listener {
 
 	private final Inventory inventory;
 	private final InventoryView view;
+	private boolean closeEventCalled = false;
 
 	/**
 	 * Creates a new menu instance.
@@ -57,7 +59,9 @@ public abstract class IconMenu implements Listener {
 //						IconMenu.this.view.close();
 //					}
 					HandlerList.unregisterAll(IconMenu.this);
-					IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
+					if (!closeEventCalled) {
+						IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
+					}
 					this.cancel();
 					return;
 				}
@@ -95,6 +99,7 @@ public abstract class IconMenu implements Listener {
 	 * Calls {@link #onClose(MenuCloseEvent)} with {@link CloseReason#FORCE_CLOSE} and closes the inventory.
 	 */
 	public void close() {
+		closeEventCalled = true;
 		this.onClose(new MenuCloseEvent(this.player, CloseReason.FORCE_CLOSE));
 		this.view.close();
 	}
@@ -139,11 +144,19 @@ public abstract class IconMenu implements Listener {
 
 				final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, item));
 				if (close) {
+					closeEventCalled = true;
 					IconMenu.this.onClose(new MenuCloseEvent(IconMenu.this.player, CloseReason.ITEM_CLICK));
 					this.view.close();
 				}
 			}
 		}
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onQuit(PlayerQuitEvent event) {
+		Player player = event.getPlayer();
+		closeEventCalled = true;
+		this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_QUIT));
 	}
 
 }
