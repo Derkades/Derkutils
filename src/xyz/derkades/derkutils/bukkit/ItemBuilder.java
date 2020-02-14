@@ -202,10 +202,6 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder lorePlaceholder(final String key, final String value) {
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getDisplayName() == null) {
-			return this;
-		}
-
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
 			return this;
 		}
