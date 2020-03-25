@@ -1,5 +1,6 @@
 package xyz.derkades.derkutils.bukkit.reflection;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
@@ -39,6 +40,7 @@ public class ReflectionUtil {
 		}
 	}
 
+	@Deprecated // broken in 1.15+
 	public static ItemStack addCanPlaceOn(final ItemStack item, final String... minecraftItemNames) {
 		try {
 			final Class<?> craftItemStackClass = getMinecraftClass("org.bukkit.craftbukkit.%s.inventory.CraftItemStack");
@@ -55,7 +57,9 @@ public class ReflectionUtil {
 					minecraftItemName = "minecraft:" + minecraftItemName;
 				}
 
-				final Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
+				final Constructor<?> constr = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class);
+				constr.setAccessible(true);
+				final Object nbtString = constr.newInstance(minecraftItemName);
 				nbtList.getClass().getMethod("add", Object.class).invoke(nbtList, nbtString);
 			}
 
@@ -70,6 +74,7 @@ public class ReflectionUtil {
 		}
 	}
 
+	@Deprecated // broken in 1.15+
 	public static ItemStack addCanDestroy(final ItemStack item, final String... minecraftItemNames) {
 		try {
 			final Class<?> craftItemStackClass = getMinecraftClass("org.bukkit.craftbukkit.%s.inventory.CraftItemStack");
@@ -85,7 +90,9 @@ public class ReflectionUtil {
 					minecraftItemName = "minecraft:" + minecraftItemName;
 				}
 
-				final Object nbtString = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class).newInstance(minecraftItemName);
+				final Constructor<?> constr = getMinecraftClass("net.minecraft.server.%s.NBTTagString").getConstructor(String.class);
+				constr.setAccessible(true);
+				final Object nbtString = constr.newInstance(minecraftItemName);
 				nbtList.getClass().getMethod("add", Object.class).invoke(nbtList, nbtString);
 			}
 			nbtClass.getMethod("set", String.class, getMinecraftClass("net.minecraft.server.%s.NBTBase")).invoke(nbt, "CanDestroy", nbtList);
@@ -98,18 +105,18 @@ public class ReflectionUtil {
 			return item;
 		}
 	}
-	
+
 	public static CommandMap getCommandMap() {
 		try {
-			Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
+			final Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
 			field.setAccessible(true);
 			return (CommandMap) field.get(Bukkit.getServer());
 		} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	public static void registerCommand(String name, Command command) {
+
+	public static void registerCommand(final String name, final Command command) {
 		getCommandMap().register(name, command);
 	}
 
