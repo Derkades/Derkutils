@@ -21,7 +21,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
-import xyz.derkades.derkutils.bukkit.reflection.ReflectionUtil;
 
 public class ItemBuilder implements Serializable {
 
@@ -139,12 +138,16 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder canDestroy(final String... minecraftItemNames) {
-		this.item = ReflectionUtil.addCanDestroy(this.item, minecraftItemNames);
+		final NBTItem nbt = new NBTItem(this.item);
+		nbt.getStringList("CanDestroy").addAll(Arrays.asList(minecraftItemNames));
+		this.item = nbt.getItem();
 		return this;
 	}
 
 	public ItemBuilder canPlaceOn(final String... minecraftItemNames) {
-		this.item = ReflectionUtil.addCanPlaceOn(this.item, minecraftItemNames);
+		final NBTItem nbt = new NBTItem(this.item);
+		nbt.getStringList("CanPlaceOn").addAll(Arrays.asList(minecraftItemNames));
+		this.item = nbt.getItem();
 		return this;
 	}
 
