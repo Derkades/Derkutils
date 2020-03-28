@@ -25,13 +25,22 @@ public class BukkitFuture<T> {
 				final T result = action.get();
 				Bukkit.getScheduler().runTask(this.plugin, () -> this.onCompleteCallbacks.forEach((c) -> c.accept(result)));
 			} catch (final Exception e) {
-				if (this.onExceptionCallbacks.isEmpty())
+				if (this.onExceptionCallbacks.isEmpty()) {
 					throw new RuntimeException(e);
-				else {
+				} else {
 					Bukkit.getScheduler().runTask(this.plugin, () -> this.onExceptionCallbacks.forEach((c) -> c.accept(e)));
 				}
 			}
 		});
+	}
+	
+	public void awaitCompletion() {
+		this.onComplete(a -> this.notify());
+		try {
+			this.wait();
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	public void onComplete(final Consumer<T> callback) {
