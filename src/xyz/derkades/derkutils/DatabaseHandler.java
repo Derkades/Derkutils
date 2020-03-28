@@ -1,8 +1,10 @@
 package xyz.derkades.derkutils;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -53,6 +55,21 @@ public class DatabaseHandler {
 		}
 
 		return statement;
+	}
+	
+	protected void createTableIfNonexistent(final String table, final String sql) throws SQLException {
+		final DatabaseMetaData meta = this.getConnection().getMetaData();
+		final ResultSet result = meta.getTables(null, null, table, null);
+
+		if (result != null && result.next()) {
+			return; // Table exists
+		}
+
+		result.close();
+
+		final PreparedStatement statement = this.prepareStatement(sql);
+		statement.execute();
+		statement.close();
 	}
 
 	public Connection getConnection() {
