@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -16,6 +17,9 @@ public class BukkitFuture<T> {
 	private final List<Consumer<Exception>> onExceptionCallbacks;
 
 	public BukkitFuture(final Plugin plugin, final ThrowingSupplier<T, Exception> action) {
+		Validate.notNull(plugin, "plugin must not be null");
+		Validate.notNull(action, "action must not be null");
+		
 		this.plugin = plugin;
 		this.onCompleteCallbacks = new ArrayList<>();
 		this.onExceptionCallbacks = new ArrayList<>();
@@ -44,10 +48,12 @@ public class BukkitFuture<T> {
 	}
 
 	public void onComplete(final Consumer<T> callback) {
+		Validate.notNull(callback, "callback must not be null");
 		this.onCompleteCallbacks.add(callback);
 	}
 
 	public void onException(final Consumer<Exception> callback) {
+		Validate.notNull(callback, "callback must not be null");
 		this.onExceptionCallbacks.add(callback);
 	}
 
