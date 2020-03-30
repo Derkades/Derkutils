@@ -1,5 +1,6 @@
 package xyz.derkades.derkutils.bukkit.reflection;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
@@ -39,6 +40,7 @@ public class ReflectionUtil {
 		}
 	}
 
+	@Deprecated
 	public static ItemStack addCanPlaceOn(final ItemStack item, final String... minecraftItemNames) {
 		try {
 			final Class<?> craftItemStackClass = getMinecraftClass("org.bukkit.craftbukkit.%s.inventory.CraftItemStack");
@@ -68,6 +70,7 @@ public class ReflectionUtil {
 		}
 	}
 
+	@Deprecated
 	public static ItemStack addCanDestroy(final ItemStack item, final String... minecraftItemNames) {
 		try {
 			final Class<?> craftItemStackClass = getMinecraftClass("org.bukkit.craftbukkit.%s.inventory.CraftItemStack");
@@ -96,7 +99,7 @@ public class ReflectionUtil {
 			return null;
 		}
 	}
-	
+
 	public static CommandMap getCommandMap() {
 		try {
 			final Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
@@ -106,8 +109,8 @@ public class ReflectionUtil {
 			throw new RuntimeException(e);
 		}
 	}
-	
-	public static void registerCommand(String name, Command command) {
+
+	public static void registerCommand(final String name, final Command command) {
 		getCommandMap().register(name, command);
 	}
 

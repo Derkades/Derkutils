@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -23,7 +24,12 @@ public class Chat {
 	 * @return Formatted base component
 	 */
 	public static BaseComponent[] toComponent(final FileConfiguration config, final String path) {
+		Validate.notNull(config, "Provided config is null");
+		Validate.notNull(config, "Path is null");
+
 		final List<BaseComponent> message = new ArrayList<>();
+
+		final ComponentBuilder builder = new ComponentBuilder("");
 
 		config.getList(path).stream()
 			.filter(s -> s instanceof Map<?, ?>)
@@ -87,7 +93,14 @@ public class Chat {
 	 * @return Formatted base component
 	 */
 	public static BaseComponent[] toComponentWithPapiPlaceholders(final FileConfiguration config, final String path, final Player player, final Placeholder... placeholders) {
+		Validate.notNull(config, "Provided config is null");
+		Validate.notNull(config, "Path is null");
+		Validate.notNull(player, "Player is null");
+		Validate.noNullElements(placeholders, "Provided null placeholder");
+
 		final List<BaseComponent> message = new ArrayList<>();
+
+		final ComponentBuilder builder = new ComponentBuilder("");
 
 		config.getList(path).stream()
 			.filter(s -> s instanceof Map<?, ?>)
@@ -155,7 +168,13 @@ public class Chat {
 	 * @return Formatted base component
 	 */
 	public static BaseComponent[] toComponentWithPlaceholders(final FileConfiguration config, final String path, final Placeholder... placeholders) {
+		Validate.notNull(config, "Provided config is null");
+		Validate.notNull(config, "Path is null");
+		Validate.noNullElements(placeholders, "Provided null placeholder");
+
 		final List<BaseComponent> message = new ArrayList<>();
+
+		final ComponentBuilder builder = new ComponentBuilder("");
 
 		config.getList(path).stream()
 			.filter(s -> s instanceof Map<?, ?>)
