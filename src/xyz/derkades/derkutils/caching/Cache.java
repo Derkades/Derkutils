@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.lang.Validate;
+
 public class Cache {
 	
 	private static final int DEFAULT_CACHE_DURATION = 60;
@@ -12,11 +14,15 @@ public class Cache {
 	private static final Map<String, CacheObject> CACHE_OBJECT_MAP = new ConcurrentHashMap<>();
 	
 	/**
+	 * Caches object for the specified amount of time.
 	 * @param identifier
 	 * @param object
 	 * @param timeout In seconds. If set to <= 0, cache indefinitely
 	 */
 	public static void set(final String identifier, final Object object, long timeout) {
+		Validate.notNull(identifier);
+		Validate.notNull(object);
+		
 		if (timeout <= 0){
 			timeout = Long.MAX_VALUE;
 		}
@@ -34,6 +40,8 @@ public class Cache {
 	}
 	
 	public static <T> Optional<T> get(final String identifier) {
+		Validate.notNull(identifier);
+		
 		final CacheObject cache = CACHE_OBJECT_MAP.get(identifier);
 		
 		if (cache == null) {
@@ -50,11 +58,14 @@ public class Cache {
 		}
 	}
 	
-	public static void removeCachedObject(final String identifier){
+	public static void remove(final String identifier) {
+		Validate.notNull(identifier);
 		CACHE_OBJECT_MAP.remove(identifier);
 	}
 	
 	/**
+	 * Clean cache, removing any expired objects. This can be an expensive
+	 * operation, it should be run asynchronously.
 	 * @return Number of objects removed from cache
 	 */
 	public static int cleanCache(){
@@ -103,6 +114,11 @@ public class Cache {
 		} else {
 			return cache.object;
 		}
+	}
+	
+	@Deprecated
+	public static void removeCachedObject(final String identifier){
+		CACHE_OBJECT_MAP.remove(identifier);
 	}
 
 }
