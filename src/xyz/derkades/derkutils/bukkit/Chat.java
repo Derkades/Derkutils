@@ -31,8 +31,6 @@ public class Chat {
 
 		final List<BaseComponent> message = new ArrayList<>();
 
-		final ComponentBuilder builder = new ComponentBuilder("");
-
 		config.getList(path).stream()
 			.filter(s -> s instanceof Map<?, ?>)
 			.forEach((s) -> {
@@ -102,8 +100,6 @@ public class Chat {
 		Validate.notNull(config.getList(path), "Path does not exist in config");
 
 		final List<BaseComponent> message = new ArrayList<>();
-
-		final ComponentBuilder builder = new ComponentBuilder("");
 
 		config.getList(path).stream()
 			.filter(s -> s instanceof Map<?, ?>)
@@ -177,8 +173,6 @@ public class Chat {
 		Validate.notNull(config.getList(path), "Path does not exist in config");
 
 		final List<BaseComponent> message = new ArrayList<>();
-
-		final ComponentBuilder builder = new ComponentBuilder("");
 
 		config.getList(path).stream()
 			.filter(s -> s instanceof Map<?, ?>)
