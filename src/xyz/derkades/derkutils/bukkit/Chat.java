@@ -23,7 +23,8 @@ public class Chat {
 	 */
 	public static BaseComponent[] toComponent(final FileConfiguration config, final String path) {
 		Validate.notNull(config, "Provided config is null");
-		Validate.notNull(config, "Path is null");
+		Validate.notNull(path, "Path is null");
+		Validate.notNull(config.getList(path), "Path does not exist in config");
 		
 		final ComponentBuilder builder = new ComponentBuilder("");
 
@@ -81,6 +82,7 @@ public class Chat {
 		Validate.notNull(path, "Path is null");
 		Validate.notNull(player, "Player is null");
 		Validate.noNullElements(placeholders, "Provided null placeholder");
+		Validate.notNull(config.getList(path), "Path does not exist in config");
 		
 		final ComponentBuilder builder = new ComponentBuilder("");
 
@@ -141,8 +143,9 @@ public class Chat {
 	 */
 	public static BaseComponent[] toComponentWithPlaceholders(final FileConfiguration config, final String path, final Placeholder... placeholders) {
 		Validate.notNull(config, "Provided config is null");
-		Validate.notNull(config, "Path is null");
+		Validate.notNull(path, "Path is null");
 		Validate.noNullElements(placeholders, "Provided null placeholder");
+		Validate.notNull(config.getList(path), "Path does not exist in config");
 		
 		final ComponentBuilder builder = new ComponentBuilder("");
 
