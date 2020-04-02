@@ -1,36 +1,50 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
-import xyz.derkades.derkutils.ThrowingSupplier;
-
-/**
- * @deprecated Use java future
- */
-@Deprecated
 public class BukkitFuture<T> {
 
 	private final Plugin plugin;
-	private final List<Consumer<T>> onCompleteCallbacks;
-	private final List<Consumer<Exception>> onExceptionCallbacks;
+	private final Callable<T> action;
+	private final Stack<Consumer<T>> onCompleteCallbacks;
+	private final Stack<Consumer<Exception>> onExceptionCallbacks;
+	private boolean retrieving = false;
+	private boolean done = false;
 
-	public BukkitFuture(final Plugin plugin, final ThrowingSupplier<T, Exception> action) {
+	public BukkitFuture(final Plugin plugin, final Callable<T> action) {
 		Validate.notNull(plugin, "plugin must not be null");
 		Validate.notNull(action, "action must not be null");
 		
 		this.plugin = plugin;
-		this.onCompleteCallbacks = new ArrayList<>();
-		this.onExceptionCallbacks = new ArrayList<>();
-
-		Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+		this.action = action;
+		this.onCompleteCallbacks = new Stack<>();
+		this.onExceptionCallbacks = new Stack<>();
+	}
+	
+	/**
+	 * Runs callable asynchronously, then runs onComplete and onException handlers
+	 */
+	public synchronized void retrieveAsync() {
+		if (this.done) {
+			throw new IllegalStateException("Already retrieved");
+		}
+		
+		if (this.retrieving) {
+			throw new IllegalStateException("Already retrieving");
+		}
+		
+		this.retrieving = true;
+		
+		Bukkit.getScheduler().runTaskAsynchronously(this.plugin, () -> {
 			try {
-				final T result = action.get();
+				final T result = this.action.call();
+				this.done = true;
 				Bukkit.getScheduler().runTask(this.plugin, () -> this.onCompleteCallbacks.forEach((c) -> c.accept(result)));
 			} catch (final Exception e) {
 				if (this.onExceptionCallbacks.isEmpty()) {
@@ -42,7 +56,14 @@ public class BukkitFuture<T> {
 		});
 	}
 	
-	public void awaitCompletion() {
+	/**
+	 * Freeze thread
+	 */
+	public synchronized void awaitCompletion() {
+		if (this.done) {
+			throw new IllegalStateException("Already retrieved");
+		}
+		
 		this.onComplete(a -> this.notify());
 		try {
 			this.wait();
@@ -50,15 +71,49 @@ public class BukkitFuture<T> {
 			Thread.currentThread().interrupt();
 		}
 	}
+	
+	/**
+	 * Call synchronously
+	 * @return
+	 * @throws Exception
+	 */
+	public synchronized T get() throws Exception {
+		if (this.done) {
+			throw new IllegalStateException("Already retrieved");
+		}
+		
+		if (this.done) {
+			throw new IllegalStateException("Already retrieved");
+		}
+		
+		this.retrieving = true;
+		final T t = this.action.call();
+		this.done = true;
+		return t;
+	}
 
 	public void onComplete(final Consumer<T> callback) {
 		Validate.notNull(callback, "callback must not be null");
-		this.onCompleteCallbacks.add(callback);
+		
+		if (this.done) {
+			throw new IllegalStateException("Already retrieved");
+		}
+		
+		synchronized(this) {
+			this.onCompleteCallbacks.add(callback);
+		}
 	}
 
 	public void onException(final Consumer<Exception> callback) {
 		Validate.notNull(callback, "callback must not be null");
-		this.onExceptionCallbacks.add(callback);
+		
+		if (this.done) {
+			throw new IllegalStateException("Already retrieved");
+		}
+		
+		synchronized(this) {
+			this.onExceptionCallbacks.add(callback);
+		}
 	}
 
 }
