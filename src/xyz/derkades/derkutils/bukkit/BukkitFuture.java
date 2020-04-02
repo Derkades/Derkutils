@@ -10,6 +10,10 @@ import org.bukkit.plugin.Plugin;
 
 import xyz.derkades.derkutils.ThrowingSupplier;
 
+/**
+ * @deprecated Use java future
+ */
+@Deprecated
 public class BukkitFuture<T> {
 
 	private final Plugin plugin;
