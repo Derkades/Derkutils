@@ -1,6 +1,5 @@
 package xyz.derkades.derkutils.bukkit.reflection;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
