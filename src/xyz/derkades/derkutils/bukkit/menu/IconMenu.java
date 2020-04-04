@@ -55,11 +55,8 @@ public abstract class IconMenu implements Listener {
 						IconMenu.this.view.getPlayer() == null ||
 						IconMenu.this.view.getPlayer().getOpenInventory() == null ||
 						!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view)) {
-//					if (IconMenu.this.view != null) {
-//						IconMenu.this.view.close();
-//					}
 					HandlerList.unregisterAll(IconMenu.this);
-					if (!closeEventCalled) {
+					if (!IconMenu.this.closeEventCalled) {
 						IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
 					}
 					this.cancel();
@@ -99,7 +96,7 @@ public abstract class IconMenu implements Listener {
 	 * Calls {@link #onClose(MenuCloseEvent)} with {@link CloseReason#FORCE_CLOSE} and closes the inventory.
 	 */
 	public void close() {
-		closeEventCalled = true;
+		this.closeEventCalled = true;
 		this.onClose(new MenuCloseEvent(this.player, CloseReason.FORCE_CLOSE));
 		this.view.close();
 	}
@@ -142,9 +139,9 @@ public abstract class IconMenu implements Listener {
 			if (slot >= 0 && slot < this.size && this.hasItem(slot)) {
 				final ItemStack item = this.inventory.getItem(slot);
 
-				final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, item));
+				final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, item, event.getClick()));
 				if (close) {
-					closeEventCalled = true;
+					this.closeEventCalled = true;
 					IconMenu.this.onClose(new MenuCloseEvent(IconMenu.this.player, CloseReason.ITEM_CLICK));
 					this.view.close();
 				}
@@ -153,9 +150,9 @@ public abstract class IconMenu implements Listener {
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
-	public void onQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		closeEventCalled = true;
+	public void onQuit(final PlayerQuitEvent event) {
+		final Player player = event.getPlayer();
+		this.closeEventCalled = true;
 		this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_QUIT));
 	}
 

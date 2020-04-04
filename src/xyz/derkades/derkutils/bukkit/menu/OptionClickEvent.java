@@ -2,6 +2,7 @@ package xyz.derkades.derkutils.bukkit.menu;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,12 +14,14 @@ public class OptionClickEvent extends PlayerEvent {
 
 	private final int position;
 	private final ItemStack item;
+	private final ClickType click;
 
-	OptionClickEvent(final Player player, final int position, final ItemStack item) {
+	OptionClickEvent(final Player player, final int position, final ItemStack item, final ClickType click) {
 		super(player);
 
 		this.position = position;
 		this.item = item;
+		this.click = click;
 	}
 
 	/**
@@ -41,6 +44,10 @@ public class OptionClickEvent extends PlayerEvent {
 	 */
 	public ItemStack getItemStack() {
 		return this.item;
+	}
+	
+	public ClickType getClickType() {
+		return this.click;
 	}
 
 	@Override

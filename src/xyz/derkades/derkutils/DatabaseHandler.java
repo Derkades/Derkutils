@@ -82,7 +82,7 @@ public class DatabaseHandler {
 	}
 
 	public void createTableIfNonexistent(final String tableName, final String sql) throws SQLException {
-		final DatabaseMetaData meta = this.databaseConnection.getMetaData();
+		final DatabaseMetaData meta = this.getConnection().getMetaData();
 		final ResultSet result = meta.getTables(null, null, tableName, null);
 
 		if (result != null && result.next()) {

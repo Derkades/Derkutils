@@ -3,13 +3,11 @@ package xyz.derkades.derkutils.caching;
 public class CacheObject {
 	
 	public Object object;
-	public long timeout;
-	public long timeCreated;
+	public long expire;
 	
-	protected CacheObject(Object object, long timeout){
+	protected CacheObject(final Object object, final long timeout){
 		this.object = object;
-		this.timeout = timeout * 1000;
-		this.timeCreated = System.currentTimeMillis();
+		this.expire = System.currentTimeMillis() + timeout * 1000;
 	}
 
 }
