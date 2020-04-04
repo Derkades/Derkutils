@@ -138,7 +138,7 @@ public abstract class IconMenu implements Listener {
 			if (slot >= 0 && slot < this.size && this.hasItem(slot)) {
 				final ItemStack item = this.inventory.getItem(slot);
 
-				final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, item));
+				final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, item, event.getClick()));
 				if (close) {
 					this.closeEventCalled = true;
 					IconMenu.this.onClose(new MenuCloseEvent(IconMenu.this.player, CloseReason.ITEM_CLICK));
