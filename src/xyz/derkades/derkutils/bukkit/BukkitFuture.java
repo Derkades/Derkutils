@@ -30,7 +30,7 @@ public class BukkitFuture<T> {
 	/**
 	 * Runs callable asynchronously, then runs onComplete and onException handlers
 	 */
-	public synchronized void retrieveAsync() {
+	public synchronized BukkitFuture<T> retrieveAsync() {
 		if (this.done) {
 			throw new IllegalStateException("Already retrieved");
 		}
@@ -54,12 +54,14 @@ public class BukkitFuture<T> {
 				}
 			}
 		});
+		
+		return this;
 	}
 	
 	/**
 	 * Freeze thread
 	 */
-	public synchronized void awaitCompletion() {
+	public synchronized BukkitFuture<T> awaitCompletion() {
 		if (this.done) {
 			throw new IllegalStateException("Already retrieved");
 		}
@@ -70,6 +72,8 @@ public class BukkitFuture<T> {
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}
+		
+		return this;
 	}
 	
 	/**
@@ -92,7 +96,7 @@ public class BukkitFuture<T> {
 		return t;
 	}
 
-	public void onComplete(final Consumer<T> callback) {
+	public BukkitFuture<T> onComplete(final Consumer<T> callback) {
 		Validate.notNull(callback, "callback must not be null");
 		
 		if (this.done) {
@@ -102,9 +106,11 @@ public class BukkitFuture<T> {
 		synchronized(this) {
 			this.onCompleteCallbacks.add(callback);
 		}
+		
+		return this;
 	}
 
-	public void onException(final Consumer<Exception> callback) {
+	public BukkitFuture<T> onException(final Consumer<Exception> callback) {
 		Validate.notNull(callback, "callback must not be null");
 		
 		if (this.done) {
@@ -114,6 +120,8 @@ public class BukkitFuture<T> {
 		synchronized(this) {
 			this.onExceptionCallbacks.add(callback);
 		}
+		
+		return this;
 	}
 
 }
