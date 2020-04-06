@@ -27,10 +27,15 @@ public class BukkitFuture<T> {
 		this.onExceptionCallbacks = new Stack<>();
 	}
 	
+	@Deprecated
+	public synchronized BukkitFuture<T> retrieveAsync() {
+		return callAsync();
+	}
+	
 	/**
 	 * Runs callable asynchronously, then runs onComplete and onException handlers
 	 */
-	public synchronized BukkitFuture<T> retrieveAsync() {
+	public synchronized BukkitFuture<T> callAsync() {
 		if (this.done) {
 			throw new IllegalStateException("Already retrieved");
 		}
@@ -76,12 +81,17 @@ public class BukkitFuture<T> {
 		return this;
 	}
 	
+	@Deprecated
+	public synchronized T get() throws Exception {
+		return callBlocking();
+	}
+	
 	/**
 	 * Call synchronously
 	 * @return
 	 * @throws Exception
 	 */
-	public synchronized T get() throws Exception {
+	public synchronized T callBlocking() throws Exception {
 		if (this.done) {
 			throw new IllegalStateException("Already retrieved");
 		}
