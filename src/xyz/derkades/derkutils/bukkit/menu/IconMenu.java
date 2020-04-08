@@ -1,5 +1,7 @@
 package xyz.derkades.derkutils.bukkit.menu;
 
+import java.util.function.Consumer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -36,12 +38,16 @@ public abstract class IconMenu implements Listener {
 	 * @param size Number of slots. Must be a multiple of 9 that is greater than 0 and less than 10.
 	 * @param player Player that this menu will be opened for when {@link #open()} is called
 	 */
-	public IconMenu(final Plugin plugin, final String name, final int rows, final Player player){
+	public IconMenu(final Plugin plugin, final String name, final int rows, final Player player) {
+		this(plugin, name, rows, player, l -> Bukkit.getServer().getPluginManager().registerEvents(l, plugin));
+	}
+	
+	public IconMenu(final Plugin plugin, final String name, final int rows, final Player player, final Consumer<Listener> listenerRegistrar) {
 		this.size = rows * 9;
 		this.name = name;
 		this.player = player;
 
-		Bukkit.getServer().getPluginManager().registerEvents(this, plugin);
+		listenerRegistrar.accept(this);
 		this.inventory = Bukkit.createInventory(this.player, this.size, this.name);
 		this.view = this.player.openInventory(this.inventory);
 
