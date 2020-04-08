@@ -3,6 +3,7 @@ package xyz.derkades.derkutils.bukkit.reflection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -118,6 +119,20 @@ public class ReflectionUtil {
 
 	public static void registerCommand(final String name, final Command command) {
 		getCommandMap().register(name, command);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static Map<String, Command> getKnownCommands() {
+		try {
+			final CommandMap map = getCommandMap();
+			return (Map<String, Command>) map.getClass().getMethod("getKnownCommands").invoke(map);
+		} catch (final InvocationTargetException | IllegalAccessException | SecurityException | NoSuchMethodException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static Command unregisterCommand(final String name) {
+		return getKnownCommands().remove(name);
 	}
 
 }
