@@ -3,6 +3,8 @@ package xyz.derkades.derkutils.bukkit.reflection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
@@ -131,8 +133,12 @@ public class ReflectionUtil {
 		}
 	}
 
-	public static Command unregisterCommand(final String name) {
-		return getKnownCommands().remove(name);
+	public static void unregisterCommand(final Command command) {
+		final List<String> names = new ArrayList<>();
+		names.add(command.getName());
+		names.addAll(command.getAliases());
+		command.unregister(getCommandMap());
+		names.forEach(getKnownCommands()::remove);
 	}
 
 }
