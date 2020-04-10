@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class ReflectionUtil {
 
+	private static final Map<String, Class<?>> classCache = new HashMap<>();
+	private static final String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+	
 	/**
 	 *
 	 * @param pathToClass Path to a Minecraft class, with %s where the version string would usually be. For example: <i>org.bukkit.craftbukkit.%s.entity.CraftPlayer</i>
@@ -24,8 +28,15 @@ public class ReflectionUtil {
 	 * @throws ClassNotFoundException
 	 */
 	public static Class<?> getMinecraftClass(final String pathToClass) throws ClassNotFoundException {
-		final String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-		return Class.forName(String.format(pathToClass, version));
+		Class<?> cached = classCache.get(pathToClass);
+		
+		if (cached == null) {
+			final String className = String.format(pathToClass, version);
+			cached = Class.forName(className);
+			classCache.put(pathToClass, cached);
+		}
+		
+		return cached;
 	}
 
 	/**
