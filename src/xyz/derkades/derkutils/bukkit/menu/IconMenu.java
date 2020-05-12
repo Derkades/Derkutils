@@ -2,6 +2,7 @@ package xyz.derkades.derkutils.bukkit.menu;
 
 import java.util.function.Consumer;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -49,6 +50,7 @@ public abstract class IconMenu implements Listener {
 
 		listenerRegistrar.accept(this);
 		this.inventory = Bukkit.createInventory(this.player, this.size, this.name);
+		Validate.notNull(this.inventory, "Inventory returned by Bukkit is null"); // For some reason this happens sometimes in 1.8, I have no idea why.
 		this.view = this.player.openInventory(this.inventory);
 
 		new BukkitRunnable() {
