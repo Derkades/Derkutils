@@ -111,7 +111,9 @@ public abstract class IconMenu implements Listener {
 
 	public void addItem(final int slot, final ItemStack item) {
 		this.inventory.setItem(slot, item);
-		((Player) this.view.getPlayer()).updateInventory(); // required for legacy versions to show the new item in the inventory
+		if (this.view != null && this.view.getPlayer() != null) {
+			((Player) this.view.getPlayer()).updateInventory(); // required for legacy versions to show the new item in the inventory
+		}
 	}
 
 	public boolean hasItem(final int slot) {
