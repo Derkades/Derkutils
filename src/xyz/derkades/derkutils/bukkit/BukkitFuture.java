@@ -2,6 +2,7 @@ package xyz.derkades.derkutils.bukkit;
 
 import java.util.Stack;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang.Validate;
@@ -14,8 +15,8 @@ public class BukkitFuture<T> {
 	private final Callable<T> action;
 	private final Stack<Consumer<T>> onCompleteCallbacks;
 	private final Stack<Consumer<Exception>> onExceptionCallbacks;
-	private boolean retrieving = false;
-	private boolean done = false;
+	private volatile boolean retrieving = false;
+	private volatile boolean done = false;
 
 	public BukkitFuture(final Plugin plugin, final Callable<T> action) {
 		Validate.notNull(plugin, "plugin must not be null");
@@ -71,13 +72,13 @@ public class BukkitFuture<T> {
 			throw new IllegalStateException("Already retrieved");
 		}
 		
-		this.onComplete(a -> this.notify());
-		try {
-			this.wait();
-		} catch (final InterruptedException e) {
-			Thread.currentThread().interrupt();
+		if (this.retrieving) {
+			throw new IllegalStateException("Already retrieving");
 		}
 		
+		final Semaphore semaphore = new Semaphore(1);
+		this.onComplete(a -> semaphore.release());
+		semaphore.acquireUninterruptibly();
 		return this;
 	}
 	

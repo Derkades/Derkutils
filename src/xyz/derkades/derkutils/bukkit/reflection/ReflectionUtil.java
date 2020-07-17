@@ -2,9 +2,14 @@ package xyz.derkades.derkutils.bukkit.reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
@@ -12,6 +17,9 @@ import org.bukkit.inventory.ItemStack;
 
 public class ReflectionUtil {
 
+	private static final Map<String, Class<?>> classCache = new HashMap<>();
+	private static final String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+	
 	/**
 	 *
 	 * @param pathToClass Path to a Minecraft class, with %s where the version string would usually be. For example: <i>org.bukkit.craftbukkit.%s.entity.CraftPlayer</i>
@@ -19,8 +27,15 @@ public class ReflectionUtil {
 	 * @throws ClassNotFoundException
 	 */
 	public static Class<?> getMinecraftClass(final String pathToClass) throws ClassNotFoundException {
-		final String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-		return Class.forName(String.format(pathToClass, version));
+		Class<?> cached = classCache.get(pathToClass);
+		
+		if (cached == null) {
+			final String className = String.format(pathToClass, version);
+			cached = Class.forName(className);
+			classCache.put(pathToClass, cached);
+		}
+		
+		return cached;
 	}
 
 	/**
@@ -124,8 +139,32 @@ public class ReflectionUtil {
 		}
 	}
 
-	public static Command unregisterCommand(final String name) {
-		return getKnownCommands().remove(name);
+	public static void unregisterCommand(final Command command) {
+		final List<String> names = new ArrayList<>();
+		names.add(command.getName());
+		names.addAll(command.getAliases());
+		command.unregister(getCommandMap());
+		names.forEach(getKnownCommands()::remove);
 	}
+	
+	
+	public static List<String> materialToMinecraftName(final Material... materials) {
+		final List<String> itemNames = new ArrayList<>();
+		try {
+			final Class<?> magicNumbersClass = ReflectionUtil.getMinecraftClass("org.bukkit.craftbukkit.%s.util.CraftMagicNumbers");
+			final Class<?> nmsItemClass = ReflectionUtil.getMinecraftClass("net.minecraft.server.%s.Item");
+			final Method getItemMethod = magicNumbersClass.getMethod("getItem", Material.class);
+			final Method getNameMethod = nmsItemClass.getMethod("getName");
+			for (final Material material : materials) {
+				final Object nmsItem = getItemMethod.invoke(null, material); // CraftMagicNumbers.getItem(material)
+				final String minecraftName = (String) getNameMethod.invoke(nmsItem); // nmsItem.getName()
+				itemNames.add(minecraftName);
+			}
+		} catch (final ClassNotFoundException | NoSuchMethodException | SecurityException | ClassCastException | IllegalAccessException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		return itemNames;
+	}
+
 
 }

@@ -10,7 +10,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
@@ -135,26 +134,24 @@ public abstract class IconMenu implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onInventoryClick(final InventoryClickEvent event) {
-		if (event.getView().equals(this.view)) {
-			event.setCancelled(true);
+		if (!event.getView().equals(this.view)) {
+			return;
+		}
+		
+		event.setCancelled(true);
+		
+		final int slot = event.getRawSlot();
 
-			if (event.getClick() != ClickType.LEFT) {
-				return;
-			}
+		final Player clicker = (Player) event.getWhoClicked();
 
-			final int slot = event.getRawSlot();
+		if (slot >= 0 && slot < this.size && this.hasItem(slot)) {
+			final ItemStack item = this.inventory.getItem(slot);
 
-			final Player clicker = (Player) event.getWhoClicked();
-
-			if (slot >= 0 && slot < this.size && this.hasItem(slot)) {
-				final ItemStack item = this.inventory.getItem(slot);
-
-				final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, item, event.getClick()));
-				if (close) {
-					this.closeEventCalled = true;
-					IconMenu.this.onClose(new MenuCloseEvent(IconMenu.this.player, CloseReason.ITEM_CLICK));
-					this.view.close();
-				}
+			final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, item, event.getClick()));
+			if (close) {
+				this.closeEventCalled = true;
+				IconMenu.this.onClose(new MenuCloseEvent(IconMenu.this.player, CloseReason.ITEM_CLICK));
+				this.view.close();
 			}
 		}
 	}

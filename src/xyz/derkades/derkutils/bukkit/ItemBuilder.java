@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -18,29 +19,33 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import xyz.derkades.derkutils.bukkit.reflection.ReflectionUtil;
 
 public class ItemBuilder {
 
 	private ItemStack item;
 
-	public ItemBuilder(final Material material){
+	public ItemBuilder(final Material material) {
+		Validate.notNull(material, "Material is null");
 		this.item = new ItemStack(material);
 	}
 
-	public ItemBuilder(final ItemStack item){
+	public ItemBuilder(final ItemStack item) {
+		Validate.notNull(item, "ItemStack is null");
 		this.item = item;
 	}
 
 	public ItemBuilder(final String ownerName) {
+		Validate.notNull(ownerName, "Skull owner name is null");
 		this.item = new ItemBuilder(Material.SKULL_ITEM).damage(3).skullOwner(ownerName).create();
 	}
 
-	public ItemBuilder amount(final int amount){
+	public ItemBuilder amount(final int amount) {
 		this.item.setAmount(amount);
 		return this;
 	}
 
-	public ItemBuilder name(final String name){
+	public ItemBuilder name(final String name) {
 		final ItemMeta meta = this.item.getItemMeta();
 		meta.setDisplayName(name);
 		this.item.setItemMeta(meta);
@@ -82,14 +87,16 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemBuilder skullOwner(final String playerName){
+	public ItemBuilder skullOwner(final String ownerName){
+		Validate.notNull(ownerName, "Skull owner name is null");
 		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
-		meta.setOwner(playerName);
+		meta.setOwner(ownerName);
 		this.item.setItemMeta(meta);
 		return this;
 	}
 
 	public ItemBuilder skullTexture(final String texture) {
+		Validate.notNull(texture, "Texture string is null");
 		final NBTItem nbt = new NBTItem(this.item);
 		final NBTCompound skullOwner = nbt.addCompound("SkullOwner");
 		skullOwner.setString("Id", UUID.randomUUID().toString());
@@ -98,47 +105,70 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemBuilder leatherArmorColor(final Color color){
+	public ItemBuilder leatherArmorColor(final Color color) {
+		Validate.notNull(color, "Color is null");
 		final LeatherArmorMeta meta = (LeatherArmorMeta) this.item.getItemMeta();
 		meta.setColor(color);
 		this.item.setItemMeta(meta);
 		return this;
 	}
 
-	public ItemBuilder enchant(final Enchantment type, final int level){
+	public ItemBuilder enchant(final Enchantment type, final int level) {
 		this.item.addEnchantment(type, level);
 		return this;
 	}
 
-	public ItemBuilder unsafeEnchant(final Enchantment type, final int level){
+	public ItemBuilder unsafeEnchant(final Enchantment type, final int level) {
 		this.item.addUnsafeEnchantment(type, level);
 		return this;
 	}
 
-	public ItemBuilder material(final Material material){
+	public ItemBuilder material(final Material material) {
 		this.item.setType(material);
 		return this;
 	}
 
-	public ItemBuilder type(final Material type){
+	public ItemBuilder type(final Material type) {
 		this.item.setType(type);
 		return this;
 	}
 
+	@Deprecated
 	public ItemBuilder canDestroy(final String... minecraftItemNames) {
+		Validate.notNull(minecraftItemNames, "Item names varargs is null");
 		final NBTItem nbt = new NBTItem(this.item);
 		nbt.getStringList("CanDestroy").addAll(Arrays.asList(minecraftItemNames));
 		this.item = nbt.getItem();
 		return this;
 	}
+	
+	public ItemBuilder canDestory(final Material... materials) {
+		Validate.notNull(materials, "Materials varargs is null");
+		final List<String> minecraftItemNames = ReflectionUtil.materialToMinecraftName(materials);
+		final NBTItem nbt = new NBTItem(this.item);
+		nbt.getStringList("CanDestroy").addAll(minecraftItemNames);
+		this.item = nbt.getItem();
+		return this;
+	}
 
+	@Deprecated
 	public ItemBuilder canPlaceOn(final String... minecraftItemNames) {
+		Validate.notNull(minecraftItemNames, "Item names varargs is null");
 		final NBTItem nbt = new NBTItem(this.item);
 		nbt.getStringList("CanPlaceOn").addAll(Arrays.asList(minecraftItemNames));
 		this.item = nbt.getItem();
 		return this;
 	}
-
+	
+	public ItemBuilder canPlaceOn(final Material... materials) {
+		Validate.notNull(materials, "materials varargs is null");
+		final List<String> minecraftItemNames = ReflectionUtil.materialToMinecraftName(materials);
+		final NBTItem nbt = new NBTItem(this.item);
+		nbt.getStringList("CanPlaceOn").addAll(minecraftItemNames);
+		this.item = nbt.getItem();
+		return this;
+	}
+	
 	public ItemBuilder damage(final int damage) {
 		this.item.setDurability((short) damage);
 		return this;
