@@ -142,7 +142,7 @@ public class ItemBuilder {
 		return this;
 	}
 	
-	public ItemBuilder canDestory(final Material... materials) {
+	public ItemBuilder canDestroy(final Material... materials) {
 		Validate.notNull(materials, "Materials varargs is null");
 		final List<String> minecraftItemNames = ReflectionUtil.materialToMinecraftName(materials);
 		final NBTItem nbt = new NBTItem(this.item);
