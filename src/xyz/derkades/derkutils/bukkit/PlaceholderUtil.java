@@ -1,6 +1,7 @@
 package xyz.derkades.derkutils.bukkit;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +56,22 @@ public class PlaceholderUtil {
 
 		return strings;
 	}
+	
+	private static Method papiParseString = null;
+	private static Method papiParseList = null;
+	
+	static {
+		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+			try {
+				final Class<?>c = Class.forName("me.clip.placeholderapi.PlaceholderAPI");
+				papiParseString = c.getMethod("setPlaceholders", Player.class, String.class);
+				papiParseList = c.getMethod("setPlaceholders", Player.class, String.class);
+			} catch (final ClassNotFoundException | IllegalArgumentException |
+					SecurityException | NoSuchMethodException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	/**
 	 * Parses PlaceholderAPI placeholders in a string if the plugin is installed
@@ -64,17 +81,15 @@ public class PlaceholderUtil {
 		Validate.notNull(player, "Player must not be null");
 		Validate.notNull(string, "Provided string must not be null");
 		
-		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
+		if (papiParseString == null) {
 			return string;
-		}
-
-		try {
-			return (String) Class.forName("me.clip.placeholderapi.PlaceholderAPI")
-					.getMethod("setPlaceholders", Player.class, String.class).invoke(null, player, string);
-		} catch (final ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
-				InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-			return string;
+		} else {
+			try {
+				return (String) papiParseString.invoke(null, player, string);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+				return string;
+			}
 		}
 	}
 
@@ -83,21 +98,19 @@ public class PlaceholderUtil {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<String> parsePapiPlaceholders(final Player player, final List<String> string) {
+	public static List<String> parsePapiPlaceholders(final Player player, final List<String> strings) {
 		Validate.notNull(player, "Player must not be null");
-		Validate.noNullElements(string, "Provided strings must not be null");
+		Validate.notNull(strings, "Provided string list must not be null");
 		
-		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
-			return string;
-		}
-
-		try {
-			return (List<String>) Class.forName("me.clip.placeholderapi.PlaceholderAPI")
-					.getMethod("setPlaceholders", Player.class, List.class).invoke(null, player, string);
-		} catch (final ClassNotFoundException | IllegalAccessException | IllegalArgumentException |
-				InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
-			return string;
+		if (papiParseList == null) {
+			return strings;
+		} else {
+			try {
+				return (List<String>) papiParseList.invoke(null, player, strings);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+				return strings;
+			}
 		}
 	}
 
