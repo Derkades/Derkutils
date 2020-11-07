@@ -65,7 +65,7 @@ public class PlaceholderUtil {
 			try {
 				final Class<?>c = Class.forName("me.clip.placeholderapi.PlaceholderAPI");
 				papiParseString = c.getMethod("setPlaceholders", Player.class, String.class);
-				papiParseList = c.getMethod("setPlaceholders", Player.class, String.class);
+				papiParseList = c.getMethod("setPlaceholders", Player.class, List.class);
 			} catch (final ClassNotFoundException | IllegalArgumentException |
 					SecurityException | NoSuchMethodException e) {
 				e.printStackTrace();
