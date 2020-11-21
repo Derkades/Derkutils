@@ -53,6 +53,8 @@ public class Chat {
 						builder.event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, v));
 					} else if (k.equals("color")) {
 						builder.color(ChatColor.valueOf(v.toUpperCase()));
+					} else if (k.equals("hex_color")) {
+						builder.color(ChatColor.of(xyz.derkades.derkutils.Colors.getColorFromHex(v)));
 					} else if (k.equals("bold")) {
 						builder.bold(Boolean.parseBoolean(v));
 					} else if (k.equals("underlined")) {
@@ -117,6 +119,8 @@ public class Chat {
 								player, v, placeholders)));
 					} else if (k.equals("color")) {
 						builder.color(ChatColor.valueOf(v.toUpperCase()));
+					} else if (k.equals("hex_color")) {
+						builder.color(ChatColor.of(xyz.derkades.derkutils.Colors.getColorFromHex(v)));
 					} else if (k.equals("bold")) {
 						builder.bold(Boolean.parseBoolean(v));
 					} else if (k.equals("underlined")) {
@@ -179,6 +183,8 @@ public class Chat {
 								PlaceholderUtil.parsePlaceholders(v, placeholders)));
 					} else if (k.equals("color")) {
 						builder.color(ChatColor.valueOf(v.toUpperCase()));
+					} else if (k.equals("hex_color")) {
+						builder.color(ChatColor.of(xyz.derkades.derkutils.Colors.getColorFromHex(v)));
 					} else if (k.equals("bold")) {
 						builder.bold(Boolean.parseBoolean(v));
 					} else if (k.equals("underlined")) {
