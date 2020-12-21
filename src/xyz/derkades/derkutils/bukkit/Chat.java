@@ -113,7 +113,7 @@ public class Chat {
 				final BaseComponent[] messageParts =
 						TextComponent.fromLegacyText(
 								PlaceholderUtil.parsePapiPlaceholders(
-										player, Colors.parseColors(map.get("text")), placeholders));
+									player, Colors.parseColors(map.get("text")), placeholders));
 
 				for (final Map.Entry<String, String> e : map.entrySet()){
 					final String k = e.getKey();
