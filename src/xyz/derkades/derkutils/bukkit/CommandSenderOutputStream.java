@@ -33,5 +33,11 @@ public class CommandSenderOutputStream extends OutputStream {
 			}
 		}
 	}
+	
+	@Override
+	public void close() throws IOException {
+		this.sender.sendMessage(this.buffer.toString());
+		super.close();
+	}
 
 }
