@@ -27,6 +27,7 @@ public abstract class IconMenu implements Listener {
 	private final Inventory inventory;
 	private final InventoryView view;
 	private boolean closeEventCalled = false;
+	private boolean cancelTask = false;
 
 	/**
 	 * Creates a new menu instance.
@@ -58,14 +59,19 @@ public abstract class IconMenu implements Listener {
 			public void run() {
 				// Unregister listeners for the menu if the player has opened a different
 				// menu, which means that this menu must be closed.
-				if (IconMenu.this.view == null ||
+				if (IconMenu.this.cancelTask ||
+						IconMenu.this.view == null ||
 						IconMenu.this.view.getPlayer() == null ||
 						IconMenu.this.view.getPlayer().getOpenInventory() == null ||
-						!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view)) {
+						!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view) ||
+						Bukkit.getPlayer(player.getUniqueId()) == null // player went offline
+						) {
 					HandlerList.unregisterAll(IconMenu.this);
+					
 					if (!IconMenu.this.closeEventCalled) {
 						IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
 					}
+					
 					this.cancel();
 					return;
 				}
@@ -106,6 +112,7 @@ public abstract class IconMenu implements Listener {
 		this.closeEventCalled = true;
 		this.onClose(new MenuCloseEvent(this.player, CloseReason.FORCE_CLOSE));
 		this.view.close();
+		this.cancelTask = true;
 	}
 
 	public void addItem(final int slot, final ItemStack item) {
@@ -160,6 +167,7 @@ public abstract class IconMenu implements Listener {
 	public void onQuit(final PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
 		this.closeEventCalled = true;
+		this.cancelTask = true;
 		this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_QUIT));
 	}
 

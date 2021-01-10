@@ -56,5 +56,6 @@ $RECYCLE.BIN/
 *.msp
 # Windows shortcuts
 *.lnk
-dependency-reduced-pom.xml
-.classpath
+
+# IntelliJ
+Derkutils.iml
