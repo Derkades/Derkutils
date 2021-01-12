@@ -145,29 +145,11 @@ public class ItemBuilder implements Serializable {
 		return this;
 	}
 
-	@Deprecated
-	public ItemBuilder canDestroy(final String... minecraftItemNames) {
-		Validate.notNull(minecraftItemNames, "Item names varargs is null");
-		final NBTItem nbt = new NBTItem(this.item);
-		nbt.getStringList("CanDestroy").addAll(Arrays.asList(minecraftItemNames));
-		this.item = nbt.getItem();
-		return this;
-	}
-	
 	public ItemBuilder canDestroy(final Material... materials) {
 		Validate.notNull(materials, "Materials varargs is null");
 		final List<String> minecraftItemNames = ReflectionUtil.materialToMinecraftName(materials);
 		final NBTItem nbt = new NBTItem(this.item);
 		nbt.getStringList("CanDestroy").addAll(minecraftItemNames);
-		this.item = nbt.getItem();
-		return this;
-	}
-
-	@Deprecated
-	public ItemBuilder canPlaceOn(final String... minecraftItemNames) {
-		Validate.notNull(minecraftItemNames, "Item names varargs is null");
-		final NBTItem nbt = new NBTItem(this.item);
-		nbt.getStringList("CanPlaceOn").addAll(Arrays.asList(minecraftItemNames));
 		this.item = nbt.getItem();
 		return this;
 	}
