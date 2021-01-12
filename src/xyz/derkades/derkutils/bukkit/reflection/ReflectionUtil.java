@@ -164,7 +164,13 @@ public class ReflectionUtil {
 			final Method getNameMethod = nmsItemClass.getMethod("getName");
 			for (final Material material : materials) {
 				final Object nmsItem = getItemMethod.invoke(null, material); // CraftMagicNumbers.getItem(material)
-				final String minecraftName = (String) getNameMethod.invoke(nmsItem); // nmsItem.getName()
+				String minecraftName = (String) getNameMethod.invoke(nmsItem); // nmsItem.getName()
+				if (minecraftName.startsWith("item.minecraft.")) { // 1.16 hack
+					minecraftName = minecraftName.replace("item.minecraft.", "minecraft:");
+				}
+				if (minecraftName.startsWith("block.minecraft.")) { // 1.16 hack
+					minecraftName = minecraftName.replace("block.minecraft.", "minecraft:");
+				}
 				itemNames.add(minecraftName);
 			}
 		} catch (final ClassNotFoundException | NoSuchMethodException | SecurityException | ClassCastException | IllegalAccessException | InvocationTargetException e) {
