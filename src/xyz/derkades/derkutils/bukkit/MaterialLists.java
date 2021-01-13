@@ -4,16 +4,20 @@ import org.bukkit.Material;
 
 public class MaterialLists {
 	
-	public static boolean isInList(Material material, Material[]... materials) {
-		if (materials.length == 0) {
+	public static boolean isInList(final Material materialToSearch, final Material[]... materialLists) {
+		if (materialToSearch == null) {
+			return false;
+		}
+		
+		if (materialLists.length == 0) {
 			return false;
 		}
 		
 		boolean isInList = false;
 		
-		for (Material[] materia : materials) {
-			for (Material materi : materia) {
-				if (material.equals(materi)) {
+		for (final Material[] materialList : materialLists) {
+			for (final Material material : materialList) {
+				if (material.equals(materialToSearch)) {
 					isInList = true;
 				}
 			}
@@ -25,44 +29,57 @@ public class MaterialLists {
 	public static final Material[] TRAPDOORS = {
 			Material.ACACIA_TRAPDOOR,
 			Material.BIRCH_TRAPDOOR,
+			Material.CRIMSON_TRAPDOOR,
 			Material.DARK_OAK_TRAPDOOR,
 			Material.IRON_TRAPDOOR,
 			Material.JUNGLE_TRAPDOOR,
 			Material.OAK_TRAPDOOR,
-			Material.SPRUCE_TRAPDOOR
+			Material.SPRUCE_TRAPDOOR,
+			Material.WARPED_TRAPDOOR
 	};
 	
 	public static final Material[] FENCES = {
 			Material.ACACIA_FENCE,
 			Material.BIRCH_FENCE,
+			Material.CRIMSON_FENCE,
 			Material.DARK_OAK_FENCE,
 			Material.JUNGLE_FENCE,
 			Material.NETHER_BRICK_FENCE,
 			Material.OAK_FENCE,
-			Material.SPRUCE_FENCE
+			Material.SPRUCE_FENCE,
+			Material.WARPED_FENCE,
 	};
 	
 	public static final Material[] FENCE_GATES = {
 			Material.ACACIA_FENCE_GATE,
 			Material.BIRCH_FENCE_GATE,
+			Material.CRIMSON_FENCE_GATE,
 			Material.DARK_OAK_FENCE_GATE,
 			Material.JUNGLE_FENCE_GATE,
 			Material.OAK_FENCE_GATE,
-			Material.SPRUCE_FENCE_GATE
+			Material.SPRUCE_FENCE_GATE,
+			Material.WARPED_FENCE_GATE,
 	};
 	
 	public static final Material[] WALLS = {
-			Material.COBBLESTONE_WALL, 
-			Material.MOSSY_COBBLESTONE_WALL
+			Material.COBBLESTONE_WALL,
+			Material.MOSSY_COBBLESTONE_WALL,
+			Material.ANDESITE_WALL,
+			Material.DIORITE_WALL,
+			Material.GRANITE_WALL,
+			Material.BLACKSTONE_WALL,
+			Material.STONE_BRICK_WALL,
 	};
 	
 	public static final Material[] DOORS = {
 			Material.ACACIA_DOOR,
 			Material.BIRCH_DOOR,
+			Material.CRIMSON_DOOR,
 			Material.DARK_OAK_DOOR,
 			Material.JUNGLE_DOOR,
 			Material.OAK_DOOR,
-			Material.SPRUCE_DOOR
+			Material.SPRUCE_DOOR,
+			Material.WARPED_DOOR,
 	};
 	
 	public static final Material[] STAINED_GLASS_BLOCKS = {
@@ -79,7 +96,7 @@ public class MaterialLists {
 			Material.ORANGE_STAINED_GLASS,
 			Material.PINK_STAINED_GLASS,
 			Material.PURPLE_STAINED_GLASS,
-			Material.RED_STAINED_GLASS,		
+			Material.RED_STAINED_GLASS,
 			Material.WHITE_STAINED_GLASS,
 			Material.YELLOW_STAINED_GLASS
 	};
@@ -104,9 +121,9 @@ public class MaterialLists {
 	};
 	
 	public static final Material[] TORCHES = {
-			Material.TORCH, 
-			Material.REDSTONE_TORCH, 
-			Material.REDSTONE_WALL_TORCH, 
+			Material.TORCH,
+			Material.REDSTONE_TORCH,
+			Material.REDSTONE_WALL_TORCH,
 			Material.WALL_TORCH
 	};
 	
@@ -167,6 +184,8 @@ public class MaterialLists {
 			Material.ACACIA_WALL_SIGN,
 			Material.BIRCH_SIGN,
 			Material.BIRCH_WALL_SIGN,
+			Material.CRIMSON_SIGN,
+			Material.CRIMSON_WALL_SIGN,
 			Material.DARK_OAK_SIGN,
 			Material.DARK_OAK_WALL_SIGN,
 			Material.JUNGLE_SIGN,
@@ -174,7 +193,9 @@ public class MaterialLists {
 			Material.OAK_SIGN,
 			Material.OAK_WALL_SIGN,
 			Material.SPRUCE_SIGN,
-			Material.SPRUCE_WALL_SIGN
+			Material.SPRUCE_WALL_SIGN,
+			Material.WARPED_SIGN,
+			Material.WARPED_WALL_SIGN,
 	};
 	
 	public static final Material[] TERRACOTTA_BLOCKS = {
