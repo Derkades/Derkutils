@@ -133,13 +133,6 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemBuilder unbreakable() {
-		final ItemMeta meta = this.item.getItemMeta();
-		meta.setUnbreakable(true);
-		this.item.setItemMeta(meta);
-		return this;
-	}
-
 	public ItemBuilder canDestroy(final Material... materials) {
 		Validate.notNull(materials, "Materials varargs is null");
 		final List<String> minecraftItemNames = ReflectionUtil.materialToMinecraftName(materials);
