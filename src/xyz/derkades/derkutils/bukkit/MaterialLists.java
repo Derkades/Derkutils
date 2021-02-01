@@ -216,6 +216,38 @@ public class MaterialLists {
 			Material.YELLOW_TERRACOTTA
 	);
 	
+	public static final Set<Material> POTTED_PLANT = Set.of(
+			Material.POTTED_ACACIA_SAPLING,
+			Material.POTTED_ALLIUM,
+			Material.POTTED_AZURE_BLUET,
+			Material.POTTED_BAMBOO,
+			Material.POTTED_BIRCH_SAPLING,
+			Material.POTTED_BLUE_ORCHID,
+			Material.POTTED_BROWN_MUSHROOM,
+			Material.POTTED_CACTUS,
+			Material.POTTED_CORNFLOWER,
+			Material.POTTED_CRIMSON_FUNGUS,
+			Material.POTTED_CRIMSON_ROOTS,
+			Material.POTTED_DANDELION,
+			Material.POTTED_DARK_OAK_SAPLING,
+			Material.POTTED_DEAD_BUSH,
+			Material.POTTED_FERN,
+			Material.POTTED_JUNGLE_SAPLING,
+			Material.POTTED_LILY_OF_THE_VALLEY,
+			Material.POTTED_OAK_SAPLING,
+			Material.POTTED_ORANGE_TULIP,
+			Material.POTTED_OXEYE_DAISY,
+			Material.POTTED_PINK_TULIP,
+			Material.POTTED_POPPY,
+			Material.POTTED_RED_MUSHROOM,
+			Material.POTTED_RED_TULIP,
+			Material.POTTED_SPRUCE_SAPLING,
+			Material.POTTED_WARPED_FUNGUS,
+			Material.POTTED_WARPED_ROOTS,
+			Material.POTTED_WHITE_TULIP,
+			Material.POTTED_WITHER_ROSE
+	);
+	
 	/*public static final Material[] PARTIAL_BLOCKS = ListUtils.mergeArrays(
 			TRAPDOORS,
 			FENCES,
