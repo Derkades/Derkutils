@@ -1,6 +1,6 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,7 +19,7 @@ public class BlockUtils {
 	public static void fillArea(final World world,
 			final int x1, final int y1, final int z1,
 			final int x2, final int y2, final int z2,
-			final Material material, final Consumer<Block> runForEveryBlock, final boolean applyPhysics) {
+			final Material material, final Function<Block, Boolean> blockFilter, final boolean applyPhysics) {
 
 		final int minX = Math.min(x1, x2);
 		final int minY = Math.min(y1, y2);
@@ -32,10 +32,12 @@ public class BlockUtils {
 			for (int y = minY; y <= maxY; y++) {
 				for (int z = minZ; z <= maxZ; z++) {
 					final Block block = new Location(world, x, y, z).getBlock();
-					block.setType(material, applyPhysics);
-					if (runForEveryBlock != null) {
-						runForEveryBlock.accept(block);
+					if (blockFilter != null) {
+						if (!blockFilter.apply(block)) {
+							continue;
+						}
 					}
+					block.setType(material, applyPhysics);
 				}
 			}
 		}
@@ -60,22 +62,22 @@ public class BlockUtils {
 	public static void fillArea(final World world,
 			final int x1, final int y1, final int z1,
 			final int x2, final int y2, final int z2,
-			final Material material, final Consumer<Block> runForEveryBlock) {
+			final Material material, final Function<Block, Boolean> blockFilter) {
 
-		fillArea(world, x1, y1, z1, x2, y2, z2, material, runForEveryBlock, true);
+		fillArea(world, x1, y1, z1, x2, y2, z2, material, blockFilter, true);
 	}
 
 	public static void fillArea(final Location a, final Location b, final Material material,
-			final Consumer<Block> runForEveryBlock, final boolean applyPhysics) {
+			final Function<Block, Boolean> blockFilter, final boolean applyPhysics) {
 		fillArea(a.getWorld(),
 				a.getBlockX(), a.getBlockY(), a.getBlockZ(),
 				b.getBlockX(), b.getBlockY(), b.getBlockZ(),
-				material, runForEveryBlock, applyPhysics);
+				material, blockFilter, applyPhysics);
 	}
 
 	public static void fillArea(final Location a, final Location b, final Material material,
-			final Consumer<Block> runForEveryBlock) {
-		fillArea(a, b, material, runForEveryBlock, true);
+			final Function<Block, Boolean> blockFilter) {
+		fillArea(a, b, material, blockFilter, true);
 	}
 
 	public static void fillArea(final Location a, final Location b, final Material material, final boolean applyPhysics) {
