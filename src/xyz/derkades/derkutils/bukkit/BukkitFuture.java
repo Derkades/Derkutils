@@ -1,6 +1,7 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
@@ -13,8 +14,8 @@ public class BukkitFuture<T> {
 
 	private final Plugin plugin;
 	private final Callable<T> action;
-	private final Stack<Consumer<T>> onCompleteCallbacks;
-	private final Stack<Consumer<Exception>> onExceptionCallbacks;
+	private final Deque<Consumer<T>> onCompleteCallbacks;
+	private final Deque<Consumer<Exception>> onExceptionCallbacks;
 	private volatile boolean retrieving = false;
 	private volatile boolean done = false;
 
@@ -24,8 +25,8 @@ public class BukkitFuture<T> {
 		
 		this.plugin = plugin;
 		this.action = action;
-		this.onCompleteCallbacks = new Stack<>();
-		this.onExceptionCallbacks = new Stack<>();
+		this.onCompleteCallbacks = new ArrayDeque<>();
+		this.onExceptionCallbacks = new ArrayDeque<>();
 	}
 	
 	@Deprecated

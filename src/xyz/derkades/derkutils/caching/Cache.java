@@ -1,8 +1,9 @@
 package xyz.derkades.derkutils.caching;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.Validate;
@@ -69,7 +70,7 @@ public class Cache {
 	 * @return Number of objects removed from cache
 	 */
 	public static int cleanCache(){
-		final Stack<String> toRemove = new Stack<>();
+		final Deque<String> toRemove = new ArrayDeque<>();
 		
 		CACHE_OBJECT_MAP.forEach((k, v) -> {
 			if (v.expire < System.currentTimeMillis()) {
