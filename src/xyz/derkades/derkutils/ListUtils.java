@@ -74,14 +74,17 @@ public class ListUtils {
 	 * @see #getRandomValueFromList(List)
 	 */
 	public static <T> T getRandomValueFromArray(final T[] array){
-		if (array == null)
+		if (array == null) {
 			throw new IllegalArgumentException("Array must not be null");
+		}
 
-		if (array.length == 1)
+		if (array.length == 1) {
 			return array[0];
+		}
 
-		if (array.length == 0)
+		if (array.length == 0) {
 			throw new IllegalArgumentException("Array must not be empty");
+		}
 
 		final int size = array.length;
 		final int index = Random.getRandomInteger(0, size - 1);
@@ -94,14 +97,17 @@ public class ListUtils {
 	 * @return A random element from the provided collection
 	 */
 	public static <T> T getRandomValueFromList(final Collection<T> list) {
-		if (list == null)
+		if (list == null) {
 			throw new IllegalArgumentException("List must not be null");
+		}
 
-		if (list.size() == 0)
+		if (list.size() == 0) {
 			throw new IllegalArgumentException("List must not be empty");
+		}
 
-		if (list.size() == 1)
+		if (list.size() == 1) {
 			return (T) list.toArray()[0];
+		}
 
 		final int size = list.size();
 		final int index = Random.getRandomInteger(0, size - 1); //Size -1 because if the list has 1 entry (entry 0) the length is 1.
@@ -112,7 +118,9 @@ public class ListUtils {
 	 * Removes the first string from a string array
 	 * @param array
 	 * @return Array without the first string
+	 * @deprecated Use Arrays.copyOfRange(array, 1, array.length);
 	 */
+	@Deprecated
 	public static String[] removeFirstStringFromArray(final String[] array){
 		final int n = array.length - 1;
 		final String[] newArray = new String[n];
@@ -128,8 +136,9 @@ public class ListUtils {
 	 * @return ["Hello there", "Lorem dolor"]
 	 */
 	public static List<String> replaceInStringList(final List<String> list, final Object[] before, final Object[] after) {
-		if (before.length != after.length)
+		if (before.length != after.length) {
 			throw new IllegalArgumentException("before[] length must be equal to after[] length");
+		}
 
 		final List<String> newList = new ArrayList<>();
 
