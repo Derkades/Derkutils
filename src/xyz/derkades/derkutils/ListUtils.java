@@ -118,7 +118,9 @@ public class ListUtils {
 	 * Removes the first string from a string array
 	 * @param array
 	 * @return Array without the first string
+	 * @deprecated Use Arrays.copyOfRange(array, 1, array.length);
 	 */
+	@Deprecated
 	public static String[] removeFirstStringFromArray(final String[] array){
 		final int n = array.length - 1;
 		final String[] newArray = new String[n];
