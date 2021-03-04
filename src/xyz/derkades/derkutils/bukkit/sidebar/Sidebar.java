@@ -47,7 +47,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 		this.bukkitScoreboard = bukkitManager.getNewScoreboard();
 
-		this.bukkitObjective = this.bukkitScoreboard.registerNewObjective("obj", "dummy", "mgsb");
+		this.bukkitObjective = this.bukkitScoreboard.registerNewObjective("obj", "dummy");
 
 		this.entries = new ArrayList<>();
 		this.entries.addAll(Arrays.asList(entries));
@@ -268,7 +268,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	private void redoBukkitObjective() {
 		this.bukkitObjective.unregister();
-		this.bukkitObjective = this.bukkitScoreboard.registerNewObjective("obj", "dummy", "mgsb");
+		this.bukkitObjective = this.bukkitScoreboard.registerNewObjective("obj", "dummy");
 
 		this.bukkitObjective.setDisplayName(this.title);
 		this.bukkitObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
