@@ -23,7 +23,6 @@ public class Chat {
 	 * @param section Location of the message in the config
 	 * @return Formatted base component
 	 */
-	@SuppressWarnings("deprecation")
 	public static BaseComponent[] toComponent(final FileConfiguration config, final String path) {
 		Validate.notNull(config, "Provided config is null");
 		Validate.notNull(config, "Path is null");
@@ -93,7 +92,6 @@ public class Chat {
 	 * @param section Location of the message in the config
 	 * @return Formatted base component
 	 */
-	@SuppressWarnings("deprecation")
 	public static BaseComponent[] toComponentWithPapiPlaceholders(final FileConfiguration config, final String path, final Player player, final Placeholder... placeholders) {
 		Validate.notNull(config, "Provided config is null");
 		Validate.notNull(path, "Path is null");
@@ -168,7 +166,6 @@ public class Chat {
 	 * @param section Location of the message in the config
 	 * @return Formatted base component
 	 */
-	@SuppressWarnings("deprecation")
 	public static BaseComponent[] toComponentWithPlaceholders(final FileConfiguration config, final String path, final Placeholder... placeholders) {
 		Validate.notNull(config, "Provided config is null");
 		Validate.notNull(path, "Path is null");
