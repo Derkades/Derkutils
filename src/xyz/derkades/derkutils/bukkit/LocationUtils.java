@@ -7,6 +7,10 @@ import org.bukkit.entity.Player;
 public class LocationUtils {
 
 	public static boolean isIn2dBounds(final Location location, final Location cornerOne, final Location cornerTwo) {
+		Validate.notNull(location, "Location is null");
+		Validate.notNull(cornerOne, "First corner is null");
+		Validate.notNull(cornerTwo, "Second corner is null");
+
 		if (!location.getWorld().equals(cornerOne.getWorld())) {
 			return false;
 		}
@@ -24,6 +28,10 @@ public class LocationUtils {
 	}
 
 	public static boolean isIn3dBounds(final Location location, final Location cornerOne, final Location cornerTwo) {
+		Validate.notNull(location, "Location is null");
+		Validate.notNull(cornerOne, "First corner is null");
+		Validate.notNull(cornerTwo, "Second corner is null");
+
 		if (!isIn2dBounds(location, cornerOne, cornerTwo)) {
 			return false;
 		}
