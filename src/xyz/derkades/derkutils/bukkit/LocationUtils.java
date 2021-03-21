@@ -2,6 +2,7 @@ package xyz.derkades.derkutils.bukkit;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 public class LocationUtils {
 
@@ -42,6 +43,44 @@ public class LocationUtils {
 	public static Location minCorner(final Location a, final Location b) {
 		Validate.isTrue(a.getWorld().equals(b.getWorld()), "Locations must be in the same world");
 		return new Location(a.getWorld(), Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
+	}
+
+	/**
+	 * @see #yawInBounds(float, float, float)
+	 * @param player
+	 * @param min
+	 * @param max
+	 * @return
+	 */
+	public boolean yawInBounds(final Player player, final float min, final float max) {
+		return yawInBounds(player.getLocation(), min, max);
+	}
+
+	/**
+	 * @see #yawInBounds(float, float, float)
+	 * @param player
+	 * @param min
+	 * @param max
+	 * @return
+	 */
+	public boolean yawInBounds(final Location location, final float min, final float max) {
+		return yawInBounds(location.getYaw(), min, max);
+	}
+
+	/**
+	 * Check if bukkit yaw is in bounds of vanilla yaw
+	 * @param yaw Bukkit yaw (e.g. from {@link Location#getYaw()}
+	 * @param min Min yaw, as displayed in debug screen
+	 * @param max Max yaw, as displayed in debug screen
+	 * @return whether yaw is in bounds
+	 */
+	public boolean yawInBounds(float yaw, final float min, final float max) {
+		if (yaw < -180) {
+			yaw += 360;
+		} else if (yaw > 180) {
+			yaw -= 360;
+		}
+		return yaw > min && yaw < max;
 	}
 
 }
