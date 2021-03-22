@@ -41,7 +41,7 @@ public class LocationUtils {
 
 	public static Location minCorner(final Location a, final Location b) {
 		Validate.isTrue(a.getWorld().equals(b.getWorld()), "Locations must be in the same world");
-		return new Location(a.getWorld(), Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
+		return new Location(a.getWorld(), Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
 	}
 
 }
