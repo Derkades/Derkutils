@@ -1,5 +1,6 @@
 package xyz.derkades.derkutils.constraints;
 
+@Deprecated
 public class BooleanConstraint extends Constraint {
 
 	@Override

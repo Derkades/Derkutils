@@ -5,11 +5,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.Validate;
 
 public class ListUtils {
 
@@ -58,6 +58,7 @@ public class ListUtils {
 	 * @return A list of all values in a column as returned by an SQL query
 	 * @throws SQLException
 	 */
+	@Deprecated
 	public static List<String> getStringListFromResultSet(final ResultSet resultSet, final String column) throws SQLException {
 		final List<String> list = new ArrayList<>();
 
@@ -73,17 +74,12 @@ public class ListUtils {
 	 * @return A random element from an array
 	 * @see #getRandomValueFromList(List)
 	 */
+	@Deprecated
 	public static <T> T getRandomValueFromArray(final T[] array){
-		if (array == null) {
-			throw new IllegalArgumentException("Array must not be null");
-		}
+		Validate.notEmpty(array, "Array is null or empty");
 
 		if (array.length == 1) {
 			return array[0];
-		}
-
-		if (array.length == 0) {
-			throw new IllegalArgumentException("Array must not be empty");
 		}
 
 		final int size = array.length;
@@ -91,27 +87,22 @@ public class ListUtils {
 		return array[index];
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	/**
 	 * @param list
-	 * @return A random element from the provided collection
+	 * @return A random element from the provided list
 	 */
-	public static <T> T getRandomValueFromList(final Collection<T> list) {
-		if (list == null) {
-			throw new IllegalArgumentException("List must not be null");
-		}
-
-		if (list.size() == 0) {
-			throw new IllegalArgumentException("List must not be empty");
-		}
+	@Deprecated
+	public static <T> T getRandomValueFromList(final List<T> list) {
+		Validate.notEmpty(list, "List is null or empty");
 
 		if (list.size() == 1) {
-			return (T) list.toArray()[0];
+			return list.get(0);
 		}
 
 		final int size = list.size();
 		final int index = Random.getRandomInteger(0, size - 1); //Size -1 because if the list has 1 entry (entry 0) the length is 1.
-		return (T) list.toArray()[index];
+		return list.get(index);
 	}
 
 	/**
@@ -136,9 +127,7 @@ public class ListUtils {
 	 * @return ["Hello there", "Lorem dolor"]
 	 */
 	public static List<String> replaceInStringList(final List<String> list, final Object[] before, final Object[] after) {
-		if (before.length != after.length) {
-			throw new IllegalArgumentException("before[] length must be equal to after[] length");
-		}
+		Validate.isTrue(before.length == after.length, "before[] length must be equal to after[] length");
 
 		final List<String> newList = new ArrayList<>();
 
@@ -166,6 +155,7 @@ public class ListUtils {
 	}
 
 	@SafeVarargs
+	@Deprecated
 	public static <T> List<T> addToList(final List<T> list, final T... items) {
 		for (final T item : items) {
 			list.add(item);
@@ -175,6 +165,7 @@ public class ListUtils {
 	}
 
 	@SafeVarargs
+	@Deprecated
 	public static <T> List<T> addToList(final List<T> list, final List<T>... listsToAdd){
 		for (final List<T> listToAdd : listsToAdd) {
 			list.addAll(listToAdd);
@@ -189,6 +180,7 @@ public class ListUtils {
 	 * @param max Inclusive
 	 * @return
 	 */
+	@Deprecated
 	public static List<Integer> getNumbersList(final int min, final int max) {
 		final List<Integer> list = new ArrayList<>();
 		for (int i = min; i <= max; i++) {
@@ -197,6 +189,7 @@ public class ListUtils {
 		return list;
 	}
 
+	@Deprecated
 	public static List<Integer> getRandomizedNumbersList(final int min, final int max) {
 		final List<Integer> list = getNumbersList(min, max);
 		Collections.shuffle(list);
@@ -219,6 +212,7 @@ public class ListUtils {
 	 * @param list
 	 * @return
 	 */
+	@Deprecated
 	public static <T> void removeLeadingElementsFromList(final int amount, final List<T> list){
 		if (amount > list.size()) {
 			list.clear();
@@ -243,6 +237,7 @@ public class ListUtils {
 		return copy;
 	}
 
+	@Deprecated
 	public static <T> List<T> copyArrayToList(final T[] array){
 		final List<T> list = new ArrayList<>();
 		for (final T element : array) {
@@ -251,16 +246,18 @@ public class ListUtils {
 		return list;
 	}
 
-	@SuppressWarnings("unchecked")
+	@Deprecated
 	public static <T> T[] subarray(final T[] array, final int startIndexInclusive, final int endIndexExclusive){
 		return (T[]) ArrayUtils.subarray(array, startIndexInclusive, endIndexExclusive);
 	}
 
+	@Deprecated
 	public static <T> List<T> inFirstNotSecond(final List<T> first, final List<T> second){
 		first.removeAll(second);
 		return first;
 	}
 
+	@Deprecated
 	public static <T> List<T> inFirstAndSecond(final List<T> first, final List<T> second){
 		first.removeIf((a) -> !second.contains(a));
 		return first;

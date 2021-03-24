@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 
 import xyz.derkades.derkutils.constraints.Constraint;
 
+@Deprecated
 public class OnlinePlayerNameConstraint extends Constraint {
 
 	@Override

@@ -1,3 +1,4 @@
+
 package xyz.derkades.derkutils;
 
 /**
@@ -15,6 +16,7 @@ package xyz.derkades.derkutils;
  * System.out.println(s);
  * </pre>
  */
+@Deprecated
 public class AssertionException extends RuntimeException {
 
 	private static final long serialVersionUID = -1519059134126795928L;

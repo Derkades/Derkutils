@@ -1,5 +1,6 @@
 package xyz.derkades.derkutils.constraints;
 
+@Deprecated
 public class ConstraintValidationException extends Exception {
 	
 	private static final long serialVersionUID = -960916237626495088L;

@@ -2,6 +2,7 @@ package xyz.derkades.derkutils;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+@Deprecated
 public class Random {
 	
 	/**
