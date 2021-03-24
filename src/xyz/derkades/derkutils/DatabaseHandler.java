@@ -10,6 +10,7 @@ import java.util.Properties;
 
 import org.apache.commons.lang.Validate;
 
+@Deprecated
 public class DatabaseHandler {
 
 	private final boolean debug;
