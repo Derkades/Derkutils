@@ -5,8 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
@@ -87,7 +89,7 @@ public class ListUtils {
 		return array[index];
 	}
 
-	
+
 	/**
 	 * @param list
 	 * @return A random element from the provided list
@@ -248,7 +250,7 @@ public class ListUtils {
 
 	@Deprecated
 	public static <T> T[] subarray(final T[] array, final int startIndexInclusive, final int endIndexExclusive){
-		return (T[]) ArrayUtils.subarray(array, startIndexInclusive, endIndexExclusive);
+		return ArrayUtils.subarray(array, startIndexInclusive, endIndexExclusive);
 	}
 
 	@Deprecated
@@ -261,6 +263,22 @@ public class ListUtils {
 	public static <T> List<T> inFirstAndSecond(final List<T> first, final List<T> second){
 		first.removeIf((a) -> !second.contains(a));
 		return first;
+	}
+
+	/**
+	 * Convert an empty collection to empty optional and a collection with one item to an optional of that item.
+	 * @param <T>
+	 * @param collection
+	 * @throws IllegalArgumentException collection is not empty and size is not == 1
+	 * @return
+	 */
+	public static <T> Optional<T> toOptional(final Collection<T> collection) {
+		if (collection.isEmpty()) {
+			return Optional.empty();
+		}
+
+		Validate.isTrue(collection.size() == 1);
+		return Optional.of(collection.iterator().next());
 	}
 
 }
