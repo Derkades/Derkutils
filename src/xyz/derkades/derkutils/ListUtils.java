@@ -289,4 +289,12 @@ public class ListUtils {
 	    return set.stream().skip(ThreadLocalRandom.current().nextInt(set.size())).findFirst().orElse(null);
 	}
 
+	public static <T> T choice(final List<T> list) {
+		return list.get(ThreadLocalRandom.current().nextInt(list.size()));
+	}
+
+	public static <T> T choice(final T[] array) {
+		return array[ThreadLocalRandom.current().nextInt(array.length)];
+	}
+
 }
