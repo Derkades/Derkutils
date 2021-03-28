@@ -9,9 +9,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
+
+import io.netty.util.internal.ThreadLocalRandom;
 
 public class ListUtils {
 
@@ -279,6 +282,19 @@ public class ListUtils {
 
 		Validate.isTrue(collection.size() == 1);
 		return Optional.of(collection.iterator().next());
+	}
+
+	public static <T> T choice(final Set<T> set) {
+		Validate.notEmpty(set, "Set is null or contains no elements");
+	    return set.stream().skip(ThreadLocalRandom.current().nextInt(set.size())).findFirst().orElse(null);
+	}
+
+	public static <T> T choice(final List<T> list) {
+		return list.get(ThreadLocalRandom.current().nextInt(list.size()));
+	}
+
+	public static <T> T choice(final T[] array) {
+		return array[ThreadLocalRandom.current().nextInt(array.length)];
 	}
 
 }
