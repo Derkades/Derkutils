@@ -15,6 +15,11 @@ public class UriBuilder {
 		this.builder = new StringBuilder(base);
 	}
 
+	public UriBuilder(final String base, final boolean hasParameters) {
+		this.builder = new StringBuilder(base);
+		this.noParams = !hasParameters;
+	}
+
 	public UriBuilder(final URI base) {
 		this(base.toString());
 	}
