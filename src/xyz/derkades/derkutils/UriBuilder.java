@@ -1,9 +1,9 @@
 package xyz.derkades.derkutils;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class UriBuilder {
@@ -30,7 +30,11 @@ public class UriBuilder {
 
 	public UriBuilder appendEncoded(final String string) {
 		Objects.requireNonNull(string, "The provided string is null");
-		this.builder.append(URLEncoder.encode(string, StandardCharsets.UTF_8));
+		try {
+			this.builder.append(URLEncoder.encode(string, "UTF-8"));
+		} catch (final UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 		return this;
 	}
 
