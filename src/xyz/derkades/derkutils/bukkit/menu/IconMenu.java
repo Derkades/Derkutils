@@ -24,7 +24,7 @@ public abstract class IconMenu implements Listener {
 
 	private String name;
 	private final int size;
-	protected final UUID uuid;
+	private final UUID uuid;
 
 	private final Inventory inventory;
 	private final InventoryView view;
@@ -113,17 +113,17 @@ public abstract class IconMenu implements Listener {
 		return this.size;
 	}
 
+	public OfflinePlayer getPlayer() {
+		final OfflinePlayer player = this.getPlayer();
+		return player != null ? player : Bukkit.getOfflinePlayer(this.uuid);
+	}
+
 	/**
 	 * Calls {@link #onClose(MenuCloseEvent)} with {@link CloseReason#FORCE_CLOSE} and closes the inventory.
 	 */
 	public void close() {
 		this.closeEventCalled = true;
-		OfflinePlayer player = Bukkit.getPlayer(this.uuid);
-		if (player == null) {
-			// player is offline
-			player = Bukkit.getOfflinePlayer(this.uuid);
-		}
-		this.onClose(new MenuCloseEvent(player, CloseReason.FORCE_CLOSE));
+		this.onClose(new MenuCloseEvent(this.getPlayer(), CloseReason.FORCE_CLOSE));
 		this.view.close();
 		this.cancelTask = true;
 	}
@@ -167,12 +167,7 @@ public abstract class IconMenu implements Listener {
 			final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, item, event.getClick()));
 			if (close) {
 				this.closeEventCalled = true;
-				OfflinePlayer player = Bukkit.getPlayer(this.uuid);
-				if (player == null) {
-					// player is offline
-					player = Bukkit.getOfflinePlayer(this.uuid);
-				}
-				IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.ITEM_CLICK));
+				IconMenu.this.onClose(new MenuCloseEvent(this.getPlayer(), CloseReason.ITEM_CLICK));
 				this.view.close();
 			}
 		}
