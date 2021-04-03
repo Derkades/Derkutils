@@ -2,7 +2,6 @@ package xyz.derkades.derkutils.bungee;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.Charset;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -19,18 +18,17 @@ public class CommandSenderOutputStream extends OutputStream {
 
 	@Override
 	public void write(final int arg) throws IOException {
-		write(new byte[] { (byte) arg });
+		this.buffer.append((char) ((byte) arg));
 	}
 
 	@Override
 	public void write(final byte[] bytes) throws IOException {
-		final String string = new String(bytes, Charset.forName("UTF-8"));
-		for (final char c : string.toCharArray()) {
-			if (c == '\n') {
+		for (final byte b : bytes) {
+			if (b == '\n') {
 				this.sender.sendMessage(TextComponent.fromLegacyText(this.buffer.toString()));
 				this.buffer.setLength(0);
 			} else {
-				this.buffer.append(c);
+				this.buffer.append((char) b);
 			}
 		}
 	}
