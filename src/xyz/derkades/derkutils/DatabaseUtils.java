@@ -5,16 +5,17 @@ import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 import org.apache.commons.lang.Validate;
 
 public class DatabaseUtils {
 
 	public static void createTableIfNonexistent(final Connection connection, final String tableName, final String sql) throws SQLException {
-		Validate.notNull(connection, "Connection is null");
+		Objects.requireNonNull(connection, "Connection is null");
 		Validate.isTrue(!connection.isClosed(), "Connection is closed");
-		Validate.notNull(tableName, "Table name is null");
-		Validate.notNull(sql, "Query is null");
+		Objects.requireNonNull(tableName, "Table name is null");
+		Objects.requireNonNull(sql, "Query is null");
 
 		final DatabaseMetaData meta = connection.getMetaData();
 		final ResultSet result = meta.getTables(null, null, tableName, null);

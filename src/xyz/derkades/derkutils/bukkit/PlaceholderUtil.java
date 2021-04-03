@@ -3,6 +3,7 @@ package xyz.derkades.derkutils.bukkit;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.Validate;
@@ -12,7 +13,7 @@ import org.bukkit.entity.Player;
 public class PlaceholderUtil {
 
 	public static String parsePlaceholders(String string, final Placeholder... placeholders) {
-		Validate.notNull(string, "input string must not be null");
+		Objects.requireNonNull(string, "input string must not be null");
 		Validate.noNullElements(placeholders, "no placeholder must be null");
 		for (final Placeholder p : placeholders) {
 			string = p.parse(string);
@@ -30,10 +31,10 @@ public class PlaceholderUtil {
 	}
 
 	public static String parsePapiPlaceholders(final Player player, String string, final Placeholder... placeholders) {
-		Validate.notNull(player, "Player must not be null");
-		Validate.notNull(string, "Input string must not be null");
+		Objects.requireNonNull(player, "Player must not be null");
+		Objects.requireNonNull(string, "Input string must not be null");
 		Validate.noNullElements(placeholders, "Provided strings must not be null");
-		
+
 		for (final Placeholder p : placeholders) {
 			string = p.parse(string);
 		}
@@ -44,10 +45,10 @@ public class PlaceholderUtil {
 	}
 
 	public static List<String> parsePapiPlaceholders(final Player player, List<String> strings, final Placeholder... placeholders) {
-		Validate.notNull(player, "Player must not be null");
+		Objects.requireNonNull(player, "Player must not be null");
 		Validate.noNullElements(strings, "Input strings must not be null");
 		Validate.noNullElements(placeholders, "Provided strings must not be null");
-		
+
 		for (final Placeholder p : placeholders) {
 			strings = p.parse(strings);
 		}
@@ -56,10 +57,10 @@ public class PlaceholderUtil {
 
 		return strings;
 	}
-	
+
 	private static Method papiParseString = null;
 	private static Method papiParseList = null;
-	
+
 	static {
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
 			try {
@@ -78,9 +79,9 @@ public class PlaceholderUtil {
 	 * @return
 	 */
 	public static String parsePapiPlaceholders(final Player player, final String string) {
-		Validate.notNull(player, "Player must not be null");
-		Validate.notNull(string, "Provided string must not be null");
-		
+		Objects.requireNonNull(player, "Player must not be null");
+		Objects.requireNonNull(string, "Provided string must not be null");
+
 		if (papiParseString == null) {
 			return string;
 		} else {
@@ -99,9 +100,9 @@ public class PlaceholderUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<String> parsePapiPlaceholders(final Player player, final List<String> strings) {
-		Validate.notNull(player, "Player must not be null");
-		Validate.notNull(strings, "Provided string list must not be null");
-		
+		Objects.requireNonNull(player, "Player must not be null");
+		Objects.requireNonNull(strings, "Provided string list must not be null");
+
 		if (papiParseList == null) {
 			return strings;
 		} else {
@@ -120,8 +121,8 @@ public class PlaceholderUtil {
 		private final String value;
 
 		public Placeholder(final String key, final String value) {
-			this.key = key;
-			this.value = value;
+			this.key = Objects.requireNonNull(key, "Placeholder key is null");
+			this.value = Objects.requireNonNull(value, "Placeholder value is null");
 		}
 
 		public String parse(final String string) {

@@ -3,6 +3,7 @@ package xyz.derkades.derkutils.bukkit;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 import org.bukkit.command.CommandSender;
 
@@ -15,7 +16,7 @@ public class CommandSenderOutputStream extends OutputStream {
 	private ByteArrayDataOutput out;
 
 	public CommandSenderOutputStream(final CommandSender sender) {
-		this.sender = sender;
+		this.sender = Objects.requireNonNull(sender, "Command sender is null");
 		this.out = ByteStreams.newDataOutput();
 	}
 

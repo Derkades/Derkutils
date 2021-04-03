@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -37,7 +38,9 @@ public class ListUtils {
 	 * 		<br>For string "Hello world" - Returns true
 	 * 		<br>For string "Bar" - Returns false
 	 */
-	public static boolean stringListContainsString(final List<String> list, final String string, final boolean caseSensitive){
+	public static boolean stringListContainsString(final List<String> list, final String string, final boolean caseSensitive) {
+		Objects.requireNonNull(list, "List is null");
+		Objects.requireNonNull(string, "Contains string is null");
 		boolean contains = false;
 		for (final String entry : list){
 			if (caseSensitive) {
@@ -111,6 +114,9 @@ public class ListUtils {
 	 * @return ["Hello there", "Lorem dolor"]
 	 */
 	public static List<String> replaceInStringList(final List<String> list, final Object[] before, final Object[] after) {
+		Objects.requireNonNull(list, "List is null");
+		Objects.requireNonNull(before, "Before array is null");
+		Objects.requireNonNull(after, "After array is null");
 		Validate.isTrue(before.length == after.length, "before[] length must be equal to after[] length");
 
 		final List<String> newList = new ArrayList<>();
@@ -172,16 +178,20 @@ public class ListUtils {
 	}
 
 	public static <T> int sizeSum(final Collection<Collection<T>> collections) {
+		Objects.requireNonNull(collections, "Collections collection is null");
 		int size = 0;
 		for (final Collection<T> col: collections) {
+			Objects.requireNonNull(col, "A collection is null");
 			size += col.size();
 		}
 		return size;
 	}
 
 	public static <T> int sizeSum(final T[][] arrays) {
+		Objects.requireNonNull(arrays, "Arrays array is null");
 		int size = 0;
 		for (final T[] array : arrays) {
+			Objects.requireNonNull(array, "An array is null");
 			size += array.length;
 		}
 		return size;
@@ -218,7 +228,7 @@ public class ListUtils {
 			return Optional.empty();
 		}
 
-		Validate.isTrue(collection.size() == 1);
+		Validate.isTrue(collection.size() == 1, "Size of collection must be one if it is not empty");
 		return Optional.of(collection.iterator().next());
 	}
 

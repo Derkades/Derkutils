@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -31,17 +31,15 @@ public class ItemBuilder implements Serializable {
 	private ItemStack item;
 
 	public ItemBuilder(final Material material) {
-		Validate.notNull(material, "Material is null");
-		this.item = new ItemStack(material);
+		this.item = new ItemStack(Objects.requireNonNull(material, "Material is null"));
 	}
 
 	public ItemBuilder(final ItemStack item) {
-		Validate.notNull(item, "ItemStack is null");
-		this.item = item;
+		this.item = Objects.requireNonNull(item, "item is null");
 	}
 
 	public ItemBuilder(final OfflinePlayer skullOwner) {
-		Validate.notNull("Skull owner is null");
+		Objects.requireNonNull(skullOwner, "Skull owner is null");
 		this.item = new ItemBuilder(Material.PLAYER_HEAD).skullOwner(skullOwner).create();
 	}
 
@@ -93,7 +91,7 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder skullOwner(final OfflinePlayer player) {
-		Validate.notNull(player, "Skull owner is null");
+		Objects.requireNonNull(player, "Skull owner is null");
 		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
 		meta.setOwningPlayer(player);
 		this.item.setItemMeta(meta);
@@ -101,7 +99,7 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder skullTexture(final String texture) {
-		Validate.notNull(texture, "Texture string is null");
+		Objects.requireNonNull(texture, "Texture string is null");
 		final NBTItem nbt = new NBTItem(this.item);
 		final NBTCompound skullOwner = nbt.addCompound("SkullOwner");
 		skullOwner.setString("Id", UUID.randomUUID().toString());
@@ -111,7 +109,7 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder leatherArmorColor(final Color color) {
-		Validate.notNull(color, "Color is null");
+		Objects.requireNonNull(color, "Color is null");
 		final LeatherArmorMeta meta = (LeatherArmorMeta) this.item.getItemMeta();
 		meta.setColor(color);
 		this.item.setItemMeta(meta);
@@ -119,11 +117,13 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder enchant(final Enchantment type, final int level) {
+		Objects.requireNonNull(type, "Enchantment type is null");
 		this.item.addEnchantment(type, level);
 		return this;
 	}
 
 	public ItemBuilder unsafeEnchant(final Enchantment type, final int level) {
+		Objects.requireNonNull(type, "Enchantment type is null");
 		this.item.addUnsafeEnchantment(type, level);
 		return this;
 	}
@@ -146,23 +146,23 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder canDestroy(final Material... materials) {
-		Validate.notNull(materials, "Materials varargs is null");
+		Objects.requireNonNull(materials, "Materials varargs is null");
 		final List<String> minecraftItemNames = ReflectionUtil.materialToMinecraftName(materials);
 		final NBTItem nbt = new NBTItem(this.item);
 		nbt.getStringList("CanDestroy").addAll(minecraftItemNames);
 		this.item = nbt.getItem();
 		return this;
 	}
-	
+
 	public ItemBuilder canPlaceOn(final Material... materials) {
-		Validate.notNull(materials, "materials varargs is null");
+		Objects.requireNonNull(materials, "materials varargs is null");
 		final List<String> minecraftItemNames = ReflectionUtil.materialToMinecraftName(materials);
 		final NBTItem nbt = new NBTItem(this.item);
 		nbt.getStringList("CanPlaceOn").addAll(minecraftItemNames);
 		this.item = nbt.getItem();
 		return this;
 	}
-	
+
 	public ItemBuilder damage(final int damage) {
 		final Damageable damageable = (Damageable) this.item.getItemMeta();
 		damageable.setDamage(damage);
@@ -178,6 +178,9 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder namePlaceholder(final String key, final String value) {
+		Objects.requireNonNull(key, "Placeholder key is null");
+		Objects.requireNonNull(value, "Placeholder value is null");
+
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getDisplayName() == null) {
 			return this;
 		}
@@ -186,6 +189,8 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder namePlaceholders(final Map<String, String> placeholders) {
+		Objects.requireNonNull(placeholders, "Placeholder map is null");
+
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getDisplayName() == null) {
 			return this;
 		}
@@ -195,6 +200,9 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder namePlaceholderOptional(final String key, final Supplier<String> value) {
+		Objects.requireNonNull(key, "Placeholder key is null");
+		Objects.requireNonNull(value, "Placeholder value is null");
+
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getDisplayName() == null) {
 			return this;
 		}
@@ -208,6 +216,8 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder namePlaceholdersOptional(final Map<String, Supplier<String>> placeholders) {
+		Objects.requireNonNull(placeholders, "Placeholder map is null");
+
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getDisplayName() == null) {
 			return this;
 		}
@@ -217,6 +227,9 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder lorePlaceholder(final String key, final String value) {
+		Objects.requireNonNull(key, "Placeholder key is null");
+		Objects.requireNonNull(value, "Placeholder value is null");
+
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
 			return this;
 		}
@@ -225,6 +238,8 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder lorePlaceholders(final Map<String, String> placeholders) {
+		Objects.requireNonNull(placeholders, "Placeholder map is null");
+
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
 			return this;
 		}
@@ -234,6 +249,9 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder lorePlaceholderOptional(final String key, final Supplier<String> value) {
+		Objects.requireNonNull(key, "Placeholder key is null");
+		Objects.requireNonNull(value, "Placeholder value is null");
+
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
 			return this;
 		}
@@ -248,6 +266,8 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder lorePlaceholdersOptional(final Map<String, Supplier<String>> placeholders) {
+		Objects.requireNonNull(placeholders, "Placeholder map is null");
+
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
 			return this;
 		}
@@ -257,18 +277,28 @@ public class ItemBuilder implements Serializable {
 	}
 
 	public ItemBuilder placeholder(final String key, final String value) {
+		Objects.requireNonNull(key, "Placeholder key is null");
+		Objects.requireNonNull(value, "Placeholder value is null");
+
 		return this.namePlaceholder(key, value).lorePlaceholder(key, value);
 	}
 
 	public ItemBuilder placeholders(final Map<String, String> placeholders) {
+		Objects.requireNonNull(placeholders, "Placeholder map is null");
+
 		return this.namePlaceholders(placeholders).lorePlaceholders(placeholders);
 	}
 
 	public ItemBuilder placeholderOptional(final String key, final Supplier<String> value) {
+		Objects.requireNonNull(key, "Placeholder key is null");
+		Objects.requireNonNull(value, "Placeholder value is null");
+
 		return this.namePlaceholderOptional(key, value).lorePlaceholderOptional(key, value);
 	}
 
 	public ItemBuilder placeholdersOptional(final Map<String, Supplier<String>> placeholders) {
+		Objects.requireNonNull(placeholders, "Placeholder map is null");
+
 		return this.namePlaceholdersOptional(placeholders).lorePlaceholdersOptional(placeholders);
 	}
 

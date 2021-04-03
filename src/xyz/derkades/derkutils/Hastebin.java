@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -12,9 +13,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class Hastebin {
-	
+
 	private static final Charset UTF_8 = Charset.forName("UTF-8");
-	
+
 	/**
 	 * Creates paste on a hastebin paste site
 	 * @param content
@@ -23,9 +24,12 @@ public class Hastebin {
 	 * @throws IOException
 	 */
 	public static String createPaste(final String content, final String baseUrl) throws IOException {
+		Objects.requireNonNull(content, "Content is null");
+		Objects.requireNonNull(baseUrl, "Base url is null");
+
 		return createPaste(content.toString().getBytes(UTF_8), baseUrl);
 	}
-	
+
 	/**
 	 * Creates paste on a hastebin paste site
 	 * @param content
@@ -34,6 +38,9 @@ public class Hastebin {
 	 * @throws IOException
 	 */
 	public static String createPaste(final byte[] content, final String baseUrl) throws IOException {
+		Objects.requireNonNull(content, "Content is null");
+		Objects.requireNonNull(baseUrl, "Base url is null");
+
 		final HttpsURLConnection connection = (HttpsURLConnection) new URL("https://" + baseUrl + "/documents").openConnection();
 		connection.setRequestMethod("POST");
 		connection.setDoOutput(true);

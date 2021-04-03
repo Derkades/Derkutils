@@ -1,5 +1,7 @@
 package xyz.derkades.derkutils.bukkit;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -7,9 +9,9 @@ import org.bukkit.entity.Player;
 public class LocationUtils {
 
 	public static boolean isIn2dBounds(final Location location, final Location cornerOne, final Location cornerTwo) {
-		Validate.notNull(location, "Location is null");
-		Validate.notNull(cornerOne, "First corner is null");
-		Validate.notNull(cornerTwo, "Second corner is null");
+		Objects.requireNonNull(location, "Location is null");
+		Objects.requireNonNull(cornerOne, "First corner is null");
+		Objects.requireNonNull(cornerTwo, "Second corner is null");
 
 		if (!location.getWorld().equals(cornerOne.getWorld())) {
 			return false;
@@ -28,9 +30,9 @@ public class LocationUtils {
 	}
 
 	public static boolean isIn3dBounds(final Location location, final Location cornerOne, final Location cornerTwo) {
-		Validate.notNull(location, "Location is null");
-		Validate.notNull(cornerOne, "First corner is null");
-		Validate.notNull(cornerTwo, "Second corner is null");
+		Objects.requireNonNull(location, "Location is null");
+		Objects.requireNonNull(cornerOne, "First corner is null");
+		Objects.requireNonNull(cornerTwo, "Second corner is null");
 
 		if (!isIn2dBounds(location, cornerOne, cornerTwo)) {
 			return false;
