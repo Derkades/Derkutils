@@ -129,15 +129,6 @@ public class ListUtils {
 		return replaceInStringList(list, new Object[] {before}, new Object[] {after});
 	}
 
-	@SuppressWarnings("unchecked")
-	public static <T> T[] mergeArrays(final T[]... arrays) {
-		final List<T> list = new ArrayList<>();
-		for (final T[] array : arrays) {
-			list.addAll(Arrays.asList(array));
-		}
-		return (T[]) list.toArray();
-	}
-
 	@SafeVarargs
 	@Deprecated
 	public static <T> List<T> addToList(final List<T> list, final T... items) {
@@ -180,9 +171,35 @@ public class ListUtils {
 		return list;
 	}
 
+	public static <T> int sizeSum(final Collection<Collection<T>> collections) {
+		int size = 0;
+		for (final Collection<T> col: collections) {
+			size += col.size();
+		}
+		return size;
+	}
+
+	public static <T> int sizeSum(final T[][] arrays) {
+		int size = 0;
+		for (final T[] array : arrays) {
+			size += array.length;
+		}
+		return size;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Deprecated
+	public static <T> T[] mergeArrays(final T[]... arrays) {
+		final List<T> list = new ArrayList<>();
+		for (final T[] array : arrays) {
+			list.addAll(Arrays.asList(array));
+		}
+		return (T[]) list.toArray();
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> T[] combineArrays(final T[]... arrays) {
-		final List<T> list = new ArrayList<>();
+		final List<T> list = new ArrayList<>(sizeSum(arrays));
 		for (final T[] array : arrays) {
 			list.addAll(Arrays.asList(array));
 		}
