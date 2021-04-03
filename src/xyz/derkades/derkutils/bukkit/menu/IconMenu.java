@@ -115,7 +115,7 @@ public abstract class IconMenu implements Listener {
 	}
 
 	public OfflinePlayer getPlayer() {
-		final OfflinePlayer player = this.getPlayer();
+		final OfflinePlayer player = Bukkit.getPlayer(this.uuid);
 		return player != null ? player : Bukkit.getOfflinePlayer(this.uuid);
 	}
 
