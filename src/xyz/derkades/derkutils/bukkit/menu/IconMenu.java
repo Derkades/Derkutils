@@ -1,5 +1,6 @@
 package xyz.derkades.derkutils.bukkit.menu;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import org.bukkit.Bukkit;
@@ -39,10 +40,17 @@ public abstract class IconMenu implements Listener {
 	 * @param player Player that this menu will be opened for when {@link #open()} is called
 	 */
 	public IconMenu(final Plugin plugin, final String name, final int rows, final Player player) {
-		this(plugin, name, rows, player, l -> Bukkit.getServer().getPluginManager().registerEvents(l, plugin));
+		this(name, rows, player,
+				t -> t.runTaskTimer(plugin, 1, 1),
+				l -> Bukkit.getServer().getPluginManager().registerEvents(l, plugin));
 	}
-	
-	public IconMenu(final Plugin plugin, final String name, final int rows, final Player player, final Consumer<Listener> listenerRegistrar) {
+
+	public IconMenu(final String name, final int rows, final Player player,
+			final Consumer<BukkitRunnable> timerRegistrar, final Consumer<Listener> listenerRegistrar) {
+		Objects.requireNonNull(name, "Name is null");
+		Objects.requireNonNull(player, "Player is null");
+		Objects.requireNonNull(listenerRegistrar, "Listener registrar is null");
+
 		this.size = rows * 9;
 		this.name = name;
 		this.player = player;
@@ -51,7 +59,7 @@ public abstract class IconMenu implements Listener {
 		this.inventory = Bukkit.createInventory(this.player, this.size, this.name);
 		this.view = this.player.openInventory(this.inventory);
 
-		new BukkitRunnable() {
+		timerRegistrar.accept(new BukkitRunnable() {
 
 			@Override
 			public void run() {
@@ -65,17 +73,17 @@ public abstract class IconMenu implements Listener {
 						Bukkit.getPlayer(player.getUniqueId()) == null // player went offline
 						) {
 					HandlerList.unregisterAll(IconMenu.this);
-					
+
 					if (!IconMenu.this.closeEventCalled) {
 						IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
 					}
-					
+
 					this.cancel();
 					return;
 				}
 			}
 
-		}.runTaskTimer(plugin, 1, 1);
+		});
 	}
 
 	/**
@@ -139,9 +147,9 @@ public abstract class IconMenu implements Listener {
 		if (!event.getView().equals(this.view)) {
 			return;
 		}
-		
+
 		event.setCancelled(true);
-		
+
 		final int slot = event.getRawSlot();
 
 		final Player clicker = (Player) event.getWhoClicked();
@@ -157,7 +165,7 @@ public abstract class IconMenu implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(final PlayerQuitEvent event) {
 		final Player player = event.getPlayer();
