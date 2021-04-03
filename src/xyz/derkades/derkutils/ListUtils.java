@@ -1,17 +1,14 @@
 package xyz.derkades.derkutils;
 
-import java.lang.reflect.Array;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Validate;
 
 import io.netty.util.internal.ThreadLocalRandom;
@@ -41,7 +38,9 @@ public class ListUtils {
 	 * 		<br>For string "Hello world" - Returns true
 	 * 		<br>For string "Bar" - Returns false
 	 */
-	public static boolean stringListContainsString(final List<String> list, final String string, final boolean caseSensitive){
+	public static boolean stringListContainsString(final List<String> list, final String string, final boolean caseSensitive) {
+		Objects.requireNonNull(list, "List is null");
+		Objects.requireNonNull(string, "Contains string is null");
 		boolean contains = false;
 		for (final String entry : list){
 			if (caseSensitive) {
@@ -55,23 +54,6 @@ public class ListUtils {
 			}
 		}
 		return contains;
-	}
-
-	/**
-	 * @param resultSet
-	 * @param column
-	 * @return A list of all values in a column as returned by an SQL query
-	 * @throws SQLException
-	 */
-	@Deprecated
-	public static List<String> getStringListFromResultSet(final ResultSet resultSet, final String column) throws SQLException {
-		final List<String> list = new ArrayList<>();
-
-		while (resultSet.next()){
-			list.add(resultSet.getString(column));
-		}
-
-		return list;
 	}
 
 	/**
@@ -132,6 +114,9 @@ public class ListUtils {
 	 * @return ["Hello there", "Lorem dolor"]
 	 */
 	public static List<String> replaceInStringList(final List<String> list, final Object[] before, final Object[] after) {
+		Objects.requireNonNull(list, "List is null");
+		Objects.requireNonNull(before, "Before array is null");
+		Objects.requireNonNull(after, "After array is null");
 		Validate.isTrue(before.length == after.length, "before[] length must be equal to after[] length");
 
 		final List<String> newList = new ArrayList<>();
@@ -148,15 +133,6 @@ public class ListUtils {
 
 	public static List<String> replaceInStringList(final List<String> list, final Object before, final Object after){
 		return replaceInStringList(list, new Object[] {before}, new Object[] {after});
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> T[] mergeArrays(final T[]... arrays) {
-		final List<T> list = new ArrayList<>();
-		for (final T[] array : arrays) {
-			list.addAll(Arrays.asList(array));
-		}
-		return (T[]) list.toArray();
 	}
 
 	@SafeVarargs
@@ -201,8 +177,29 @@ public class ListUtils {
 		return list;
 	}
 
+	public static <T> int sizeSum(final Collection<Collection<T>> collections) {
+		Objects.requireNonNull(collections, "Collections collection is null");
+		int size = 0;
+		for (final Collection<T> col: collections) {
+			Objects.requireNonNull(col, "A collection is null");
+			size += col.size();
+		}
+		return size;
+	}
+
+	public static <T> int sizeSum(final T[][] arrays) {
+		Objects.requireNonNull(arrays, "Arrays array is null");
+		int size = 0;
+		for (final T[] array : arrays) {
+			Objects.requireNonNull(array, "An array is null");
+			size += array.length;
+		}
+		return size;
+	}
+
 	@SuppressWarnings("unchecked")
-	public static <T> T[] combineArrays(final T[]... arrays) {
+	@Deprecated
+	public static <T> T[] mergeArrays(final T[]... arrays) {
 		final List<T> list = new ArrayList<>();
 		for (final T[] array : arrays) {
 			list.addAll(Arrays.asList(array));
@@ -210,62 +207,13 @@ public class ListUtils {
 		return (T[]) list.toArray();
 	}
 
-	/**
-	 * Removes the first element from the list {@code amount} times. If {@code amount} is greater than {@code list.size()}, the list is cleared.
-	 * @param <T>
-	 * @param amount Amount of times to remove the first element from {@code list}
-	 * @param list
-	 * @return
-	 */
-	@Deprecated
-	public static <T> void removeLeadingElementsFromList(final int amount, final List<T> list){
-		if (amount > list.size()) {
-			list.clear();
+	@SuppressWarnings("unchecked")
+	public static <T> T[] combineArrays(final T[]... arrays) {
+		final List<T> list = new ArrayList<>(sizeSum(arrays));
+		for (final T[] array : arrays) {
+			list.addAll(Arrays.asList(array));
 		}
-
-		for (int i = 0; i < amount; i++) {
-			list.remove(0);
-		}
-	}
-
-	/**
-	 * @deprecated Untested
-	 */
-	@Deprecated
-	public static <T> T[] removeLeadingElementsFromArray(final int amount, final T[] array) {
-		@SuppressWarnings("unchecked")
-		final
-		T[] copy = (T[]) Array.newInstance(array.getClass(), array.length - amount);
-		for (int i = amount - 1; i < array.length - amount; i++) {
-			copy[i] = array[i + amount];
-		}
-		return copy;
-	}
-
-	@Deprecated
-	public static <T> List<T> copyArrayToList(final T[] array){
-		final List<T> list = new ArrayList<>();
-		for (final T element : array) {
-			list.add(element);
-		}
-		return list;
-	}
-
-	@Deprecated
-	public static <T> T[] subarray(final T[] array, final int startIndexInclusive, final int endIndexExclusive){
-		return ArrayUtils.subarray(array, startIndexInclusive, endIndexExclusive);
-	}
-
-	@Deprecated
-	public static <T> List<T> inFirstNotSecond(final List<T> first, final List<T> second){
-		first.removeAll(second);
-		return first;
-	}
-
-	@Deprecated
-	public static <T> List<T> inFirstAndSecond(final List<T> first, final List<T> second){
-		first.removeIf((a) -> !second.contains(a));
-		return first;
+		return (T[]) list.toArray();
 	}
 
 	/**
@@ -280,7 +228,7 @@ public class ListUtils {
 			return Optional.empty();
 		}
 
-		Validate.isTrue(collection.size() == 1);
+		Validate.isTrue(collection.size() == 1, "Size of collection must be one if it is not empty");
 		return Optional.of(collection.iterator().next());
 	}
 

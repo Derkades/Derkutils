@@ -1,6 +1,7 @@
 package xyz.derkades.derkutils;
 
 import java.awt.Color;
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.Validate;
@@ -8,7 +9,7 @@ import org.apache.commons.lang3.Validate;
 public class Colors {
 
 	public static int[] hexToRGB(String hex){
-		Validate.notNull(hex, "Hex is null");
+		Objects.requireNonNull(hex, "Hex is null");
 		if (hex.startsWith("#")) {
 			hex = hex.substring(1);
 		}
@@ -22,7 +23,7 @@ public class Colors {
 	}
 
 	public static Color hexToColor(String hex){
-		Validate.notNull(hex, "Hex is null");
+		Objects.requireNonNull(hex, "Hex is null");
 		if (hex.startsWith("#")) {
 			hex = hex.substring(1);
 		}

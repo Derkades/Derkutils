@@ -1,10 +1,12 @@
 package xyz.derkades.derkutils.bukkit.menu;
 
+import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,7 +24,7 @@ public abstract class IconMenu implements Listener {
 
 	private String name;
 	private final int size;
-	protected final Player player;
+	protected final UUID uuid;
 
 	private final Inventory inventory;
 	private final InventoryView view;
@@ -40,20 +42,27 @@ public abstract class IconMenu implements Listener {
 	 * @param player Player that this menu will be opened for when {@link #open()} is called
 	 */
 	public IconMenu(final Plugin plugin, final String name, final int rows, final Player player) {
-		this(plugin, name, rows, player, l -> Bukkit.getServer().getPluginManager().registerEvents(l, plugin));
+		this(name, rows, player,
+				t -> t.runTaskTimer(plugin, 1, 1),
+				l -> Bukkit.getServer().getPluginManager().registerEvents(l, plugin));
 	}
-	
-	public IconMenu(final Plugin plugin, final String name, final int rows, final Player player, final Consumer<Listener> listenerRegistrar) {
+
+	public IconMenu(final String name, final int rows, final Player player,
+			final Consumer<BukkitRunnable> timerRegistrar, final Consumer<Listener> listenerRegistrar) {
+		Objects.requireNonNull(name, "Name is null");
+		Objects.requireNonNull(player, "Player is null");
+		Objects.requireNonNull(listenerRegistrar, "Listener registrar is null");
+
 		this.size = rows * 9;
 		this.name = name;
-		this.player = player;
+		this.uuid = player.getUniqueId();
 
 		listenerRegistrar.accept(this);
-		this.inventory = Bukkit.createInventory(this.player, this.size, this.name);
-		Validate.notNull(this.inventory, "Inventory returned by Bukkit is null"); // For some reason this happens sometimes in 1.8, I have no idea why.
-		this.view = this.player.openInventory(this.inventory);
+		this.inventory = Bukkit.createInventory(player, this.size, this.name);
+		Objects.requireNonNull(this.inventory, "Inventory returned by Bukkit is null"); // For some reason this happens sometimes in 1.8, I have no idea why.
+		this.view = player.openInventory(this.inventory);
 
-		new BukkitRunnable() {
+		timerRegistrar.accept(new BukkitRunnable() {
 
 			@Override
 			public void run() {
@@ -64,20 +73,20 @@ public abstract class IconMenu implements Listener {
 						IconMenu.this.view.getPlayer() == null ||
 						IconMenu.this.view.getPlayer().getOpenInventory() == null ||
 						!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view) ||
-						Bukkit.getPlayer(player.getUniqueId()) == null // player went offline
+						Bukkit.getPlayer(IconMenu.this.uuid) == null // player went offline
 						) {
 					HandlerList.unregisterAll(IconMenu.this);
-					
+
 					if (!IconMenu.this.closeEventCalled) {
 						IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
 					}
-					
+
 					this.cancel();
 					return;
 				}
 			}
 
-		}.runTaskTimer(plugin, 1, 1);
+		});
 	}
 
 	/**
@@ -110,7 +119,12 @@ public abstract class IconMenu implements Listener {
 	 */
 	public void close() {
 		this.closeEventCalled = true;
-		this.onClose(new MenuCloseEvent(this.player, CloseReason.FORCE_CLOSE));
+		OfflinePlayer player = Bukkit.getPlayer(this.uuid);
+		if (player == null) {
+			// player is offline
+			player = Bukkit.getOfflinePlayer(this.uuid);
+		}
+		this.onClose(new MenuCloseEvent(player, CloseReason.FORCE_CLOSE));
 		this.view.close();
 		this.cancelTask = true;
 	}
@@ -144,9 +158,9 @@ public abstract class IconMenu implements Listener {
 		if (!event.getView().equals(this.view)) {
 			return;
 		}
-		
+
 		event.setCancelled(true);
-		
+
 		final int slot = event.getRawSlot();
 
 		final Player clicker = (Player) event.getWhoClicked();
@@ -157,12 +171,17 @@ public abstract class IconMenu implements Listener {
 			final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, item, event.getClick()));
 			if (close) {
 				this.closeEventCalled = true;
-				IconMenu.this.onClose(new MenuCloseEvent(IconMenu.this.player, CloseReason.ITEM_CLICK));
+				OfflinePlayer player = Bukkit.getPlayer(this.uuid);
+				if (player == null) {
+					// player is offline
+					player = Bukkit.getOfflinePlayer(this.uuid);
+				}
+				IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.ITEM_CLICK));
 				this.view.close();
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onQuit(final PlayerQuitEvent event) {
 		final Player player = event.getPlayer();

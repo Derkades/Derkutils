@@ -1,5 +1,7 @@
 package xyz.derkades.derkutils.bukkit;
 
+import java.util.Objects;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -19,16 +21,18 @@ public class IllegalItems implements Listener {
 	private static final String NBT_KEY = "DerkutilsIllegalItem";
 
 	public IllegalItems(final Plugin plugin) {
-		Bukkit.getPluginManager().registerEvents(this, plugin);
+		Bukkit.getPluginManager().registerEvents(this, Objects.requireNonNull(plugin, "Plugin is null"));
 	}
 
 	public ItemStack setIllegal(final ItemStack item, final boolean illegal) {
+		Objects.requireNonNull(item, "Item is null");
 		final NBTItem nbt = new NBTItem(item);
 		nbt.setBoolean(NBT_KEY, illegal);
 		return nbt.getItem();
 	}
 
 	public boolean isIllegal(final ItemStack item) {
+		Objects.requireNonNull(item, "Item is null");
 		final NBTItem nbt = new NBTItem(item);
 		if (!nbt.hasNBTData()) {
 			return false;

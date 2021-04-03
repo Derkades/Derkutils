@@ -1,5 +1,6 @@
 package xyz.derkades.derkutils.bukkit.menu;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -8,15 +9,19 @@ import org.bukkit.entity.Player;
 public class MenuCloseEvent {
 
 	private final CloseReason reason;
-	private final Player player;
+	private final OfflinePlayer player;
 
-	MenuCloseEvent(final Player player, final CloseReason reason) {
+	MenuCloseEvent(final OfflinePlayer player, final CloseReason reason) {
 		this.player = player;
 		this.reason = reason;
 	}
 
-	public Player getPlayer() {
+	public OfflinePlayer getOfflinePlayer() {
 		return this.player;
+	}
+
+	public Player getPlayer() {
+		return (Player) this.player;
 	}
 
 	public CloseReason getReason() {
