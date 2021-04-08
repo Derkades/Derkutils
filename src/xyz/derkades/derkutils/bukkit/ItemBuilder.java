@@ -52,7 +52,11 @@ public class ItemBuilder {
 
 	public ItemBuilder coloredName(final String name){
 		final ItemMeta meta = this.item.getItemMeta();
-		meta.setDisplayName(Colors.parseColors(name));
+		if (name == null) {
+			meta.setDisplayName(null);
+		} else {
+			meta.setDisplayName(Colors.parseColors(name));
+		}
 		this.item.setItemMeta(meta);
 		return this;
 	}
@@ -66,7 +70,11 @@ public class ItemBuilder {
 
 	public ItemBuilder coloredLore(final String... lore){
 		final ItemMeta meta = this.item.getItemMeta();
-		meta.setLore(Colors.parseColors(Arrays.asList(lore)));
+		if (lore == null) {
+			meta.setLore(null);
+		} else {
+			meta.setLore(Colors.parseColors(Arrays.asList(lore)));
+		}
 		this.item.setItemMeta(meta);
 		return this;
 	}
@@ -80,7 +88,11 @@ public class ItemBuilder {
 
 	public ItemBuilder coloredLore(final List<String> lore){
 		final ItemMeta meta = this.item.getItemMeta();
-		meta.setLore(Colors.parseColors(lore));
+		if (lore == null) {
+			meta.setLore(null);
+		} else {
+			meta.setLore(Colors.parseColors(lore));
+		}
 		this.item.setItemMeta(meta);
 		return this;
 	}
