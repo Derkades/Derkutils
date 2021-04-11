@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.Writer;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 
 public class FileUtils {
@@ -51,6 +52,25 @@ public class FileUtils {
 			final URL inputUrl = clazz.getResource(pathToFileInJar);
 			try (InputStream in = inputUrl.openStream()) {
 				Files.copy(in, outputFile.toPath());
+			}
+		}
+	}
+
+	/**
+	 * Copies any file in a jar file to an outside locations. Fails silently if the file already exists.
+	 * @param clazz Class this method is called from
+	 * @param pathToFileInJar
+	 * @param outputFile
+	 */
+	public static void copyOutOfJar(final Class<?> clazz, final String pathToFileInJar, final Path outputFile) throws IOException {
+		Objects.requireNonNull(clazz, "Class is null");
+		Objects.requireNonNull(pathToFileInJar, "File path is null");
+		Objects.requireNonNull(outputFile, "Output file is null");
+
+		if (!Files.exists(outputFile)) {
+			final URL inputUrl = clazz.getResource(pathToFileInJar);
+			try (InputStream in = inputUrl.openStream()) {
+				Files.copy(in, outputFile);
 			}
 		}
 	}
