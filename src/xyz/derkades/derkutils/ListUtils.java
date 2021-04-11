@@ -57,42 +57,6 @@ public class ListUtils {
 	}
 
 	/**
-	 * @param array
-	 * @return A random element from an array
-	 * @see #getRandomValueFromList(List)
-	 */
-	@Deprecated
-	public static <T> T getRandomValueFromArray(final T[] array){
-		Validate.notEmpty(array, "Array is null or empty");
-
-		if (array.length == 1) {
-			return array[0];
-		}
-
-		final int size = array.length;
-		final int index = Random.getRandomInteger(0, size - 1);
-		return array[index];
-	}
-
-
-	/**
-	 * @param list
-	 * @return A random element from the provided list
-	 */
-	@Deprecated
-	public static <T> T getRandomValueFromList(final List<T> list) {
-		Validate.notEmpty(list, "List is null or empty");
-
-		if (list.size() == 1) {
-			return list.get(0);
-		}
-
-		final int size = list.size();
-		final int index = Random.getRandomInteger(0, size - 1); //Size -1 because if the list has 1 entry (entry 0) the length is 1.
-		return list.get(index);
-	}
-
-	/**
 	 * Removes the first string from a string array
 	 * @param array
 	 * @return Array without the first string
