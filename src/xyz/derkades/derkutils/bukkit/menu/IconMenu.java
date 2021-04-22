@@ -13,7 +13,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +28,7 @@ public abstract class IconMenu implements Listener {
 	private final Inventory inventory;
 	private final InventoryView view;
 	private boolean closeEventCalled = false;
-	private boolean cancelTask = false;
+//	private boolean cancelTask = false;
 
 	/**
 	 * Creates a new menu instance.
@@ -60,6 +59,7 @@ public abstract class IconMenu implements Listener {
 		listenerRegistrar.accept(this);
 		this.inventory = Bukkit.createInventory(player, this.size, this.name);
 		this.view = player.openInventory(this.inventory);
+		Objects.requireNonNull(this.view, "Opened inventory view is null");
 
 		timerRegistrar.accept(new BukkitRunnable() {
 
@@ -67,13 +67,17 @@ public abstract class IconMenu implements Listener {
 			public void run() {
 				// Unregister listeners for the menu if the player has opened a different
 				// menu, which means that this menu must be closed.
-				if (IconMenu.this.cancelTask ||
-						IconMenu.this.view == null ||
-						IconMenu.this.view.getPlayer() == null ||
-						IconMenu.this.view.getPlayer().getOpenInventory() == null ||
-						!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view) ||
-						Bukkit.getPlayer(IconMenu.this.uuid) == null // player went offline
+				final Player player = Bukkit.getPlayer(IconMenu.this.uuid);
+				if (player == null || // player went offline
+						!player.getOpenInventory().getTopInventory().equals(IconMenu.this.inventory) // player closed inventory
 						) {
+//				if (IconMenu.this.cancelTask ||
+//						IconMenu.this.view == null ||
+//						IconMenu.this.view.getPlayer() == null ||
+//						IconMenu.this.view.getPlayer().getOpenInventory() == null ||
+//						!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view) ||
+//						Bukkit.getPlayer(IconMenu.this.uuid) == null // player went offline
+//						) {
 					HandlerList.unregisterAll(IconMenu.this);
 
 					if (!IconMenu.this.closeEventCalled) {
@@ -125,7 +129,7 @@ public abstract class IconMenu implements Listener {
 		this.closeEventCalled = true;
 		this.onClose(new MenuCloseEvent(this.getPlayer(), CloseReason.FORCE_CLOSE));
 		this.view.close();
-		this.cancelTask = true;
+//		this.cancelTask = true;
 	}
 
 	public void addItem(final int slot, final ItemStack item) {
@@ -151,7 +155,7 @@ public abstract class IconMenu implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onInventoryClick(final InventoryClickEvent event) {
-		if (!event.getView().equals(this.view)) {
+		if (!event.getView().getTopInventory().equals(this.inventory)) {
 			return;
 		}
 
@@ -173,12 +177,12 @@ public abstract class IconMenu implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	public void onQuit(final PlayerQuitEvent event) {
-		final Player player = event.getPlayer();
-		this.closeEventCalled = true;
-		this.cancelTask = true;
-		this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_QUIT));
-	}
+//	@EventHandler(priority = EventPriority.MONITOR)
+//	public void onQuit(final PlayerQuitEvent event) {
+//		final Player player = event.getPlayer();
+//		this.closeEventCalled = true;
+//		this.cancelTask = true;
+//		this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_QUIT));
+//	}
 
 }
