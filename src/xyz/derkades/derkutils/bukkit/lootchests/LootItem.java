@@ -1,9 +1,9 @@
 package xyz.derkades.derkutils.bukkit.lootchests;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-
-import xyz.derkades.derkutils.Random;
 
 public class LootItem {
 
@@ -37,8 +37,8 @@ public class LootItem {
 	}
 
 	public int calculateAmount() {
-		if (Random.getRandomFloat() < this.chance) {
-			return Random.getRandomInteger(this.minAmount, this.maxAmount);
+		if (ThreadLocalRandom.current().nextFloat() < this.chance) {
+			return ThreadLocalRandom.current().nextInt(this.minAmount, this.maxAmount + 1);
 		} else {
 			return 0;
 		}
