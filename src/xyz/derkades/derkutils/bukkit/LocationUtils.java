@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
 public class LocationUtils {
@@ -62,7 +63,7 @@ public class LocationUtils {
 	 * @param max
 	 * @return
 	 */
-	public boolean yawInBounds(final Player player, final float min, final float max) {
+	public static boolean yawInBounds(final Player player, final float min, final float max) {
 		return yawInBounds(player.getLocation(), min, max);
 	}
 
@@ -73,7 +74,7 @@ public class LocationUtils {
 	 * @param max
 	 * @return
 	 */
-	public boolean yawInBounds(final Location location, final float min, final float max) {
+	public static boolean yawInBounds(final Location location, final float min, final float max) {
 		return yawInBounds(location.getYaw(), min, max);
 	}
 
@@ -84,13 +85,30 @@ public class LocationUtils {
 	 * @param max Max yaw, as displayed in debug screen
 	 * @return whether yaw is in bounds
 	 */
-	public boolean yawInBounds(float yaw, final float min, final float max) {
-		if (yaw < -180) {
-			yaw += 360;
-		} else if (yaw > 180) {
-			yaw -= 360;
+	public static boolean yawInBounds(float bukkitYaw, final float clientYawMin, final float clientYawMax) {
+		if (bukkitYaw < -180) {
+			bukkitYaw += 360;
+		} else if (bukkitYaw > 180) {
+			bukkitYaw -= 360;
 		}
-		return yaw > min && yaw < max;
+		return bukkitYaw > clientYawMin && bukkitYaw < clientYawMax;
+	}
+
+	public static BlockFace getYawAsBlockFace(float yaw) {
+		if (yaw < 0) {
+			yaw += 360;
+		}
+		if (yaw < 45 || yaw >= 315) { // 0, 360
+			return BlockFace.SOUTH; // +Z
+		} else if (yaw >= 45 && yaw < 135) { // 90
+			return BlockFace.WEST; // -X
+		} else if (yaw >= 135 && yaw < 225) { // 180
+			return BlockFace.NORTH; // -Z
+		} else if (yaw >= 225 && yaw < 315) { // 270
+			return BlockFace.EAST; // +X
+		} else {
+			throw new IllegalStateException("Impossible yaw: " + yaw);
+		}
 	}
 
 }
