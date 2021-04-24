@@ -68,25 +68,24 @@ public abstract class IconMenu implements Listener {
 				// Unregister listeners for the menu if the player has opened a different
 				// menu, which means that this menu must be closed.
 				final Player player = Bukkit.getPlayer(IconMenu.this.uuid);
-				if (player == null || // player went offline
-						!player.getOpenInventory().getTopInventory().equals(IconMenu.this.inventory) // player closed inventory
-						) {
-//				if (IconMenu.this.cancelTask ||
-//						IconMenu.this.view == null ||
-//						IconMenu.this.view.getPlayer() == null ||
-//						IconMenu.this.view.getPlayer().getOpenInventory() == null ||
-//						!IconMenu.this.view.getPlayer().getOpenInventory().equals(IconMenu.this.view) ||
-//						Bukkit.getPlayer(IconMenu.this.uuid) == null // player went offline
-//						) {
-					HandlerList.unregisterAll(IconMenu.this);
-
+				if (player == null) {
+					// player went offline
+					if (!IconMenu.this.closeEventCalled) {
+						IconMenu.this.onClose(new MenuCloseEvent(Bukkit.getOfflinePlayer(IconMenu.this.uuid), CloseReason.PLAYER_QUIT));
+					}
+				} else if (!player.getOpenInventory().getTopInventory().equals(IconMenu.this.inventory)) {
+					// player closed inventory
 					if (!IconMenu.this.closeEventCalled) {
 						IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
 					}
-
-					this.cancel();
+				} else {
+					// menu is still open
 					return;
 				}
+
+				HandlerList.unregisterAll(IconMenu.this);
+				this.cancel();
+				return;
 			}
 
 		});
