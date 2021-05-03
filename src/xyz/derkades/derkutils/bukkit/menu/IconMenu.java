@@ -56,11 +56,14 @@ public abstract class IconMenu implements Listener {
 		this.name = name;
 		this.uuid = player.getUniqueId();
 
-		listenerRegistrar.accept(this);
 		this.inventory = Bukkit.createInventory(player, this.size, this.name);
 		this.view = player.openInventory(this.inventory);
-		Objects.requireNonNull(this.view, "Opened inventory view is null");
+		if (this.view == null) {
+			System.err.println("IconMenu: Failed to open inventory for " + player.getName() + ". Did a plugin cancel the event?");
+			return;
+		}
 
+		listenerRegistrar.accept(this);
 		timerRegistrar.accept(new BukkitRunnable() {
 
 			@Override
