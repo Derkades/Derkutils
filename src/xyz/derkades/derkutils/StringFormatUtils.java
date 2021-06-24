@@ -1,7 +1,5 @@
 package xyz.derkades.derkutils;
 
-import java.sql.SQLException;
-
 public class StringFormatUtils {
 
 	private static final String[] SIZE_SUFFIX = {
@@ -23,7 +21,7 @@ public class StringFormatUtils {
 			1e18,
 	};
 
-	public static String formatByteCount(final long size) throws SQLException {
+	public static String formatByteCount(final long size) {
 		for (int i = 0; i < SIZE_SUFFIX.length; i++) {
 			if (size < SIZE_DIV[i+1]) {
 				return String.format("%.2f%s", size / SIZE_DIV[i], SIZE_SUFFIX[i]);
