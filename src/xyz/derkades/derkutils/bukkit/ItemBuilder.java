@@ -145,6 +145,19 @@ public class ItemBuilder {
 		return this;
 	}
 
+	public ItemBuilder unbreakable() {
+		final ItemMeta meta = this.item.getItemMeta();
+		meta.setUnbreakable(true);
+		this.item.setItemMeta(meta);
+		return this;
+	}
+
+	/**
+	 * @deprecated Broken in 1.17
+	 * @param materials
+	 * @return
+	 */
+	@Deprecated
 	public ItemBuilder canDestroy(final Material... materials) {
 		Objects.requireNonNull(materials, "Materials varargs is null");
 		final List<String> minecraftItemNames = ReflectionUtil.materialToMinecraftName(materials);
@@ -154,11 +167,33 @@ public class ItemBuilder {
 		return this;
 	}
 
+	public ItemBuilder canDestroy(final String... vanillaNamespacedNames) {
+		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
+		final NBTItem nbt = new NBTItem(this.item);
+		nbt.getStringList("CanDestroy").addAll(List.of(vanillaNamespacedNames));
+		this.item = nbt.getItem();
+		return this;
+	}
+
+	/**
+	 * @deprecated Broken in 1.17
+	 * @param materials
+	 * @return
+	 */
+	@Deprecated
 	public ItemBuilder canPlaceOn(final Material... materials) {
 		Objects.requireNonNull(materials, "materials varargs is null");
 		final List<String> minecraftItemNames = ReflectionUtil.materialToMinecraftName(materials);
 		final NBTItem nbt = new NBTItem(this.item);
 		nbt.getStringList("CanPlaceOn").addAll(minecraftItemNames);
+		this.item = nbt.getItem();
+		return this;
+	}
+
+	public ItemBuilder canPlaceOn(final String... vanillaNamespacedNames) {
+		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
+		final NBTItem nbt = new NBTItem(this.item);
+		nbt.getStringList("CanPlaceOn").addAll(List.of(vanillaNamespacedNames));
 		this.item = nbt.getItem();
 		return this;
 	}

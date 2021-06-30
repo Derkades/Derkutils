@@ -19,7 +19,7 @@ public class ReflectionUtil {
 
 	private static final Map<String, Class<?>> classCache = new HashMap<>();
 	private static final String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-	
+
 	/**
 	 *
 	 * @param pathToClass Path to a Minecraft class, with %s where the version string would usually be. For example: <i>org.bukkit.craftbukkit.%s.entity.CraftPlayer</i>
@@ -28,13 +28,14 @@ public class ReflectionUtil {
 	 */
 	public static Class<?> getMinecraftClass(final String pathToClass) throws ClassNotFoundException {
 		Class<?> cached = classCache.get(pathToClass);
-		
+
 		if (cached == null) {
-			final String className = String.format(pathToClass, version);
+			String className = String.format(pathToClass, version);
+			className = className.replace(".v1_17_R1", "");
 			cached = Class.forName(className);
 			classCache.put(pathToClass, cached);
 		}
-		
+
 		return cached;
 	}
 
@@ -128,7 +129,7 @@ public class ReflectionUtil {
 	public static void registerCommand(final String name, final Command command) {
 		getCommandMap().register(name, command);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static Map<String, Command> getKnownCommands() {
 		try {
@@ -146,8 +147,14 @@ public class ReflectionUtil {
 		command.unregister(getCommandMap());
 		names.forEach(getKnownCommands()::remove);
 	}
-	
-	
+
+	/**
+	 *
+	 * @param materials
+	 * @return
+	 * @deprecated Broken in 1.17
+	 */
+	@Deprecated
 	public static List<String> materialToMinecraftName(final Material... materials) {
 		final List<String> itemNames = new ArrayList<>();
 		try {
