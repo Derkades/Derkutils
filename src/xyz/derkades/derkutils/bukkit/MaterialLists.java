@@ -5,26 +5,26 @@ import java.util.Set;
 import org.bukkit.Material;
 
 public class MaterialLists {
-	
+
 	@SafeVarargs
 	public static boolean isInList(final Material materialToSearch, final Set<Material>... materialLists) {
 		if (materialToSearch == null) {
 			return false;
 		}
-		
+
 		if (materialLists.length == 0) {
 			return false;
 		}
-		
+
 		for (final Set<Material> materialList : materialLists) {
 			if (materialList.contains(materialToSearch)) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	public static final Set<Material> TRAPDOORS = Set.of(
 			Material.ACACIA_TRAPDOOR,
 			Material.BIRCH_TRAPDOOR,
@@ -36,7 +36,7 @@ public class MaterialLists {
 			Material.SPRUCE_TRAPDOOR,
 			Material.WARPED_TRAPDOOR
 	);
-	
+
 	public static final Set<Material> FENCES = Set.of(
 			Material.ACACIA_FENCE,
 			Material.BIRCH_FENCE,
@@ -48,7 +48,7 @@ public class MaterialLists {
 			Material.SPRUCE_FENCE,
 			Material.WARPED_FENCE
 	);
-	
+
 	public static final Set<Material> FENCE_GATES = Set.of(
 			Material.ACACIA_FENCE_GATE,
 			Material.BIRCH_FENCE_GATE,
@@ -59,7 +59,7 @@ public class MaterialLists {
 			Material.SPRUCE_FENCE_GATE,
 			Material.WARPED_FENCE_GATE
 	);
-	
+
 	public static final Set<Material> WALLS = Set.of(
 			Material.COBBLESTONE_WALL,
 			Material.MOSSY_COBBLESTONE_WALL,
@@ -69,7 +69,7 @@ public class MaterialLists {
 			Material.BLACKSTONE_WALL,
 			Material.STONE_BRICK_WALL
 	);
-	
+
 	public static final Set<Material> DOORS = Set.of(
 			Material.ACACIA_DOOR,
 			Material.BIRCH_DOOR,
@@ -80,7 +80,7 @@ public class MaterialLists {
 			Material.SPRUCE_DOOR,
 			Material.WARPED_DOOR
 	);
-	
+
 	public static final Set<Material> STAINED_GLASS_BLOCKS = Set.of(
 			Material.BLACK_STAINED_GLASS,
 			Material.BLUE_STAINED_GLASS,
@@ -99,7 +99,7 @@ public class MaterialLists {
 			Material.WHITE_STAINED_GLASS,
 			Material.YELLOW_STAINED_GLASS
 	);
-	
+
 	public static final Set<Material> STAINED_GLASS_PANES = Set.of(
 			Material.BLACK_STAINED_GLASS_PANE,
 			Material.BLUE_STAINED_GLASS_PANE,
@@ -118,14 +118,14 @@ public class MaterialLists {
 			Material.WHITE_STAINED_GLASS_PANE,
 			Material.YELLOW_STAINED_GLASS_PANE
 	);
-	
+
 	public static final Set<Material> TORCHES = Set.of(
 			Material.TORCH,
 			Material.REDSTONE_TORCH,
 			Material.REDSTONE_WALL_TORCH,
 			Material.WALL_TORCH
 	);
-	
+
 	public static final Set<Material> LEAVES = Set.of(
 			Material.ACACIA_LEAVES,
 			Material.BIRCH_LEAVES,
@@ -134,12 +134,12 @@ public class MaterialLists {
 			Material.OAK_LEAVES,
 			Material.SPRUCE_LEAVES
 	);
-	
+
 	public static final Set<Material> FLUIDS = Set.of(
 			Material.WATER,
 			Material.LAVA
 	);
-	
+
 	public static final Set<Material> WOOLS = Set.of(
 			Material.BLACK_WOOL,
 			Material.BLUE_WOOL,
@@ -158,7 +158,7 @@ public class MaterialLists {
 			Material.WHITE_WOOL,
 			Material.YELLOW_WOOL
 	);
-	
+
 	public static final Set<Material> DYES = Set.of(
 			Material.BLACK_DYE,
 			Material.BLUE_DYE,
@@ -177,7 +177,7 @@ public class MaterialLists {
 			Material.WHITE_DYE,
 			Material.YELLOW_DYE
 	);
-	
+
 	public static final Set<Material> SIGNS = Set.of(
 			Material.ACACIA_SIGN,
 			Material.ACACIA_WALL_SIGN,
@@ -196,7 +196,7 @@ public class MaterialLists {
 			Material.WARPED_SIGN,
 			Material.WARPED_WALL_SIGN
 	);
-	
+
 	public static final Set<Material> TERRACOTTA_BLOCKS = Set.of(
 			Material.BLACK_TERRACOTTA,
 			Material.BLUE_TERRACOTTA,
@@ -215,7 +215,8 @@ public class MaterialLists {
 			Material.WHITE_TERRACOTTA,
 			Material.YELLOW_TERRACOTTA
 	);
-	
+
+	@Deprecated
 	public static final Set<Material> POTTED_PLANT = Set.of(
 			Material.POTTED_ACACIA_SAPLING,
 			Material.POTTED_ALLIUM,
@@ -247,7 +248,40 @@ public class MaterialLists {
 			Material.POTTED_WHITE_TULIP,
 			Material.POTTED_WITHER_ROSE
 	);
-	
+
+	public static final Set<Material> FLOWER_POTS = Set.of(
+			Material.FLOWER_POT,
+			Material.POTTED_ACACIA_SAPLING,
+			Material.POTTED_ALLIUM,
+			Material.POTTED_AZURE_BLUET,
+			Material.POTTED_BAMBOO,
+			Material.POTTED_BIRCH_SAPLING,
+			Material.POTTED_BLUE_ORCHID,
+			Material.POTTED_BROWN_MUSHROOM,
+			Material.POTTED_CACTUS,
+			Material.POTTED_CORNFLOWER,
+			Material.POTTED_CRIMSON_FUNGUS,
+			Material.POTTED_CRIMSON_ROOTS,
+			Material.POTTED_DANDELION,
+			Material.POTTED_DARK_OAK_SAPLING,
+			Material.POTTED_DEAD_BUSH,
+			Material.POTTED_FERN,
+			Material.POTTED_JUNGLE_SAPLING,
+			Material.POTTED_LILY_OF_THE_VALLEY,
+			Material.POTTED_OAK_SAPLING,
+			Material.POTTED_ORANGE_TULIP,
+			Material.POTTED_OXEYE_DAISY,
+			Material.POTTED_PINK_TULIP,
+			Material.POTTED_POPPY,
+			Material.POTTED_RED_MUSHROOM,
+			Material.POTTED_RED_TULIP,
+			Material.POTTED_SPRUCE_SAPLING,
+			Material.POTTED_WARPED_FUNGUS,
+			Material.POTTED_WARPED_ROOTS,
+			Material.POTTED_WHITE_TULIP,
+			Material.POTTED_WITHER_ROSE
+	);
+
 	/*public static final Material[] PARTIAL_BLOCKS = ListUtils.mergeArrays(
 			TRAPDOORS,
 			FENCES,
@@ -263,11 +297,11 @@ public class MaterialLists {
 				Material.GLASS,
 				Material.END_ROD}
 	);
-	
+
 	public static final Material[] INTERACTABLE_BLOCKS = ListUtils.mergeArrays(
 			FENCE_GATES,
 			TRAPDOORS,
 			DOORS
 	);*/
-	
+
 }
