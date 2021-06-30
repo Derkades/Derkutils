@@ -163,7 +163,7 @@ public class ItemBuilder {
 	public ItemBuilder canDestroy(final String... vanillaNamespacedNames) {
 		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
 		final NBTItem nbt = new NBTItem(this.item);
-		nbt.getStringList("CanDestroy").addAll(List.of(vanillaNamespacedNames));
+		nbt.getStringList("CanDestroy").addAll(Arrays.asList(vanillaNamespacedNames));
 		this.item = nbt.getItem();
 		return this;
 	}
@@ -186,7 +186,7 @@ public class ItemBuilder {
 	public ItemBuilder canPlaceOn(final String... vanillaNamespacedNames) {
 		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
 		final NBTItem nbt = new NBTItem(this.item);
-		nbt.getStringList("CanPlaceOn").addAll(List.of(vanillaNamespacedNames));
+		nbt.getStringList("CanPlaceOn").addAll(Arrays.asList(vanillaNamespacedNames));
 		this.item = nbt.getItem();
 		return this;
 	}
