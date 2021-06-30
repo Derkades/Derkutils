@@ -145,13 +145,6 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemBuilder unbreakable() {
-		final ItemMeta meta = this.item.getItemMeta();
-		meta.setUnbreakable(true);
-		this.item.setItemMeta(meta);
-		return this;
-	}
-
 	/**
 	 * @deprecated Broken in 1.17
 	 * @param materials
