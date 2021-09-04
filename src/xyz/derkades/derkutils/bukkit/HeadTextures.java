@@ -5,22 +5,27 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class HeadTextures {
 
-	private static final Map<UUID, String> HEAD_TEXTURE_CACHE = new HashMap<>();
+	private static final Gson GSON = new Gson();
+	private static final Map<String, String> HEAD_TEXTURE_CACHE = new HashMap<>();
 
 	public static Optional<String> getHeadTexture(final UUID uuid) {
 		synchronized (HEAD_TEXTURE_CACHE) {
-			if (HEAD_TEXTURE_CACHE.containsKey(uuid)) {
-				return Optional.of(HEAD_TEXTURE_CACHE.get(uuid));
+			if (HEAD_TEXTURE_CACHE.containsKey(uuid.toString())) {
+				return Optional.of(HEAD_TEXTURE_CACHE.get(uuid.toString()));
 			}
 		}
 
@@ -32,13 +37,32 @@ public class HeadTextures {
 				final String texture = jsonResponse.get("properties").getAsJsonArray().get(0).getAsJsonObject()
 						.get("value").getAsString();
 				synchronized (HEAD_TEXTURE_CACHE) {
-					HEAD_TEXTURE_CACHE.put(uuid, texture);
+					HEAD_TEXTURE_CACHE.put(uuid.toString(), texture);
 				}
 				return Optional.of(texture);
 			}
 		} catch (final IOException | IllegalArgumentException | NullPointerException | ClassCastException
 				| IllegalStateException | IndexOutOfBoundsException e) {
 			return Optional.empty();
+		}
+	}
+
+	public static void saveCacheToFile(final Path path) throws IOException {
+		final String json = GSON.toJson(HEAD_TEXTURE_CACHE);
+		Files.writeString(path, json, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+	}
+
+	public static int readFileToCache(final Path path) throws IOException {
+		final String json = Files.readString(path);
+		try {
+			@SuppressWarnings("unchecked")
+			final Map<String, String> map = GSON.fromJson(json, Map.class);
+			synchronized(HEAD_TEXTURE_CACHE) {
+				HEAD_TEXTURE_CACHE.putAll(map);
+			}
+			return map.size();
+		} catch (final Exception e) {
+			throw new IOException(e);
 		}
 	}
 
