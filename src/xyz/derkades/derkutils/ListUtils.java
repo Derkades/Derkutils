@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.Validate;
 
@@ -207,6 +209,26 @@ public class ListUtils {
 
 	public static <T> T choice(final T[] array) {
 		return array[ThreadLocalRandom.current().nextInt(array.length)];
+	}
+
+	public static <T> List<T> chooseMultiple(final T[] array, final int amount) {
+		Validate.isTrue(amount <= array.length, "Amount to pick from array must not exceed array size");
+	    return IntStream
+	            .generate(() -> ThreadLocalRandom.current().nextInt(array.length))
+	            .distinct()
+	            .limit(amount)
+	            .mapToObj(i -> array[i])
+	            .collect(Collectors.toUnmodifiableList());
+	}
+
+	public static <T> List<T> chooseMultiple(final List<T> list, final int amount) {
+		Validate.isTrue(amount <= list.size(), "Amount to pick from array must not exceed array size");
+	    return IntStream
+	            .generate(() -> ThreadLocalRandom.current().nextInt(list.size()))
+	            .distinct()
+	            .limit(amount)
+	            .mapToObj(list::get)
+	            .collect(Collectors.toUnmodifiableList());
 	}
 
 }
