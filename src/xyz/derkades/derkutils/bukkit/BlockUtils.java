@@ -36,7 +36,7 @@ public class BlockUtils {
 		for (int x = minX; x <= maxX; x++) {
 			for (int y = minY; y <= maxY; y++) {
 				for (int z = minZ; z <= maxZ; z++) {
-					final Block block = new Location(world, x, y, z).getBlock();
+					final Block block = world.getBlockAt(x, y, z);
 					if (blockFilter != null) {
 						if (!blockFilter.apply(block)) {
 							continue;
