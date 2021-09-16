@@ -6,6 +6,7 @@ import net.md_5.bungee.api.ChatColor;
 /**
  * Standard ChatColors available as adventure TextColors
  */
+@Deprecated
 public class StandardTextColor {
 
 	public static final TextColor BLACK = TextColor.color(ChatColor.BLACK.getColor().getRGB());
