@@ -128,6 +128,10 @@ public class ItemBuilder implements Serializable {
 		return this;
 	}
 
+	public ItemBuilder enchant(final Enchantment type) {
+		return enchant(type, 1);
+	}
+
 	public ItemBuilder enchant(final Enchantment type, final int level) {
 		Objects.requireNonNull(type, "Enchantment type is null");
 		this.item.addEnchantment(type, level);
