@@ -50,8 +50,8 @@ public class Colors {
 
 	public static Color randomPastelColor() {
 		final float hue = ThreadLocalRandom.current().nextFloat();
-		// Saturation between 0.1 and 0.3
-		final float saturation = (ThreadLocalRandom.current().nextInt(0, 2000) + 1000) / 10000f;
+		// Saturation between 0.2 and 0.4
+		final float saturation = (ThreadLocalRandom.current().nextInt(0, 3000) + 2000) / 10_000f;
 		final float luminance = 0.9f;
 		return Color.getHSBColor(hue, saturation, luminance);
 	}
