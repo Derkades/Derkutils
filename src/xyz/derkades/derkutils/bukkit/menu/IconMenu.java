@@ -18,14 +18,19 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class IconMenu implements Listener {
 
+	@NotNull
 	private String name;
 	private final int size;
+	@NotNull
 	private final UUID uuid;
 
+	@NotNull
 	private final Inventory inventory;
+	@NotNull
 	private final InventoryView view;
 	private boolean closeEventCalled = false;
 //	private boolean cancelTask = false;
@@ -40,16 +45,19 @@ public abstract class IconMenu implements Listener {
 	 * @param size Number of slots. Must be a multiple of 9 that is greater than 0 and less than 10.
 	 * @param player Player that this menu will be opened for when {@link #open()} is called
 	 */
-	public IconMenu(final Plugin plugin, final String name, final int rows, final Player player) {
+	@SuppressWarnings("null")
+	public IconMenu(@NotNull final Plugin plugin, @NotNull final String name, final int rows, @NotNull final Player player) {
 		this(name, rows, player,
 				t -> t.runTaskTimer(plugin, 1, 1),
 				l -> Bukkit.getServer().getPluginManager().registerEvents(l, plugin));
 	}
 
-	public IconMenu(final String name, final int rows, final Player player,
-			final Consumer<BukkitRunnable> timerRegistrar, final Consumer<Listener> listenerRegistrar) {
+	@SuppressWarnings({ "null", "unused" })
+	public IconMenu(@NotNull final String name, final int rows, @NotNull final Player player,
+			@NotNull final Consumer<BukkitRunnable> timerRegistrar, @NotNull final Consumer<Listener> listenerRegistrar) {
 		Objects.requireNonNull(name, "Name is null");
 		Objects.requireNonNull(player, "Player is null");
+		Objects.requireNonNull(listenerRegistrar, "Timer registrar is null");
 		Objects.requireNonNull(listenerRegistrar, "Listener registrar is null");
 
 		this.size = rows * 9;
@@ -111,7 +119,7 @@ public abstract class IconMenu implements Listener {
 	 * Sets the name of the menu. Has no effect after the menu has been opened.
 	 * @param name
 	 */
-	public void setName(final String name){
+	public void setName(@NotNull final String name){
 		this.name = name;
 	}
 
@@ -139,8 +147,9 @@ public abstract class IconMenu implements Listener {
 	}
 
 	public boolean hasItem(final int slot) {
-		return this.inventory.getItem(slot) != null &&
-				this.inventory.getItem(slot).getType() != Material.AIR;
+		final ItemStack item = this.inventory.getItem(slot);
+		return item != null &&
+				item.getType() != Material.AIR;
 	}
 
 	public void clear() {

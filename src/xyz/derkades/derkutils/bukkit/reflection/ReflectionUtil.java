@@ -15,6 +15,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class ReflectionUtil {
 
@@ -123,6 +124,8 @@ public class ReflectionUtil {
 		}
 	}
 
+	@SuppressWarnings("null")
+	@NotNull
 	public static CommandMap getCommandMap() {
 		try {
 			final Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
@@ -133,7 +136,7 @@ public class ReflectionUtil {
 		}
 	}
 
-	public static void registerCommand(final String name, final Command command) {
+	public static void registerCommand(@NotNull final String name, @NotNull final Command command) {
 		getCommandMap().register(name, command);
 	}
 

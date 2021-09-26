@@ -19,6 +19,8 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -28,27 +30,30 @@ public class ItemBuilder implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@NotNull
 	private ItemStack item;
 
-	public ItemBuilder(final Material material) {
+	public ItemBuilder(@NotNull final Material material) {
 		this.item = new ItemStack(Objects.requireNonNull(material, "Material is null"));
 	}
 
-	public ItemBuilder(final ItemStack item) {
+	public ItemBuilder(@NotNull final ItemStack item) {
 		this.item = Objects.requireNonNull(item, "item is null");
 	}
 
-	public ItemBuilder(final OfflinePlayer skullOwner) {
+	public ItemBuilder(@NotNull final OfflinePlayer skullOwner) {
 		Objects.requireNonNull(skullOwner, "Skull owner is null");
 		this.item = new ItemBuilder(Material.PLAYER_HEAD).skullOwner(skullOwner).create();
 	}
 
+	@NotNull
 	public ItemBuilder amount(final int amount) {
 		this.item.setAmount(amount);
 		return this;
 	}
 
-	public ItemBuilder name(final String name) {
+	@NotNull
+	public ItemBuilder name(@Nullable final String name) {
 		final ItemMeta meta = this.item.getItemMeta();
 		meta.setDisplayName(name);
 		this.item.setItemMeta(meta);
@@ -362,11 +367,13 @@ public class ItemBuilder implements Serializable {
 		return this.name(PlaceholderUtil.parsePapiPlaceholders(player, this.item.getItemMeta().getDisplayName()));
 	}
 
-	public ItemBuilder papi(final Player player) {
+	public ItemBuilder papi(@NotNull final Player player) {
+		Objects.requireNonNull(player, "Player is null");
 		this.namePapi(player);
 		return this.lorePapi(player);
 	}
 
+	@NotNull
 	public ItemStack create(){
 		return this.item;
 	}
