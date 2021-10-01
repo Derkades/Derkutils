@@ -9,11 +9,9 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -97,10 +95,9 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public T skullOwner(final OfflinePlayer player) {
-		Objects.requireNonNull(player, "Skull owner is null");
+	public T skullOwner(String owner) {
 		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
-		meta.setOwningPlayer(player);
+		meta.setOwner(owner);
 		this.item.setItemMeta(meta);
 		return this.getInstance();
 	}
@@ -139,17 +136,8 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public T unbreakable() {
-		final ItemMeta meta = this.item.getItemMeta();
-		meta.setUnbreakable(true);
-		this.item.setItemMeta(meta);
-		return this.getInstance();
-	}
-
-	public T damage(final int damage) {
-		final Damageable damageable = (Damageable) this.item.getItemMeta();
-		damageable.setDamage(damage);
-		this.item.setItemMeta((ItemMeta) damageable);
+	public T damage(final int durability) {
+		item.setDurability((short) durability);
 		return this.getInstance();
 	}
 
