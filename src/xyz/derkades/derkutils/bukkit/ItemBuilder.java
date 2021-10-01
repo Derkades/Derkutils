@@ -9,11 +9,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemBuilder extends AbstractItemBuilder<ItemBuilder> {
 	
-	public ItemBuilder(Material material) {
+	public ItemBuilder(@NotNull Material material) {
 		super(material);
 	}
 	
-	public ItemBuilder(ItemStack item) {
+	public ItemBuilder(@NotNull ItemStack item) {
 		super(item);
 	}
 	
@@ -23,6 +23,7 @@ public class ItemBuilder extends AbstractItemBuilder<ItemBuilder> {
 	}
 
 	@Override
+	@NotNull 
 	public ItemBuilder getInstance() {
 		return this;
 	}
