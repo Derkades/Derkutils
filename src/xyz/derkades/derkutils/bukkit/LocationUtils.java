@@ -60,7 +60,8 @@ public class LocationUtils {
 
 	@NotNull
 	public static Location minCorner(@NotNull final Location a, @NotNull final Location b) {
-		Validate.isTrue(a.getWorld().equals(b.getWorld()), "Locations must be in the same world");
+		World world = a.getWorld();
+		Validate.isTrue(world != null && world.equals(b.getWorld()), "Locations must be in the same world");
 		return new Location(a.getWorld(), Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
 	}
 
@@ -71,7 +72,7 @@ public class LocationUtils {
 	 * @param max
 	 * @return
 	 */
-	public static boolean yawInBounds(final Player player, final float min, final float max) {
+	public static boolean yawInBounds(@NotNull final Player player, final float min, final float max) {
 		return yawInBounds(player.getLocation(), min, max);
 	}
 
@@ -82,7 +83,7 @@ public class LocationUtils {
 	 * @param max
 	 * @return
 	 */
-	public static boolean yawInBounds(final Location location, final float min, final float max) {
+	public static boolean yawInBounds(@NotNull final Location location, final float min, final float max) {
 		return yawInBounds(location.getYaw(), min, max);
 	}
 

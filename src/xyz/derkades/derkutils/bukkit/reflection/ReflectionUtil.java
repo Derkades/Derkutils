@@ -140,7 +140,8 @@ public class ReflectionUtil {
 		getCommandMap().register(name, command);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "null" })
+	@NotNull
 	public static Map<String, Command> getKnownCommands() {
 		try {
 			final CommandMap map = getCommandMap();

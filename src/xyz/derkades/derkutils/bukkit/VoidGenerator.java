@@ -4,11 +4,13 @@ import java.util.Random;
 
 import org.bukkit.World;
 import org.bukkit.generator.ChunkGenerator;
+import org.jetbrains.annotations.NotNull;
 
 public class VoidGenerator extends ChunkGenerator {
 
 	@Override
-	public ChunkData generateChunkData(final World world, final Random random, final int x, final int z, final BiomeGrid biome) {
+	@NotNull
+	public ChunkData generateChunkData(@NotNull final World world, @NotNull final Random random, final int x, final int z, @NotNull final BiomeGrid biome) {
 		return this.createChunkData(world);
 	}
 }
