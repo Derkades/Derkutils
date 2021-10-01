@@ -31,7 +31,7 @@ public class ItemBuilder implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@NotNull
-	private ItemStack item;
+	protected ItemStack item;
 
 	public ItemBuilder(@NotNull final Material material) {
 		this.item = new ItemStack(Objects.requireNonNull(material, "Material is null"));
