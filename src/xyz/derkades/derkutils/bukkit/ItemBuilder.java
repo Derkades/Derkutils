@@ -1,6 +1,5 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +25,7 @@ import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import xyz.derkades.derkutils.bukkit.reflection.ReflectionUtil;
 
-public class ItemBuilder implements Serializable {
-
-	private static final long serialVersionUID = 1L;
+public class ItemBuilder {
 
 	@NotNull
 	protected ItemStack item;
