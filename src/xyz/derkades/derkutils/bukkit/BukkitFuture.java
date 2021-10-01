@@ -9,17 +9,19 @@ import java.util.function.Consumer;
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 public class BukkitFuture<T> {
 
-	private final Plugin plugin;
-	private final Callable<T> action;
-	private final Deque<Consumer<T>> onCompleteCallbacks;
-	private final Deque<Consumer<Exception>> onExceptionCallbacks;
+
+	@NotNull private final Plugin plugin;
+	@NotNull private final Callable<T> action;
+	@NotNull private final Deque<Consumer<T>> onCompleteCallbacks;
+	@NotNull private final Deque<Consumer<Exception>> onExceptionCallbacks;
 	private volatile boolean retrieving = false;
 	private volatile boolean done = false;
 
-	public BukkitFuture(final Plugin plugin, final Callable<T> action) {
+	public BukkitFuture(@NotNull final Plugin plugin, @NotNull final Callable<T> action) {
 		Validate.notNull(plugin, "plugin must not be null");
 		Validate.notNull(action, "action must not be null");
 

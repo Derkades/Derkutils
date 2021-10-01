@@ -4,15 +4,20 @@ import java.util.Objects;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class LocationUtils {
 
-	public static boolean isIn2dBounds(final Location location, final Location cornerOne, final Location cornerTwo) {
+	public static boolean isIn2dBounds(@NotNull final Location location, @NotNull final Location cornerOne, @NotNull final Location cornerTwo) {
 		Objects.requireNonNull(location, "Location is null");
 		Objects.requireNonNull(cornerOne, "First corner is null");
 		Objects.requireNonNull(cornerTwo, "Second corner is null");
+		Objects.requireNonNull(location.getWorld(), "Location world is null");
+		Objects.requireNonNull(cornerOne.getWorld(), "CornerOne world is null");
+		Objects.requireNonNull(cornerTwo.getWorld(), "CornerTwo world is null");
 
 		if (!location.getWorld().equals(cornerOne.getWorld())) {
 			return false;
@@ -30,7 +35,7 @@ public class LocationUtils {
 				z >= minZ && z <= maxZ;
 	}
 
-	public static boolean isIn3dBounds(final Location location, final Location cornerOne, final Location cornerTwo) {
+	public static boolean isIn3dBounds(@NotNull final Location location, @NotNull final Location cornerOne, @NotNull final Location cornerTwo) {
 		Objects.requireNonNull(location, "Location is null");
 		Objects.requireNonNull(cornerOne, "First corner is null");
 		Objects.requireNonNull(cornerTwo, "Second corner is null");
@@ -46,12 +51,15 @@ public class LocationUtils {
 		return y >= minY && y <= maxY;
 	}
 
-	public static Location maxCorner(final Location a, final Location b) {
-		Validate.isTrue(a.getWorld().equals(b.getWorld()), "Locations must be in the same world");
-		return new Location(a.getWorld(), Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
+	@NotNull
+	public static Location maxCorner(@NotNull final Location a, @NotNull final Location b) {
+		World world = a.getWorld();
+		Validate.isTrue(world != null && world.equals(b.getWorld()), "Locations must be in the same world");
+		return new Location(world, Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
 	}
 
-	public static Location minCorner(final Location a, final Location b) {
+	@NotNull
+	public static Location minCorner(@NotNull final Location a, @NotNull final Location b) {
 		Validate.isTrue(a.getWorld().equals(b.getWorld()), "Locations must be in the same world");
 		return new Location(a.getWorld(), Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
 	}

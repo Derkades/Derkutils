@@ -11,8 +11,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
 import de.tr7zw.changeme.nbtapi.NBTItem;
 
@@ -24,14 +26,14 @@ public class IllegalItems implements Listener {
 		Bukkit.getPluginManager().registerEvents(this, Objects.requireNonNull(plugin, "Plugin is null"));
 	}
 
-	public ItemStack setIllegal(final ItemStack item, final boolean illegal) {
+	public ItemStack setIllegal(@NotNull final ItemStack item, final boolean illegal) {
 		Objects.requireNonNull(item, "Item is null");
 		final NBTItem nbt = new NBTItem(item);
 		nbt.setBoolean(NBT_KEY, illegal);
 		return nbt.getItem();
 	}
 
-	public boolean isIllegal(final ItemStack item) {
+	public boolean isIllegal(@NotNull final ItemStack item) {
 		Objects.requireNonNull(item, "Item is null");
 		final NBTItem nbt = new NBTItem(item);
 		if (!nbt.hasNBTData()) {
@@ -53,9 +55,11 @@ public class IllegalItems implements Listener {
 			return;
 		}
 
-		if (event.getClickedInventory().getType() == InventoryType.PLAYER) {
+		final Inventory inventory = event.getClickedInventory();
+		if (inventory != null &&
+				inventory.getType() == InventoryType.PLAYER) {
 			final ItemStack item = event.getCurrentItem();
-			if (this.isIllegal(item)) {
+			if (item != null && this.isIllegal(item)) {
 //				event.getView().getPlayer().sendMessage(ChatColor.RED + "You are not supposed to have this item");
 				item.setType(Material.AIR);
 				event.setCurrentItem(item);

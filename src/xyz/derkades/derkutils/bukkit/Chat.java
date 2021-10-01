@@ -17,6 +17,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import xyz.derkades.derkutils.bukkit.PlaceholderUtil.Placeholder;
 
+@Deprecated
 public class Chat {
 
 	/**
@@ -24,6 +25,7 @@ public class Chat {
 	 * @param section Location of the message in the config
 	 * @return Formatted base component
 	 */
+	@Deprecated
 	public static BaseComponent[] toComponent(final FileConfiguration config, final String path) {
 		Objects.requireNonNull(config, "Provided config is null");
 		Objects.requireNonNull(path, "Path is null");
@@ -92,6 +94,7 @@ public class Chat {
 	 * @param section Location of the message in the config
 	 * @return Formatted base component
 	 */
+	@Deprecated
 	public static BaseComponent[] toComponentWithPapiPlaceholders(final FileConfiguration config, final String path, final Player player, final Placeholder... placeholders) {
 		Objects.requireNonNull(config, "Provided config is null");
 		Objects.requireNonNull(path, "Path is null");
@@ -166,6 +169,7 @@ public class Chat {
 	 * @param section Location of the message in the config
 	 * @return Formatted base component
 	 */
+	@Deprecated
 	public static BaseComponent[] toComponentWithPlaceholders(final FileConfiguration config, final String path, final Placeholder... placeholders) {
 		Objects.requireNonNull(config, "Provided config is null");
 		Objects.requireNonNull(path, "Path is null");

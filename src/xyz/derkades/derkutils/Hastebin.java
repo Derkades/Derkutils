@@ -19,7 +19,7 @@ public class Hastebin {
 	/**
 	 * Creates paste on a hastebin paste site
 	 * @param content
-	 * @param baseUrl e.g. hastebin.com or paste.derkad.es
+	 * @param baseUrl e.g. hastebin.com or paste.rkslot.nl
 	 * @return key (full url will be https://hastebin.com/key or https://hastebin.com/raw/key)
 	 * @throws IOException
 	 */
@@ -33,7 +33,7 @@ public class Hastebin {
 	/**
 	 * Creates paste on a hastebin paste site
 	 * @param content
-	 * @param baseUrl e.g. hastebin.com or paste.derkad.es
+	 * @param baseUrl e.g. hastebin.com or paste.rkslot.nl
 	 * @return key (full url will be https://hastebin.com/key or https://hastebin.com/raw/key)
 	 * @throws IOException
 	 */
