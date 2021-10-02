@@ -29,7 +29,6 @@ public class SidebarAPI {
 	 * @return
 	 */
 	public static Sidebar getSidebar(final Player forPlayer) {
-
 		if (forPlayer == null) {
 			throw new NullPointerException("forPlayer cannot be null!");
 		}
@@ -49,7 +48,6 @@ public class SidebarAPI {
 		}
 
 		return null;
-
 	}
 
 }

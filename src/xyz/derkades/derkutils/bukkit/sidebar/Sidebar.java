@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -32,7 +31,6 @@ public class Sidebar implements ConfigurationSerializable {
 	private transient Objective bukkitObjective;
 	private transient BukkitTask updateTask;
 	private String title;
-	private Player setPlaceholdersOnUpdate = null;
 
 	/**
 	 * Constructs a new Sidebar.
@@ -44,7 +42,6 @@ public class Sidebar implements ConfigurationSerializable {
 	 * @param entries            (SidebarString...) - all the entries
 	 */
 	public Sidebar(final String title, final Plugin plugin, final int updateDelayInTicks, final SidebarString... entries) {
-
 		this.bukkitScoreboard = bukkitManager.getNewScoreboard();
 
 		this.bukkitObjective = this.bukkitScoreboard.registerNewObjective("obj", "dummy", "mgsb");
@@ -59,59 +56,22 @@ public class Sidebar implements ConfigurationSerializable {
 		setUpdateDelay(plugin, updateDelayInTicks);
 
 		SidebarAPI.registerSidebar(this);
-
 	}
 
 	@SuppressWarnings("unchecked")
 	public Sidebar(final Map<String, Object> map) {
-
 		this.entries = (List<SidebarString>) map.get("entries");
 		this.title = (String) map.get("title");
-
-		if (map.containsKey("placeholders")) {
-			this.setPlaceholdersOnUpdate = Bukkit.getPlayer(UUID.fromString((String) map.get("placeholders")));
-		}
-
 	}
 
 	@Override
 	public Map<String, Object> serialize() {
-
 		final Map<String, Object> map = new HashMap<>();
 
 		map.put("entries", this.entries);
 		map.put("title", this.title);
 
-		if (this.setPlaceholdersOnUpdate != null) {
-			map.put("placeholders", this.setPlaceholdersOnUpdate.getUniqueId().toString());
-		}
-
 		return map;
-
-	}
-
-	/**
-	 * Gets the player that will be used for setting the placeholders in the update
-	 * function.
-	 * 
-	 * @return (Player) - The player or null.
-	 * @see #update()
-	 */
-	public Player getPlaceholderPlayerForUpdate() {
-		return this.setPlaceholdersOnUpdate;
-	}
-
-	/**
-	 * Sets the player that will be used for setting the placeholders in the update
-	 * function. If set to null, the placeholders will not be set.
-	 * 
-	 * @param player (Player) - the player or null
-	 * @return (Sidebar) - this Sidebar Object, for chaining.
-	 * @see #update()
-	 */
-	public Sidebar setPlaceholderPlayerForUpdate(final Player player) {
-		this.setPlaceholdersOnUpdate = player;
-		return this;
 	}
 
 	/**
@@ -238,10 +198,7 @@ public class Sidebar implements ConfigurationSerializable {
 	}
 
 	/**
-	 * Updates the sidebar (it's entries and title). If
-	 * {@link #getPlaceholderPlayerForUpdate()} is not null, this will also run
-	 * {@link #setAllPlaceholders(Player)} with
-	 * {@link #getPlaceholderPlayerForUpdate()} as the argument.
+	 * Updates the sidebar (its entries and title).
 	 * 
 	 * @return (Sidebar) - this Sidebar Object, for chaining.
 	 */
