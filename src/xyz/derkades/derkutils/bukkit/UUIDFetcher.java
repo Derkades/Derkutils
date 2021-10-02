@@ -41,21 +41,21 @@ public class UUIDFetcher {
 
 		readData(output, result);
 
-		final String u = result.toString();
+		String u = result.toString();
 
-		String uuid = "";
+		StringBuilder uuid = new StringBuilder();
 
 		for(int i = 0; i <= 31; i++) {
 			if(i >= u.length())
 				break;
 
-			uuid = uuid + u.charAt(i);
+			uuid.append(u.charAt(i));
 			if(i == 7 || i == 11 || i == 15 || i == 19) {
-				uuid = uuid + "-";
+				uuid.append("-");
 			}
 		}
 
-		return UUID.fromString(uuid);
+		return UUID.fromString(uuid.toString());
 	}
 
 	private static void readData(final String toRead, final StringBuilder result) {
@@ -67,7 +67,7 @@ public class UUIDFetcher {
 
 			if(!String.valueOf(toRead.charAt(i)).equalsIgnoreCase("\"")) {
 
-				result.append(String.valueOf(toRead.charAt(i)));
+				result.append(toRead.charAt(i));
 
 			} else {
 				break;
@@ -77,9 +77,9 @@ public class UUIDFetcher {
 		}
 	}
 
-	private static String callURL(final String URL) {
-		final StringBuilder sb = new StringBuilder();
-		URLConnection urlConn = null;
+	private static String callURL(String URL) {
+		StringBuilder sb = new StringBuilder();
+		URLConnection urlConn;
 		InputStreamReader in = null;
 		try {
 			final URL url = new URL(URL);

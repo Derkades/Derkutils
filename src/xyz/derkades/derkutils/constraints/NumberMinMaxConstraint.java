@@ -14,7 +14,7 @@ public class NumberMinMaxConstraint extends Constraint {
 	@Override
 	public boolean validate(String parameter) {
 		try {
-			double i = Double.valueOf(parameter);
+			double i = Double.parseDouble(parameter);
 			return i > min && i < max;
 		} catch (NumberFormatException e) {
 			return false;

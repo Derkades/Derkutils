@@ -60,7 +60,8 @@ public class LocationUtils {
 
 	@NotNull
 	public static Location minCorner(@NotNull final Location a, @NotNull final Location b) {
-		Validate.isTrue(a.getWorld().equals(b.getWorld()), "Locations must be in the same world");
+		World world = a.getWorld();
+		Validate.isTrue(world != null && world.equals(b.getWorld()), "Locations must be in the same world");
 		return new Location(a.getWorld(), Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
 	}
 
@@ -71,26 +72,26 @@ public class LocationUtils {
 	 * @param max
 	 * @return
 	 */
-	public static boolean yawInBounds(final Player player, final float min, final float max) {
+	public static boolean yawInBounds(@NotNull final Player player, final float min, final float max) {
 		return yawInBounds(player.getLocation(), min, max);
 	}
 
 	/**
 	 * @see #yawInBounds(float, float, float)
-	 * @param player
+	 * @param location
 	 * @param min
 	 * @param max
 	 * @return
 	 */
-	public static boolean yawInBounds(final Location location, final float min, final float max) {
+	public static boolean yawInBounds(@NotNull final Location location, final float min, final float max) {
 		return yawInBounds(location.getYaw(), min, max);
 	}
 
 	/**
 	 * Check if bukkit yaw is in bounds of vanilla yaw
-	 * @param yaw Bukkit yaw (e.g. from {@link Location#getYaw()}
-	 * @param min Min yaw, as displayed in debug screen
-	 * @param max Max yaw, as displayed in debug screen
+	 * @param bukkitYaw Bukkit yaw (e.g. from {@link Location#getYaw()}
+	 * @param clientYawMin Min yaw, as displayed in debug screen
+	 * @param clientYawMax Max yaw, as displayed in debug screen
 	 * @return whether yaw is in bounds
 	 */
 	public static boolean yawInBounds(float bukkitYaw, final float clientYawMin, final float clientYawMax) {

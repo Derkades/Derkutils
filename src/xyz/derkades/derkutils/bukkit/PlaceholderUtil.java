@@ -58,7 +58,9 @@ public class PlaceholderUtil {
 		return strings;
 	}
 
+	@SuppressWarnings("CanBeFinal")
 	private static Method papiParseString = null;
+	@SuppressWarnings("CanBeFinal")
 	private static Method papiParseList = null;
 
 	static {

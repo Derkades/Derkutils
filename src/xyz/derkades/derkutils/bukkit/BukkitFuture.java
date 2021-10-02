@@ -100,10 +100,6 @@ public class BukkitFuture<T> {
 			throw new IllegalStateException("Already retrieved");
 		}
 
-		if (this.done) {
-			throw new IllegalStateException("Already retrieved");
-		}
-
 		this.retrieving = true;
 		final T t = this.action.call();
 		this.done = true;

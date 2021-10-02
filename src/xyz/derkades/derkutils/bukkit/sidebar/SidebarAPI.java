@@ -9,7 +9,7 @@ import org.bukkit.scoreboard.Objective;
 
 public class SidebarAPI {
 
-	private static List<Sidebar> sidebars = new ArrayList<>();
+	private static final List<Sidebar> sidebars = new ArrayList<>();
 
 	protected static void registerSidebar(final Sidebar sidebar) {
 		sidebars.add(sidebar);
@@ -29,7 +29,6 @@ public class SidebarAPI {
 	 * @return
 	 */
 	public static Sidebar getSidebar(final Player forPlayer) {
-
 		if (forPlayer == null) {
 			throw new NullPointerException("forPlayer cannot be null!");
 		}
@@ -49,7 +48,6 @@ public class SidebarAPI {
 		}
 
 		return null;
-
 	}
 
 }

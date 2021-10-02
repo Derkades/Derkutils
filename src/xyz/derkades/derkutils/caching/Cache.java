@@ -81,7 +81,7 @@ public class Cache {
 		final int i = toRemove.size();
 
 		while (!toRemove.isEmpty()) {
-			removeCachedObject(toRemove.pop());
+			remove(toRemove.pop());
 		}
 
 		return i;
