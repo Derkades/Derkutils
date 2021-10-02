@@ -58,8 +58,10 @@ public class PlaceholderUtil {
 		return strings;
 	}
 
-	private static final Method papiParseString = null;
-	private static final Method papiParseList = null;
+	@SuppressWarnings("CanBeFinal")
+	private static Method papiParseString = null;
+	@SuppressWarnings("CanBeFinal")
+	private static Method papiParseList = null;
 
 	static {
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
