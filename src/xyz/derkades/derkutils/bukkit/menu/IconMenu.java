@@ -33,13 +33,12 @@ public abstract class IconMenu implements Listener {
 	@NotNull
 	private final InventoryView view;
 	private boolean closeEventCalled = false;
-//	private boolean cancelTask = false;
 
 	/**
 	 * Creates a new menu instance. To add items, use the {@link IconMenu#addItem(int, ItemStack)} method</li>
 	 * @param plugin Bukkit plugin instance
 	 * @param name Name of the menu
-	 * @param size Number of slots. Must be a multiple of 9 that is greater than 0 and less than 10.
+	 * @param rows Menu size in rows.
 	 * @param player Player that this menu will be opened for
 	 */
 	@SuppressWarnings("null")
@@ -93,7 +92,6 @@ public abstract class IconMenu implements Listener {
 
 				HandlerList.unregisterAll(IconMenu.this);
 				this.cancel();
-				return;
 			}
 
 		});
@@ -110,6 +108,7 @@ public abstract class IconMenu implements Listener {
 	 * Called when the menu closes
 	 * @param event
 	 */
+	@SuppressWarnings("EmptyMethod")
 	public void onClose(final MenuCloseEvent event) {}
 
 	/**
@@ -184,13 +183,5 @@ public abstract class IconMenu implements Listener {
 			}
 		}
 	}
-
-//	@EventHandler(priority = EventPriority.MONITOR)
-//	public void onQuit(final PlayerQuitEvent event) {
-//		final Player player = event.getPlayer();
-//		this.closeEventCalled = true;
-//		this.cancelTask = true;
-//		this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_QUIT));
-//	}
 
 }

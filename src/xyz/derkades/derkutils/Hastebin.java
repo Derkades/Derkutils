@@ -28,7 +28,7 @@ public class Hastebin {
 		Objects.requireNonNull(content, "Content is null");
 		Objects.requireNonNull(baseUrl, "Base url is null");
 
-		return createPaste(content.toString().getBytes(UTF_8), baseUrl);
+		return createPaste(content.getBytes(UTF_8), baseUrl);
 	}
 
 	/**

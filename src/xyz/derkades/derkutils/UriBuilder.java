@@ -61,7 +61,7 @@ public class UriBuilder {
 		appendRaw(this.noParams ? '?' : '&');
 		appendEncoded(key);
 		appendRaw('=');
-		appendEncoded(value.toString());
+		appendEncoded(value);
 		this.noParams = false;
 		return this;
 	}
@@ -77,9 +77,8 @@ public class UriBuilder {
 
 	@Override
 	public boolean equals(final Object other) {
-		return other != null &&
-				other instanceof UriBuilder &&
-				Objects.equals(((UriBuilder) other).toString(), this.toString());
+		return other instanceof UriBuilder &&
+				Objects.equals(other.toString(), this.toString());
 	}
 
 }
