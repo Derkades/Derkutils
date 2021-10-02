@@ -106,9 +106,7 @@ public class ListUtils {
 	@SafeVarargs
 	@Deprecated
 	public static <T> List<T> addToList(final List<T> list, final T... items) {
-		for (final T item : items) {
-			list.add(item);
-		}
+		list.addAll(Arrays.asList(items));
 
 		return list;
 	}

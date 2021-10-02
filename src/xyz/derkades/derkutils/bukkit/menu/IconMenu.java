@@ -36,14 +36,11 @@ public abstract class IconMenu implements Listener {
 //	private boolean cancelTask = false;
 
 	/**
-	 * Creates a new menu instance.
-	 * <ul>
-	 * <li>To add items, use the {@link IconMenu#addItem(int, ItemStack)} method</li>
-	 * <li>The menu should be opened in the same tick as it's created. Do this using {@link #open()}.
+	 * Creates a new menu instance. To add items, use the {@link IconMenu#addItem(int, ItemStack)} method</li>
 	 * @param plugin Bukkit plugin instance
 	 * @param name Name of the menu
 	 * @param size Number of slots. Must be a multiple of 9 that is greater than 0 and less than 10.
-	 * @param player Player that this menu will be opened for when {@link #open()} is called
+	 * @param player Player that this menu will be opened for
 	 */
 	@SuppressWarnings("null")
 	public IconMenu(@NotNull final Plugin plugin, @NotNull final String name, final int rows, @NotNull final Player player) {

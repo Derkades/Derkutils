@@ -9,7 +9,7 @@ import org.bukkit.scoreboard.Objective;
 
 public class SidebarAPI {
 
-	private static List<Sidebar> sidebars = new ArrayList<>();
+	private static final List<Sidebar> sidebars = new ArrayList<>();
 
 	protected static void registerSidebar(final Sidebar sidebar) {
 		sidebars.add(sidebar);

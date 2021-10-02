@@ -20,7 +20,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 public class Sidebar implements ConfigurationSerializable {
 
-	private static transient ScoreboardManager bukkitManager = Bukkit.getScoreboardManager();
+	private static final transient ScoreboardManager bukkitManager = Bukkit.getScoreboardManager();
 
 	static {
 		ConfigurationSerialization.registerClass(Sidebar.class);

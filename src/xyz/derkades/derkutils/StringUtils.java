@@ -6,7 +6,7 @@ public class StringUtils {
 
 	/**
 	 * @param string
-	 * @param spaces False if spaces should be considered as non-alphanumeric characters. (e.g. "hello world" will return false but "helloworld" will return true)
+	 * @param allowSpaces False if spaces should be considered as non-alphanumeric characters. (e.g. "hello world" will return false but "helloworld" will return true)
 	 * @return True if the specified string contains characters other than A-Z, a-z, 0-9 and optionally spaces.
 	 */
 	public static boolean containsNonAlphanumericalCharacters(final String string, final boolean allowSpaces){

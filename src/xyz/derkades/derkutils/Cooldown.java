@@ -43,9 +43,8 @@ public class Cooldown {
 	 * Remove all expired cooldowns from memory.
 	 */
 	public static void cleanup() {
-		COOLDOWNS.keySet().forEach((key) -> {
-			getCooldown(key); //The getCooldown method removes the key from the HashMap if it has expired
-		});
+		//The getCooldown method removes the key from the HashMap if it has expired
+		COOLDOWNS.keySet().forEach(Cooldown::getCooldown);
 	}
 
 }

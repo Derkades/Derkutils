@@ -78,7 +78,7 @@ public class LocationUtils {
 
 	/**
 	 * @see #yawInBounds(float, float, float)
-	 * @param player
+	 * @param location
 	 * @param min
 	 * @param max
 	 * @return
@@ -89,9 +89,9 @@ public class LocationUtils {
 
 	/**
 	 * Check if bukkit yaw is in bounds of vanilla yaw
-	 * @param yaw Bukkit yaw (e.g. from {@link Location#getYaw()}
-	 * @param min Min yaw, as displayed in debug screen
-	 * @param max Max yaw, as displayed in debug screen
+	 * @param bukkitYaw Bukkit yaw (e.g. from {@link Location#getYaw()}
+	 * @param clientYawMin Min yaw, as displayed in debug screen
+	 * @param clientYawMax Max yaw, as displayed in debug screen
 	 * @return whether yaw is in bounds
 	 */
 	public static boolean yawInBounds(float bukkitYaw, final float clientYawMin, final float clientYawMax) {
