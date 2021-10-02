@@ -198,21 +198,21 @@ public class ListUtils {
 		return Optional.of(collection.iterator().next());
 	}
 
-	public static <@Nullable T> T choice(@NotNull final Set<T> set) {
+	public static <T> T choice(@NotNull final Set<T> set) {
 		Validate.notEmpty(set, "Set is null or contains no elements");
 	    return set.stream().skip(ThreadLocalRandom.current().nextInt(set.size())).findFirst().orElseThrow();
 	}
 
-	public static <@Nullable T> T choice(@NotNull final List<T> list) {
+	public static <T> T choice(@NotNull final List<T> list) {
 		return list.get(ThreadLocalRandom.current().nextInt(list.size()));
 	}
 
 	@NotNull
-	public static <@Nullable T> T choice(@NotNull final T[] array) {
+	public static <T> T choice(@NotNull final T[] array) {
 		return array[ThreadLocalRandom.current().nextInt(array.length)];
 	}
 
-	public static <@Nullable T> List<T> chooseMultiple(final T[] array, final int amount) {
+	public static <T> List<T> chooseMultiple(final T[] array, final int amount) {
 		Validate.isTrue(amount <= array.length, "Amount to pick from array must not exceed array size");
 	    return IntStream
 	            .generate(() -> ThreadLocalRandom.current().nextInt(array.length))
@@ -222,7 +222,7 @@ public class ListUtils {
 	            .collect(Collectors.toUnmodifiableList());
 	}
 
-	public static <@Nullable T> List<T> chooseMultiple(final List<T> list, final int amount) {
+	public static <T> List<T> chooseMultiple(final List<T> list, final int amount) {
 		Validate.isTrue(amount <= list.size(), "Amount to pick from array must not exceed array size");
 	    return IntStream
 	            .generate(() -> ThreadLocalRandom.current().nextInt(list.size()))

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
+import org.jetbrains.annotations.NotNull;
 
 public class SidebarString implements ConfigurationSerializable {
 
@@ -21,6 +22,7 @@ public class SidebarString implements ConfigurationSerializable {
 	 * @return (SidebarString) - the generated SidebarString, ready for use in a
 	 *         Sidebar.
 	 */
+	@NotNull
 	public static SidebarString generateScrollingAnimation(final String text, final int displayWidth) {
 		if (text.length() <= displayWidth) {
 			return new SidebarString(text);
@@ -89,7 +91,7 @@ public class SidebarString implements ConfigurationSerializable {
 	}
 
 	@Override
-	public Map<String, Object> serialize() {
+	public @NotNull Map<String, Object> serialize() {
 		final Map<String, Object> map = new HashMap<>();
 
 		map.put("data", this.animated);
@@ -105,6 +107,7 @@ public class SidebarString implements ConfigurationSerializable {
 	 * 
 	 * @return (String) - the next text.
 	 */
+	@NotNull
 	public String getNext() {
 		if (this.curStep == this.step) {
 			this.i++;
@@ -130,6 +133,7 @@ public class SidebarString implements ConfigurationSerializable {
 	 * 
 	 * @return (SidebarString) - this SidebarString Object, for chaining.
 	 */
+	@NotNull
 	public SidebarString reset() {
 		this.i = 0;
 		this.curStep = this.step;
@@ -156,6 +160,7 @@ public class SidebarString implements ConfigurationSerializable {
 	 * @return (SidebarString) - this SidebarString Object, for chaining.
 	 * @since 2.8
 	 */
+	@NotNull
 	public SidebarString setStep(final int step) {
 		if (step <= 0) {
 			throw new IllegalArgumentException("step cannot be smaller than or equal to 0!");
@@ -172,6 +177,7 @@ public class SidebarString implements ConfigurationSerializable {
 	 * 
 	 * @return (List: String) - all animations.
 	 */
+	@NotNull
 	public List<String> getVariations() {
 		return this.animated;
 	}
@@ -182,6 +188,7 @@ public class SidebarString implements ConfigurationSerializable {
 	 * @param variations (String...) - the variations to add
 	 * @return (SidebarString) - this SidebarString Object, for chaining.
 	 */
+	@NotNull
 	public SidebarString addVariation(final String... variations) {
 		this.animated.addAll(Arrays.asList(variations));
 		return this;
@@ -193,6 +200,7 @@ public class SidebarString implements ConfigurationSerializable {
 	 * @param variation (String) - the variation
 	 * @return (SidebarString) - this SidebarString Object, for chaining.
 	 */
+	@NotNull
 	public SidebarString removeVariation(final String variation) {
 		this.animated.remove(variation);
 		return this;

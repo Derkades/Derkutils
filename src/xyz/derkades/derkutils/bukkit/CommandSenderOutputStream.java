@@ -25,12 +25,12 @@ public class CommandSenderOutputStream extends OutputStream {
 	}
 
 	@Override
-	public void write(final int arg) throws IOException {
+	public void write(final int arg) {
 		this.out.writeByte(arg);
 	}
 
 	@Override
-	public void write(final byte[] bytes) throws IOException {
+	public void write(final byte[] bytes) {
 		for (final byte b : bytes) {
 			if (b == '\n') {
 				sendMessage();

@@ -17,6 +17,7 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
+import org.jetbrains.annotations.NotNull;
 
 public class Sidebar implements ConfigurationSerializable {
 
@@ -65,7 +66,7 @@ public class Sidebar implements ConfigurationSerializable {
 	}
 
 	@Override
-	public Map<String, Object> serialize() {
+	public @NotNull Map<String, Object> serialize() {
 		final Map<String, Object> map = new HashMap<>();
 
 		map.put("entries", this.entries);

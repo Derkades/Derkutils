@@ -152,7 +152,7 @@ public abstract class IconMenu implements Listener {
 		this.inventory.clear();
 	}
 
-	public Inventory getInventory() {
+	public @NotNull Inventory getInventory() {
 		return this.inventory;
 	}
 
