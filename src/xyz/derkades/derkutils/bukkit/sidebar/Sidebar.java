@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class Siderbar {
+public class Sidebar {
 
 	@NotNull
 	private final Scoreboard scoreboard;
@@ -21,13 +21,13 @@ public class Siderbar {
 	private final Objective objective;
 	private int entries = 0;
 
-	public Siderbar(@NotNull Component displayName) {
+	public Sidebar(@NotNull Component displayName) {
 		this(displayName,
 				Objects.requireNonNull(Bukkit.getScoreboardManager(),
 				"Can only create scoreboard after a world has been loaded").getNewScoreboard());
 	}
 
-	public Siderbar(@NotNull Component displayName, @NotNull Scoreboard scoreboard) {
+	public Sidebar(@NotNull Component displayName, @NotNull Scoreboard scoreboard) {
 		this.scoreboard = scoreboard;
 		this.objective = scoreboard.registerNewObjective("sb", "dummy", displayName);
 		this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
