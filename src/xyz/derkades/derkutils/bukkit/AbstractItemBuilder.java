@@ -42,6 +42,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
 	public T name(@Nullable final String name) {
 		final ItemMeta meta = this.item.getItemMeta();
@@ -172,7 +173,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	public T damage(final int damage) {
 		final Damageable damageable = (Damageable) this.item.getItemMeta();
 		damageable.setDamage(damage);
-		this.item.setItemMeta((ItemMeta) damageable);
+		this.item.setItemMeta(damageable);
 		return this.getInstance();
 	}
 
@@ -182,19 +183,18 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getDisplayName() == null) {
+		if (this.item.getItemMeta() == null) {
 			return this.getInstance();
 		}
 
 		return this.name(this.item.getItemMeta().getDisplayName().replace(key, value));
 	}
 
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
 	public T namePlaceholders(@NotNull final Map<String, String> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getDisplayName() == null) {
+		if (this.item.getItemMeta() == null) {
 			return this.getInstance();
 		}
 
@@ -220,7 +220,6 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		}
 	}
 
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
 	public T namePlaceholdersOptional(@NotNull final Map<String, Supplier<String>> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
@@ -321,6 +320,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.namePlaceholdersOptional(placeholders).lorePlaceholdersOptional(placeholders);
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
 	public T lorePapi(@NotNull final Player player) {
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
