@@ -5,7 +5,7 @@
 
 	<groupId>xyz.derkades</groupId>
 	<artifactId>Derkutils</artifactId>
-	<version>master</version>
+	<version>spigot-1.13</version>
 	<packaging>jar</packaging>
 
 	<name>derkutils</name>
