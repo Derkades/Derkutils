@@ -1,18 +1,20 @@
 package xyz.derkades.derkutils.bukkit;
 
+import org.apache.commons.lang3.Validate;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.Validate;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 public class PlaceholderUtil {
 
-	public static String parsePlaceholders(String string, final Placeholder... placeholders) {
+	@NotNull
+	public static String parsePlaceholders(@NotNull String string, @NotNull final Placeholder... placeholders) {
 		Objects.requireNonNull(string, "input string must not be null");
 		Validate.noNullElements(placeholders, "no placeholder must be null");
 		for (final Placeholder p : placeholders) {
@@ -21,7 +23,9 @@ public class PlaceholderUtil {
 		return string;
 	}
 
-	public static List<String> parsePlaceholders(List<String> strings, final Placeholder... placeholders) {
+	@NotNull
+	public static List<String> parsePlaceholders(@NotNull List<String> strings,
+												 @NotNull final Placeholder... placeholders) {
 		Validate.noNullElements(strings, "placeholder input strings must not be null");
 		Validate.noNullElements(placeholders, "no placeholder must be null");
 		for (final Placeholder p : placeholders) {
@@ -30,7 +34,9 @@ public class PlaceholderUtil {
 		return strings;
 	}
 
-	public static String parsePapiPlaceholders(final Player player, String string, final Placeholder... placeholders) {
+	@NotNull
+	public static String parsePapiPlaceholders(@NotNull final Player player, @NotNull String string,
+											   @NotNull final Placeholder... placeholders) {
 		Objects.requireNonNull(player, "Player must not be null");
 		Objects.requireNonNull(string, "Input string must not be null");
 		Validate.noNullElements(placeholders, "Provided strings must not be null");
@@ -44,7 +50,9 @@ public class PlaceholderUtil {
 		return string;
 	}
 
-	public static List<String> parsePapiPlaceholders(final Player player, List<String> strings, final Placeholder... placeholders) {
+	@NotNull
+	public static List<String> parsePapiPlaceholders(@NotNull final Player player, @NotNull List<String> strings,
+													 @NotNull final Placeholder... placeholders) {
 		Objects.requireNonNull(player, "Player must not be null");
 		Validate.noNullElements(strings, "Input strings must not be null");
 		Validate.noNullElements(placeholders, "Provided strings must not be null");
@@ -80,7 +88,8 @@ public class PlaceholderUtil {
 	 * Parses PlaceholderAPI placeholders in a string if the plugin is installed
 	 * @return
 	 */
-	public static String parsePapiPlaceholders(final Player player, final String string) {
+	@NotNull
+	public static String parsePapiPlaceholders(@NotNull final Player player, @NotNull final String string) {
 		Objects.requireNonNull(player, "Player must not be null");
 		Objects.requireNonNull(string, "Provided string must not be null");
 
@@ -101,7 +110,9 @@ public class PlaceholderUtil {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<String> parsePapiPlaceholders(final Player player, final List<String> strings) {
+	@NotNull
+	public static List<String> parsePapiPlaceholders(@NotNull final Player player,
+													 @NotNull final List<String> strings) {
 		Objects.requireNonNull(player, "Player must not be null");
 		Objects.requireNonNull(strings, "Provided string list must not be null");
 
@@ -119,19 +130,19 @@ public class PlaceholderUtil {
 
 	public static class Placeholder {
 
-		private final String key;
-		private final String value;
+		private final @NotNull String key;
+		private final @NotNull String value;
 
-		public Placeholder(final String key, final String value) {
+		public Placeholder(@NotNull final String key, @NotNull final String value) {
 			this.key = Objects.requireNonNull(key, "Placeholder key is null");
 			this.value = Objects.requireNonNull(value, "Placeholder value is null");
 		}
 
-		public String parse(final String string) {
+		public @NotNull String parse(@NotNull final String string) {
 			return string.replace(this.key, this.value);
 		}
 
-		public List<String> parse(final List<String> list) {
+		public @NotNull List<String> parse(@NotNull final List<String> list) {
 			return list.stream().map(this::parse).collect(Collectors.toList());
 		}
 
