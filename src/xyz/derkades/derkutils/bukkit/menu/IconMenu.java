@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 public abstract class IconMenu implements Listener {
 
 	@NotNull
-	private String name;
+	private Component name;
 	private final int size;
 	@NotNull
 	private final UUID uuid;
@@ -49,8 +50,8 @@ public abstract class IconMenu implements Listener {
 	}
 
 	@SuppressWarnings({ "null", "unused" })
-	public IconMenu(@NotNull final String name, final int rows, @NotNull final Player player,
-			@NotNull final Consumer<BukkitRunnable> timerRegistrar, @NotNull final Consumer<Listener> listenerRegistrar) {
+	public IconMenu(@NotNull final Component name, final int rows, @NotNull final Player player,
+					@NotNull final Consumer<BukkitRunnable> timerRegistrar, @NotNull final Consumer<Listener> listenerRegistrar) {
 		Objects.requireNonNull(name, "Name is null");
 		Objects.requireNonNull(player, "Player is null");
 		Objects.requireNonNull(listenerRegistrar, "Timer registrar is null");
