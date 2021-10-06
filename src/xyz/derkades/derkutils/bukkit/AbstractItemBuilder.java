@@ -171,9 +171,11 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
 	@NotNull
 	public T damage(final int damage) {
-		final Damageable damageable = (Damageable) this.item.getItemMeta();
-		damageable.setDamage(damage);
-		this.item.setItemMeta(damageable);
+		ItemMeta meta = this.item.getItemMeta();
+		if (meta != null) {
+			((Damageable) meta).setDamage(damage);
+			item.setItemMeta(meta);
+		}
 		return this.getInstance();
 	}
 
