@@ -1,10 +1,17 @@
 package xyz.derkades.derkutils.bukkit;
 
+import com.destroystokyo.paper.Namespaced;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
+import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,9 +21,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -42,74 +52,21 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
-	public T name(@Nullable final String name) {
-		final ItemMeta meta = this.item.getItemMeta();
-		meta.setDisplayName(name);
-		this.item.setItemMeta(meta);
+	public T name(@Nullable final Component name) {
+		item.editMeta(meta -> meta.displayName(name));
 		return this.getInstance();
 	}
 
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
-	public T coloredName(@Nullable final String name){
-		final ItemMeta meta = this.item.getItemMeta();
-		if (name == null) {
-
-			meta.setDisplayName(null);
-		} else {
-			meta.setDisplayName(Colors.parseColors(name));
-		}
-		this.item.setItemMeta(meta);
+	public T lore(final @NotNull Component@Nullable... lore) {
+		item.editMeta(meta -> meta.lore(lore == null ? Collections.emptyList() : Arrays.asList(lore)));
 		return this.getInstance();
 	}
 
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
-	public T lore(@Nullable final String... lore){
-		final ItemMeta meta = this.item.getItemMeta();
-		if (lore == null) {
-			meta.setLore(null);
-		} else {
-			meta.setLore(Arrays.asList(lore));
-		}
-		this.item.setItemMeta(meta);
-		return this.getInstance();
-	}
-
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
-	@NotNull
-	public T coloredLore(@Nullable final String... lore){
-		final ItemMeta meta = this.item.getItemMeta();
-		if (lore == null) {
-			meta.setLore(null);
-		} else {
-			meta.setLore(Colors.parseColors(Arrays.asList(lore)));
-		}
-		this.item.setItemMeta(meta);
-		return this.getInstance();
-	}
-
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
-	@NotNull
-	public T lore(@Nullable final List<String> lore){
-		final ItemMeta meta = this.item.getItemMeta();
-		meta.setLore(lore);
-		this.item.setItemMeta(meta);
-		return this.getInstance();
-	}
-
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
-	@NotNull
-	public T coloredLore(@Nullable final List<String> lore){
-		final ItemMeta meta = this.item.getItemMeta();
-		if (lore == null) {
-			meta.setLore(null);
-		} else {
-			meta.setLore(Colors.parseColors(lore));
-		}
-		this.item.setItemMeta(meta);
+	public T lore(@Nullable final List<@NotNull Component> lore) {
+		item.editMeta(meta -> meta.lore(lore));
 		return this.getInstance();
 	}
 
@@ -177,174 +134,46 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
-	@NotNull
-	public T namePlaceholder(@NotNull final String key, @NotNull final String value) {
-		Objects.requireNonNull(key, "Placeholder key is null");
-		Objects.requireNonNull(value, "Placeholder value is null");
-
-		if (this.item.getItemMeta() == null) {
-			return this.getInstance();
-		}
-
-		return this.name(this.item.getItemMeta().getDisplayName().replace(key, value));
-	}
-
-	@NotNull
-	public T namePlaceholders(@NotNull final Map<String, String> placeholders) {
-		Objects.requireNonNull(placeholders, "Placeholder map is null");
-
-		if (this.item.getItemMeta() == null) {
-			return this.getInstance();
-		}
-
-		placeholders.forEach(this::namePlaceholder);
+	public @NotNull T canPlaceOn(@NotNull Collection<Namespaced> placeableKeys) {
+		item.editMeta(meta -> meta.setPlaceableKeys(placeableKeys));
 		return this.getInstance();
 	}
 
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
-	@NotNull
-	public T namePlaceholderOptional(@NotNull final String key, @NotNull final Supplier<String> value) {
-		Objects.requireNonNull(key, "Placeholder key is null");
-		Objects.requireNonNull(value, "Placeholder value is null");
-
-		if (this.item.getItemMeta() == null) {
-			return this.getInstance();
-		}
-
-		final String oldName = this.item.getItemMeta().getDisplayName();
-		if (oldName.contains(key)) {
-			return this.name(oldName.replace(key, value.get()));
+	public @NotNull T canPlaceOnMinecraft(@Nullable String... canPlaceOn) {
+		if (canPlaceOn == null) {
+			return this.canPlaceOn(Collections.emptySet());
 		} else {
-			return this.getInstance();
+			return this.canPlaceOn(Arrays.stream(canPlaceOn).map(NamespacedKey::minecraft).collect(Collectors.toSet()));
 		}
 	}
 
-	@NotNull
-	public T namePlaceholdersOptional(@NotNull final Map<String, Supplier<String>> placeholders) {
-		Objects.requireNonNull(placeholders, "Placeholder map is null");
-
-		if (this.item.getItemMeta() == null) {
-			return this.getInstance();
-		}
-
-		placeholders.forEach(this::namePlaceholderOptional);
+	public @NotNull T canDestroy(@NotNull Collection<Namespaced> destroyableKeys) {
+		item.editMeta(meta -> meta.setDestroyableKeys(destroyableKeys));
 		return this.getInstance();
 	}
 
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
-	@NotNull
-	public T lorePlaceholder(@NotNull final String key, @NotNull final String value) {
-		Objects.requireNonNull(key, "Placeholder key is null");
-		Objects.requireNonNull(value, "Placeholder value is null");
-
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
-			return this.getInstance();
+	public @NotNull T canDestroyMinecraft(@Nullable String... canDestroy) {
+		if (canDestroy == null) {
+			return this.canDestroy(Collections.emptySet());
+		} else {
+			return this.canDestroy(Arrays.stream(canDestroy).map(NamespacedKey::minecraft).collect(Collectors.toSet()));
 		}
-
-		return this.lore(this.item.getItemMeta().getLore().stream().map((s) -> s.replace(key, value)).collect(Collectors.toList()));
 	}
 
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
-	@NotNull
-	public T lorePlaceholders(@NotNull final Map<String, String> placeholders) {
-		Objects.requireNonNull(placeholders, "Placeholder map is null");
-
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
-			return this.getInstance();
-		}
-
-		placeholders.forEach(this::lorePlaceholder);
+	public @NotNull T itemFlags(@NotNull ItemFlag... flags) {
+		item.editMeta(meta -> meta.addItemFlags(flags));
 		return this.getInstance();
 	}
 
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
-	@NotNull
-	public T lorePlaceholderOptional(@NotNull final String key, @NotNull final Supplier<String> value) {
-		Objects.requireNonNull(key, "Placeholder key is null");
-		Objects.requireNonNull(value, "Placeholder value is null");
-
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
-			return this.getInstance();
-		}
-
-		return this.lore(this.item.getItemMeta().getLore().stream().map((s) -> {
-			if (s.contains(key)) {
-				return s.replace(key, value.get());
-			} else {
-				return s;
-			}
-		}).collect(Collectors.toList()));
+	public @NotNull T skullTexture(@NotNull String skullTexture) {
+		PlayerProfile profile = Bukkit.getServer().createProfile(UUID.randomUUID());
+		profile.setProperty(new ProfileProperty("textures", skullTexture));
+		return this.skullProfile(profile);
 	}
 
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
-	@NotNull
-	public T lorePlaceholdersOptional(@NotNull final Map<String, Supplier<String>> placeholders) {
-		Objects.requireNonNull(placeholders, "Placeholder map is null");
-
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
-			return this.getInstance();
-		}
-
-		placeholders.forEach(this::lorePlaceholderOptional);
+	public @NotNull T skullProfile(@NotNull PlayerProfile profile) {
+		item.editMeta(SkullMeta.class, meta -> meta.setPlayerProfile(profile));
 		return this.getInstance();
-	}
-
-	@NotNull
-	public T placeholder(@NotNull final String key, @NotNull final String value) {
-		Objects.requireNonNull(key, "Placeholder key is null");
-		Objects.requireNonNull(value, "Placeholder value is null");
-
-		return this.namePlaceholder(key, value).lorePlaceholder(key, value);
-	}
-
-	@NotNull
-	public T placeholders(@NotNull final Map<String, String> placeholders) {
-		Objects.requireNonNull(placeholders, "Placeholder map is null");
-
-		return this.namePlaceholders(placeholders).lorePlaceholders(placeholders);
-	}
-
-	@NotNull
-	public T placeholderOptional(@NotNull final String key, final Supplier<String> value) {
-		Objects.requireNonNull(key, "Placeholder key is null");
-		Objects.requireNonNull(value, "Placeholder value is null");
-
-		return this.namePlaceholderOptional(key, value).lorePlaceholderOptional(key, value);
-	}
-
-	@NotNull
-	public T placeholdersOptional(@NotNull final Map<String, Supplier<String>> placeholders) {
-		Objects.requireNonNull(placeholders, "Placeholder map is null");
-
-		return this.namePlaceholdersOptional(placeholders).lorePlaceholdersOptional(placeholders);
-	}
-
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
-	@NotNull
-	public T lorePapi(@NotNull final Player player) {
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
-			return this.getInstance();
-		}
-
-		return this.lore(this.item.getItemMeta().getLore().stream().map((s) -> PlaceholderUtil.parsePapiPlaceholders(player, s)).collect(Collectors.toList()));
-	}
-
-	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
-	@NotNull
-	public T namePapi(@NotNull final Player player) {
-		if (this.item.getItemMeta() == null) {
-			return this.getInstance();
-		}
-
-		return this.name(PlaceholderUtil.parsePapiPlaceholders(player, this.item.getItemMeta().getDisplayName()));
-	}
-
-	@NotNull
-	public T papi(@NotNull final Player player) {
-		Objects.requireNonNull(player, "Player is null");
-		this.namePapi(player);
-		return this.lorePapi(player);
 	}
 
 	@NotNull

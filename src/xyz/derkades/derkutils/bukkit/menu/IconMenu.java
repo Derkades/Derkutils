@@ -43,7 +43,7 @@ public abstract class IconMenu implements Listener {
 	 * @param player Player that this menu will be opened for
 	 */
 	@SuppressWarnings("null")
-	public IconMenu(@NotNull final Plugin plugin, @NotNull final String name, final int rows, @NotNull final Player player) {
+	public IconMenu(@NotNull final Plugin plugin, @NotNull final Component name, final int rows, @NotNull final Player player) {
 		this(name, rows, player,
 				t -> t.runTaskTimer(plugin, 1, 1),
 				l -> Bukkit.getServer().getPluginManager().registerEvents(l, plugin));
@@ -116,7 +116,7 @@ public abstract class IconMenu implements Listener {
 	 * Sets the name of the menu. Has no effect after the menu has been opened.
 	 * @param name
 	 */
-	public void setName(@NotNull final String name){
+	public void setName(@NotNull final Component name){
 		this.name = name;
 	}
 
