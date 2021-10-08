@@ -1,16 +1,18 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-
+import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTItem;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
+/**
+ * Extension of ItemBuilder with functionality that requires NBT API
+ */
 public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 
 	public NbtItemBuilder(@NotNull Material material) {

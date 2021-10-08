@@ -1,18 +1,15 @@
 package xyz.derkades.derkutils;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Objects;
-
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.*;
+import java.util.Objects;
+
 public class DatabaseUtils {
 
-	public static void createTableIfNonexistent(@NotNull final Connection connection, @NotNull final String tableName, @NotNull final String sql) throws SQLException {
+	public static void createTableIfNonexistent(@NotNull final Connection connection, @NotNull final String tableName,
+												@NotNull final String sql) throws SQLException {
 		Objects.requireNonNull(connection, "Connection is null");
 		Validate.isTrue(!connection.isClosed(), "Connection is closed");
 		Objects.requireNonNull(tableName, "Table name is null");

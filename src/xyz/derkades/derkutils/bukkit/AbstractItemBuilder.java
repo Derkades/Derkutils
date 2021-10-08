@@ -1,12 +1,5 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
-
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -17,6 +10,13 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
@@ -40,6 +40,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
 	public T name(@Nullable final String name) {
 		final ItemMeta meta = this.item.getItemMeta();
@@ -48,10 +49,12 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
 	public T coloredName(@Nullable final String name){
 		final ItemMeta meta = this.item.getItemMeta();
 		if (name == null) {
+
 			meta.setDisplayName(null);
 		} else {
 			meta.setDisplayName(Colors.parseColors(name));
@@ -60,6 +63,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
 	public T lore(@Nullable final String... lore){
 		final ItemMeta meta = this.item.getItemMeta();
@@ -72,6 +76,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
 	public T coloredLore(@Nullable final String... lore){
 		final ItemMeta meta = this.item.getItemMeta();
@@ -84,6 +89,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
 	public T lore(@Nullable final List<String> lore){
 		final ItemMeta meta = this.item.getItemMeta();
@@ -92,8 +98,9 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
-	public T coloredLore(final List<String> lore){
+	public T coloredLore(@Nullable final List<String> lore){
 		final ItemMeta meta = this.item.getItemMeta();
 		if (lore == null) {
 			meta.setLore(null);
@@ -105,7 +112,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	@NotNull
-	public T skullOwner(String owner) {
+	public T skullOwner(@Nullable String owner) {
 		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
 		meta.setOwner(owner);
 		this.item.setItemMeta(meta);
@@ -113,7 +120,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	@NotNull
-	public T leatherArmorColor(final Color color) {
+	public T leatherArmorColor(@NotNull final Color color) {
 		Objects.requireNonNull(color, "Color is null");
 		final LeatherArmorMeta meta = (LeatherArmorMeta) this.item.getItemMeta();
 		meta.setColor(color);
@@ -122,19 +129,19 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	@NotNull
-	public T enchant(final Enchantment type) {
+	public T enchant(@NotNull final Enchantment type) {
 		return enchant(type, 1);
 	}
 
 	@NotNull
-	public T enchant(final Enchantment type, final int level) {
+	public T enchant(@NotNull final Enchantment type, final int level) {
 		Objects.requireNonNull(type, "Enchantment type is null");
 		this.item.addEnchantment(type, level);
 		return this.getInstance();
 	}
 
 	@NotNull
-	public T unsafeEnchant(final Enchantment type, final int level) {
+	public T unsafeEnchant(@NotNull final Enchantment type, final int level) {
 		Objects.requireNonNull(type, "Enchantment type is null");
 		this.item.addUnsafeEnchantment(type, level);
 		return this.getInstance();
@@ -142,13 +149,13 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
 	@NotNull
 	public T material(final Material material) {
-		this.item.setType(material);
+		this.item.setType(material == null ? Material.AIR : material);
 		return this.getInstance();
 	}
 
 	@NotNull
-	public T type(final Material type) {
-		this.item.setType(type);
+	public T type(@Nullable final Material type) {
+		this.item.setType(type == null ? Material.AIR : type);
 		return this.getInstance();
 	}
 
@@ -158,12 +165,13 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
-	public T namePlaceholder(final String key, final String value) {
+	public T namePlaceholder(@NotNull final String key, @NotNull final String value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getDisplayName() == null) {
+		if (this.item.getItemMeta() == null) {
 			return this.getInstance();
 		}
 
@@ -171,10 +179,10 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	@NotNull
-	public T namePlaceholders(final Map<String, String> placeholders) {
+	public T namePlaceholders(@NotNull final Map<String, String> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getDisplayName() == null) {
+		if (this.item.getItemMeta() == null) {
 			return this.getInstance();
 		}
 
@@ -182,12 +190,13 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
-	public T namePlaceholderOptional(final String key, final Supplier<String> value) {
+	public T namePlaceholderOptional(@NotNull final String key, @NotNull final Supplier<String> value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getDisplayName() == null) {
+		if (this.item.getItemMeta() == null) {
 			return this.getInstance();
 		}
 
@@ -200,10 +209,10 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	@NotNull
-	public T namePlaceholdersOptional(final Map<String, Supplier<String>> placeholders) {
+	public T namePlaceholdersOptional(@NotNull final Map<String, Supplier<String>> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getDisplayName() == null) {
+		if (this.item.getItemMeta() == null) {
 			return this.getInstance();
 		}
 
@@ -211,8 +220,9 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
-	public T lorePlaceholder(final String key, final String value) {
+	public T lorePlaceholder(@NotNull final String key, @NotNull final String value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
@@ -223,8 +233,9 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.lore(this.item.getItemMeta().getLore().stream().map((s) -> s.replace(key, value)).collect(Collectors.toList()));
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
-	public T lorePlaceholders(final Map<String, String> placeholders) {
+	public T lorePlaceholders(@NotNull final Map<String, String> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
@@ -235,8 +246,9 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
-	public T lorePlaceholderOptional(final String key, final Supplier<String> value) {
+	public T lorePlaceholderOptional(@NotNull final String key, @NotNull final Supplier<String> value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
@@ -253,8 +265,9 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		}).collect(Collectors.toList()));
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
-	public T lorePlaceholdersOptional(final Map<String, Supplier<String>> placeholders) {
+	public T lorePlaceholdersOptional(@NotNull final Map<String, Supplier<String>> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
@@ -266,7 +279,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	@NotNull
-	public T placeholder(final String key, final String value) {
+	public T placeholder(@NotNull final String key, @NotNull final String value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
@@ -274,14 +287,14 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	@NotNull
-	public T placeholders(final Map<String, String> placeholders) {
+	public T placeholders(@NotNull final Map<String, String> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
 		return this.namePlaceholders(placeholders).lorePlaceholders(placeholders);
 	}
 
 	@NotNull
-	public T placeholderOptional(final String key, final Supplier<String> value) {
+	public T placeholderOptional(@NotNull final String key, final Supplier<String> value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
@@ -289,14 +302,15 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	@NotNull
-	public T placeholdersOptional(final Map<String, Supplier<String>> placeholders) {
+	public T placeholdersOptional(@NotNull final Map<String, Supplier<String>> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
 		return this.namePlaceholdersOptional(placeholders).lorePlaceholdersOptional(placeholders);
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
-	public T lorePapi(final Player player) {
+	public T lorePapi(@NotNull final Player player) {
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
 			return this.getInstance();
 		}
@@ -304,9 +318,10 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.lore(this.item.getItemMeta().getLore().stream().map((s) -> PlaceholderUtil.parsePapiPlaceholders(player, s)).collect(Collectors.toList()));
 	}
 
+	@SuppressWarnings("deprecation") // don't use adventure components for spigot support
 	@NotNull
-	public T namePapi(final Player player) {
-		if (this.item.getItemMeta() == null || this.item.getItemMeta().getDisplayName() == null) {
+	public T namePapi(@NotNull final Player player) {
+		if (this.item.getItemMeta() == null) {
 			return this.getInstance();
 		}
 

@@ -1,5 +1,7 @@
 package xyz.derkades.derkutils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.security.SecureRandom;
 
 public class EnumUtils {
@@ -8,10 +10,14 @@ public class EnumUtils {
 	 * @param clazz
 	 * @return Random element from enum
 	 */
-	public static <T extends Enum<?>> T getRandomEnum(Class<T> clazz){
+	@NotNull
+	public static <T extends Enum<?>> T getRandomEnum(@NotNull Class<T> clazz){
 		final SecureRandom random = new SecureRandom();
-        final int x = random.nextInt(clazz.getEnumConstants().length);
-        return clazz.getEnumConstants()[x];
+		int size = clazz.getEnumConstants().length;
+		if (size == 0) {
+			throw new IllegalArgumentException("Cannot get random value from empty enum");
+		}
+        return clazz.getEnumConstants()[random.nextInt(size)];
     }
 
 }
