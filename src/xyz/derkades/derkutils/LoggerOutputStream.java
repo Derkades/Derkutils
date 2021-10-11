@@ -21,10 +21,11 @@ public class LoggerOutputStream extends OutputStream {
 	@Override
 	public void write(int i) throws IOException {
 		char c = (char) i;
-		buf.append(c);
 		if (c == '\n') {
 			this.logger.log(this.level, buf.toString());
 			buf = new StringBuilder();
+		} else {
+			buf.append(c);
 		}
 	}
 
