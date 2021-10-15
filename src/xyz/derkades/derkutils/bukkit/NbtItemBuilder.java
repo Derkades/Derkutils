@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -33,7 +33,7 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 	public NbtItemBuilder canDestroy(@NotNull final String... vanillaNamespacedNames) {
 		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
 		final NBTItem nbt = new NBTItem(this.item);
-		nbt.getStringList("CanDestroy").addAll(List.of(vanillaNamespacedNames));
+		nbt.getStringList("CanDestroy").addAll(Arrays.asList(vanillaNamespacedNames));
 		this.item = nbt.getItem();
 		return this;
 	}
@@ -42,7 +42,7 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 	public NbtItemBuilder canPlaceOn(@NotNull final String... vanillaNamespacedNames) {
 		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
 		final NBTItem nbt = new NBTItem(this.item);
-		nbt.getStringList("CanPlaceOn").addAll(List.of(vanillaNamespacedNames));
+		nbt.getStringList("CanPlaceOn").addAll(Arrays.asList(vanillaNamespacedNames));
 		this.item = nbt.getItem();
 		return this;
 	}
