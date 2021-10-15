@@ -1,10 +1,12 @@
 package xyz.derkades.derkutils.bukkit;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -49,14 +51,14 @@ public class HeadTextures {
 
 	public static void saveCacheToFile(final Path path) throws IOException {
 		final String json = GSON.toJson(HEAD_TEXTURE_CACHE);
-		Files.writeString(path, json, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+		Files.write(path, json.getBytes(StandardCharsets.UTF_8),
+				StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 	}
 
 	public static int readFileToCache(final Path path) throws IOException {
-		final String json = Files.readString(path);
-		try {
+		try (Reader reader = Files.newBufferedReader(path)) {
 			@SuppressWarnings("unchecked")
-			final Map<String, String> map = GSON.fromJson(json, Map.class);
+			final Map<String, String> map = GSON.fromJson(reader, Map.class);
 			synchronized(HEAD_TEXTURE_CACHE) {
 				HEAD_TEXTURE_CACHE.putAll(map);
 			}
