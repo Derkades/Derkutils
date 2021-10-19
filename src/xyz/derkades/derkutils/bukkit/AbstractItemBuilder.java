@@ -278,24 +278,6 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public T hideFlags(@NotNull ItemFlag @NotNull... itemFlags) {
-		ItemMeta meta = this.item.getItemMeta();
-		if (meta == null) {
-			throw new IllegalStateException("Item meta is null");
-		}
-		meta.addItemFlags(itemFlags);
-		return this.getInstance();
-	}
-
-	public T hideFlags() {
-		ItemMeta meta = this.item.getItemMeta();
-		if (meta == null) {
-			throw new IllegalStateException("Item meta is null");
-		}
-		meta.addItemFlags(ItemFlag.values());
-		return this.getInstance();
-	}
-
 	@NotNull
 	public T placeholder(@NotNull final String key, @NotNull final String value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
