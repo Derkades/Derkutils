@@ -3,13 +3,25 @@ package xyz.derkades.derkutils.bukkit;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
+import org.jetbrains.annotations.NotNull;
 import xyz.derkades.derkutils.Colors;
 
 import static net.kyori.adventure.text.Component.text;
 
 public class AdventureUtil {
 
-	private Component gradient(String string, float gradientMargin) {
+	/**
+	 * Generate gradient
+	 * @param string Input string
+	 * @param gradientMargin 0.0-0.5, lower value means more visible gradient. With a higher value, more of the edges
+	 *                       are "cropped off".
+	 * @return Component where the text is the input string with gradient color
+	 */
+	public static @NotNull Component gradient(@NotNull String string, float gradientMargin) {
+		if (gradientMargin < 0.0f || gradientMargin >= 0.5f) {
+			throw new IllegalArgumentException("gradientMargin must be between 0 (inclusive) and 0.5 (exclusive)");
+		}
+
 		final int rgb1 = xyz.derkades.derkutils.Colors.randomPastelColor().getRGB();
 		final int rgb2 = Colors.randomPastelColor().getRGB();
 		final TextComponent.Builder b = text();
