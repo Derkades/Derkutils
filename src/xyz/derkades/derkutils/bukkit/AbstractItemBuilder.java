@@ -4,6 +4,7 @@ import com.destroystokyo.paper.Namespaced;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -28,7 +29,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
-	
+
+	private static final Component NO_ITALICS = Component.empty().decoration(TextDecoration.ITALIC, false);
+
 	@NotNull
 	protected ItemStack item;
 	
@@ -51,19 +54,31 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
 	@NotNull
 	public T name(@Nullable final Component name) {
-		item.editMeta(meta -> meta.displayName(name));
+		if (name == null) {
+			item.editMeta(meta -> meta.displayName(null));
+		} else {
+			item.editMeta(meta -> meta.displayName(NO_ITALICS.append(name)));
+		}
 		return this.getInstance();
 	}
 
 	@NotNull
 	public T lore(final @NotNull Component@Nullable... lore) {
-		item.editMeta(meta -> meta.lore(lore == null ? Collections.emptyList() : Arrays.asList(lore)));
+		if (lore == null) {
+			item.editMeta(meta -> meta.lore(null));
+		} else {
+			item.editMeta(meta -> meta.lore(Arrays.stream(lore).map(NO_ITALICS::append).collect(Collectors.toList())));
+		}
 		return this.getInstance();
 	}
 
 	@NotNull
 	public T lore(@Nullable final List<@NotNull Component> lore) {
-		item.editMeta(meta -> meta.lore(lore));
+		if (lore == null) {
+			item.editMeta(meta -> meta.lore(null));
+		} else {
+			item.editMeta(meta -> meta.lore(lore.stream().map(NO_ITALICS::append).collect(Collectors.toList())));
+		}
 		return this.getInstance();
 	}
 
