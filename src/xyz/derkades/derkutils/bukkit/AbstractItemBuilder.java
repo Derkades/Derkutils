@@ -22,10 +22,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
-	
+
+	private static final Component NO_ITALICS = Component.empty().decoration(TextDecoration.ITALIC, false);
+
 	@NotNull
 	protected ItemStack item;
-	
+
 	public AbstractItemBuilder(@NotNull final Material material) {
 		this.item = new ItemStack(Objects.requireNonNull(material, "Material is null"));
 	}
@@ -33,7 +35,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	public AbstractItemBuilder(@NotNull final ItemStack item) {
 		this.item = Objects.requireNonNull(item, "item is null");
 	}
-	
+
 	@NotNull
 	public abstract T getInstance();
 
