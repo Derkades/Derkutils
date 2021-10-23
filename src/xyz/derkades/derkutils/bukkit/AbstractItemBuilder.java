@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
-	private static final Component NO_ITALICS = Component.empty().decoration(TextDecoration.ITALIC, false);
-
 	@NotNull
 	protected ItemStack item;
 
