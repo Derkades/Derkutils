@@ -202,7 +202,7 @@ public class ListUtils {
 	public static <T> T choice(@NotNull final Set<T> set) {
 		Preconditions.checkNotNull(set, "Set is null");
 		Preconditions.checkArgument(set.size() > 0, "Set must contain at least one element");
-	    return set.stream().skip(ThreadLocalRandom.current().nextInt(set.size())).findFirst().orElseThrow(llegalStateException::new);
+	    return set.stream().skip(ThreadLocalRandom.current().nextInt(set.size())).findFirst().orElseThrow(IllegalStateException::new);
 	}
 
 	public static <T> T choice(@NotNull final List<T> list) {
