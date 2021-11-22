@@ -1,10 +1,10 @@
 package xyz.derkades.derkutils;
 
+import com.google.common.base.Preconditions;
+
 import java.awt.Color;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
-
-import org.apache.commons.lang3.Validate;
 
 public class Colors {
 
@@ -13,7 +13,8 @@ public class Colors {
 		if (hex.startsWith("#")) {
 			hex = hex.substring(1);
 		}
-		Validate.isTrue(hex.length() == 6, "Length of hex string must be 6");
+		Preconditions.checkArgument(hex.length() == 6,
+				"Length of hex string must be 6 (it is %s)", hex.length());
 
 		return new int[]{
 				Integer.valueOf(hex.substring(1, 3), 16),
@@ -27,7 +28,8 @@ public class Colors {
 		if (hex.startsWith("#")) {
 			hex = hex.substring(1);
 		}
-		Validate.isTrue(hex.length() == 6, "Length of hex string must be 6");
+		Preconditions.checkArgument(hex.length() == 6,
+				"Length of hex string must be 6 (it is %s)", hex.length());
 
 		return new Color(
 				Integer.valueOf(hex.substring(1, 3), 16),

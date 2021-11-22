@@ -1,18 +1,17 @@
 package xyz.derkades.derkutils.bukkit;
 
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.Validate;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-
+@Deprecated
 public class BukkitFuture<T> {
-
 
 	@NotNull private final Plugin plugin;
 	@NotNull private final Callable<T> action;
@@ -22,9 +21,6 @@ public class BukkitFuture<T> {
 	private volatile boolean done = false;
 
 	public BukkitFuture(@NotNull final Plugin plugin, @NotNull final Callable<T> action) {
-		Validate.notNull(plugin, "plugin must not be null");
-		Validate.notNull(action, "action must not be null");
-
 		this.plugin = plugin;
 		this.action = action;
 		this.onCompleteCallbacks = new ArrayDeque<>();
@@ -107,8 +103,6 @@ public class BukkitFuture<T> {
 	}
 
 	public BukkitFuture<T> onComplete(final Consumer<T> callback) {
-		Validate.notNull(callback, "callback must not be null");
-
 		if (this.done) {
 			throw new IllegalStateException("Already retrieved");
 		}
@@ -121,8 +115,6 @@ public class BukkitFuture<T> {
 	}
 
 	public BukkitFuture<T> onException(final Consumer<Exception> callback) {
-		Validate.notNull(callback, "callback must not be null");
-
 		if (this.done) {
 			throw new IllegalStateException("Already retrieved");
 		}

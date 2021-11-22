@@ -1,13 +1,13 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.util.Objects;
-
-import org.apache.commons.lang3.Validate;
+import com.google.common.base.Preconditions;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 public class LocationUtils {
 
@@ -54,14 +54,14 @@ public class LocationUtils {
 	@NotNull
 	public static Location maxCorner(@NotNull final Location a, @NotNull final Location b) {
 		World world = a.getWorld();
-		Validate.isTrue(world != null && world.equals(b.getWorld()), "Locations must be in the same world");
+		Preconditions.checkArgument(world != null && world.equals(b.getWorld()), "Locations must be in the same world");
 		return new Location(world, Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
 	}
 
 	@NotNull
 	public static Location minCorner(@NotNull final Location a, @NotNull final Location b) {
 		World world = a.getWorld();
-		Validate.isTrue(world != null && world.equals(b.getWorld()), "Locations must be in the same world");
+		Preconditions.checkArgument(world != null && world.equals(b.getWorld()), "Locations must be in the same world");
 		return new Location(a.getWorld(), Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
 	}
 

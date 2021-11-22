@@ -1,9 +1,13 @@
 package xyz.derkades.derkutils;
 
-import org.apache.commons.lang3.Validate;
+import com.google.common.base.Preconditions;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class DatabaseUtils {
@@ -11,7 +15,7 @@ public class DatabaseUtils {
 	public static void createTableIfNonexistent(@NotNull final Connection connection, @NotNull final String tableName,
 												@NotNull final String sql) throws SQLException {
 		Objects.requireNonNull(connection, "Connection is null");
-		Validate.isTrue(!connection.isClosed(), "Connection is closed");
+		Preconditions.checkArgument(!connection.isClosed(), "Connection is closed");
 		Objects.requireNonNull(tableName, "Table name is null");
 		Objects.requireNonNull(sql, "Query is null");
 

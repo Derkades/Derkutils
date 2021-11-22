@@ -1,7 +1,7 @@
 package xyz.derkades.derkutils.bukkit.sidebar;
 
+import com.google.common.base.Strings;
 import net.kyori.adventure.text.Component;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public class Sidebar {
 
 	@NotNull
 	private String getInvisibleEntry(int index) {
-		return StringUtils.repeat(ChatColor.COLOR_CHAR + "r", index);
+		return Strings.repeat(ChatColor.COLOR_CHAR + "r", index);
 	}
 
 	public void clearEntries() {
