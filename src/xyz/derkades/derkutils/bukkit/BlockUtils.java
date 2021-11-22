@@ -1,15 +1,15 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.util.Objects;
-import java.util.function.Function;
-
-import org.apache.commons.lang3.Validate;
+import com.google.common.base.Preconditions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+import java.util.function.Function;
 
 public class BlockUtils {
 
@@ -83,7 +83,7 @@ public class BlockUtils {
 		Objects.requireNonNull(a, "Location a is null");
 		Objects.requireNonNull(world, "Location a is not in any world");
 		Objects.requireNonNull(b, "Location b is null");
-		Validate.isTrue(a.getWorld() == b.getWorld(), "Locations must be in the same world");
+		Preconditions.checkArgument(a.getWorld() == b.getWorld(), "Locations must be in the same world");
 		fillArea(a.getWorld(),
 				a.getBlockX(), a.getBlockY(), a.getBlockZ(),
 				b.getBlockX(), b.getBlockY(), b.getBlockZ(),

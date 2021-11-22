@@ -35,7 +35,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	/**
 	 * Constructs a new Sidebar.
-	 * 
+	 *
 	 * @param title              (String) - the title of the sidebar
 	 * @param plugin             (Plugin) - your plugin
 	 * @param updateDelayInTicks (int) - how many server ticks to wait in between
@@ -77,7 +77,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	/**
 	 * Sets how many server ticks to wait in between each update.
-	 * 
+	 *
 	 * @param plugin       (Plugin) - your plugin
 	 * @param delayInTicks (int) - the ticks
 	 * @return (Sidebar) - this Sidebar Object, for chaining.
@@ -105,7 +105,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	/**
 	 * Gets the title of this Sidebar.
-	 * 
+	 *
 	 * @return (String) - the title.
 	 */
 	public String getTitle() {
@@ -114,7 +114,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	/**
 	 * Sets the title of this Sidebar.
-	 * 
+	 *
 	 * @param title (String) - the new title
 	 * @return (Sidebar) - this Sidebar Object, for chaining.
 	 */
@@ -125,7 +125,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	/**
 	 * Gets a list of all entries.
-	 * 
+	 *
 	 * @return (List: SidebarString) - all entries.
 	 */
 	public List<SidebarString> getEntries() {
@@ -134,7 +134,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	/**
 	 * Overrides all current entries.
-	 * 
+	 *
 	 * @param entries (List: SidebarString) - the new entries
 	 * @return (Sidebar) - this Sidebar Object, for chaining.
 	 */
@@ -145,7 +145,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	/**
 	 * Adds an entry.
-	 * 
+	 *
 	 * @param entries (SidebarString) - the entry
 	 * @return (Sidebar) - this Sidebar Object, for chaining.
 	 */
@@ -156,7 +156,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	/**
 	 * Removes an entry.
-	 * 
+	 *
 	 * @param entry (SidebarString) - the entry
 	 * @return (Sidebar) - this Sidebar Object, for chaining.
 	 */
@@ -167,7 +167,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	/**
 	 * Removes the entry referring to a specific line.
-	 * 
+	 *
 	 * @param num (int) - the line
 	 * @return (Sidebar) - this Sidebar Object, for chaining.
 	 */
@@ -178,7 +178,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	/**
 	 * Shows this Sidebar to a player.
-	 * 
+	 *
 	 * @param player (Player) - the player
 	 * @return (Sidebar) - this Sidebar Object, for chaining.
 	 */
@@ -189,7 +189,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	/**
 	 * Hides this Sidebar from a player.
-	 * 
+	 *
 	 * @param player (Player) - the player
 	 * @return (Sidebar) - this Sidebar Object, for chaining.
 	 */
@@ -200,7 +200,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 	/**
 	 * Updates the sidebar (its entries and title).
-	 * 
+	 *
 	 * @return (Sidebar) - this Sidebar Object, for chaining.
 	 */
 	public Sidebar update() {
@@ -216,7 +216,7 @@ public class Sidebar implements ConfigurationSerializable {
 	/**
 	 * Adds an empty entry. The entry won't conflict with any other empty entries
 	 * made this way.
-	 * 
+	 *
 	 * @return (Sidebar) - this Sidebar Object, for chaining.
 	 */
 	public Sidebar addEmpty() {

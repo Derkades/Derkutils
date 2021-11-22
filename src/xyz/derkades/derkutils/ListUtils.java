@@ -1,5 +1,9 @@
 package xyz.derkades.derkutils;
 
+import com.google.common.base.Preconditions;
+import io.netty.util.internal.ThreadLocalRandom;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,11 +14,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import org.apache.commons.lang3.Validate;
-import org.jetbrains.annotations.NotNull;
-
-import io.netty.util.internal.ThreadLocalRandom;
 
 public class ListUtils {
 
@@ -84,7 +83,8 @@ public class ListUtils {
 		Objects.requireNonNull(list, "List is null");
 		Objects.requireNonNull(before, "Before array is null");
 		Objects.requireNonNull(after, "After array is null");
-		Validate.isTrue(before.length == after.length, "before[] length must be equal to after[] length");
+		Preconditions.checkArgument(before.length == after.length, "before[] length %s must be equal to after[] length %s",
+				before.length, after.length);
 
 		final List<String> newList = new ArrayList<>();
 
@@ -193,13 +193,16 @@ public class ListUtils {
 			return Optional.empty();
 		}
 
-		Validate.isTrue(collection.size() == 1, "Size of collection must be one if it is not empty");
+		Preconditions.checkArgument(collection.size() == 1,
+				"Size of collection must be 1 if it is not empty, but it is %s", collection.size());
+
 		return Optional.of(collection.iterator().next());
 	}
 
 	public static <T> T choice(@NotNull final Set<T> set) {
-		Validate.notEmpty(set, "Set is null or contains no elements");
-	    return set.stream().skip(ThreadLocalRandom.current().nextInt(set.size())).findFirst().orElseThrow(IllegalStateException::new);
+		Preconditions.checkNotNull(set, "Set is null");
+		Preconditions.checkArgument(set.size() > 0, "Set must contain at least one element");
+	    return set.stream().skip(ThreadLocalRandom.current().nextInt(set.size())).findFirst().orElseThrow(llegalStateException::new);
 	}
 
 	public static <T> T choice(@NotNull final List<T> list) {
@@ -212,9 +215,9 @@ public class ListUtils {
 	}
 
 	public static <T> List<T> chooseMultiple(final T[] array, final int amount) {
-		Validate.isTrue(amount <= array.length, "Amount to pick from array must not exceed array size");
+		Preconditions.checkArgument(amount <= array.length, "Amount to pick from array must not exceed array size, but is %s", amount);
 	    return Collections.unmodifiableList(
-				IntStream
+			IntStream
 	            .generate(() -> ThreadLocalRandom.current().nextInt(array.length))
 	            .distinct()
 	            .limit(amount)
@@ -223,9 +226,9 @@ public class ListUtils {
 	}
 
 	public static <T> List<T> chooseMultiple(final List<T> list, final int amount) {
-		Validate.isTrue(amount <= list.size(), "Amount to pick from array must not exceed array size");
+		Preconditions.checkArgument(amount <= list.size(), "Amount to pick from array must not exceed array size, but is %s", amount);
 	    return Collections.unmodifiableList(
-				IntStream
+			IntStream
 	            .generate(() -> ThreadLocalRandom.current().nextInt(list.size()))
 	            .distinct()
 	            .limit(amount)

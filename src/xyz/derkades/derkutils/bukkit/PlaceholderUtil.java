@@ -1,6 +1,5 @@
 package xyz.derkades.derkutils.bukkit;
 
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -16,9 +15,9 @@ public class PlaceholderUtil {
 	@NotNull
 	public static String parsePlaceholders(@NotNull String string, @NotNull final Placeholder... placeholders) {
 		Objects.requireNonNull(string, "input string must not be null");
-		Validate.noNullElements(placeholders, "no placeholder must be null");
+		Objects.requireNonNull(placeholders, "placeholders array is null");
 		for (final Placeholder p : placeholders) {
-			string = p.parse(string);
+			string = Objects.requireNonNull(p, "a placeholder is null").parse(string);
 		}
 		return string;
 	}
@@ -26,10 +25,10 @@ public class PlaceholderUtil {
 	@NotNull
 	public static List<String> parsePlaceholders(@NotNull List<String> strings,
 												 @NotNull final Placeholder... placeholders) {
-		Validate.noNullElements(strings, "placeholder input strings must not be null");
-		Validate.noNullElements(placeholders, "no placeholder must be null");
+		Objects.requireNonNull(strings, "strings list is null");
+		Objects.requireNonNull(placeholders, "placeholders array is null");
 		for (final Placeholder p : placeholders) {
-			strings = p.parse(strings);
+			strings = Objects.requireNonNull(p, "a placeholder is null").parse(strings);
 		}
 		return strings;
 	}
@@ -39,10 +38,10 @@ public class PlaceholderUtil {
 											   @NotNull final Placeholder... placeholders) {
 		Objects.requireNonNull(player, "Player must not be null");
 		Objects.requireNonNull(string, "Input string must not be null");
-		Validate.noNullElements(placeholders, "Provided strings must not be null");
+		Objects.requireNonNull(placeholders, "placeholders array is null");
 
 		for (final Placeholder p : placeholders) {
-			string = p.parse(string);
+			string = Objects.requireNonNull(p, "a placeholder is null").parse(string);
 		}
 
 		string = parsePapiPlaceholders(player, string);
@@ -54,11 +53,10 @@ public class PlaceholderUtil {
 	public static List<String> parsePapiPlaceholders(@NotNull final Player player, @NotNull List<String> strings,
 													 @NotNull final Placeholder... placeholders) {
 		Objects.requireNonNull(player, "Player must not be null");
-		Validate.noNullElements(strings, "Input strings must not be null");
-		Validate.noNullElements(placeholders, "Provided strings must not be null");
+		Objects.requireNonNull(placeholders, "placeholders array is null");
 
 		for (final Placeholder p : placeholders) {
-			strings = p.parse(strings);
+			strings = Objects.requireNonNull(p, "a placeholder is null").parse(strings);
 		}
 
 		strings = parsePapiPlaceholders(player, strings);
