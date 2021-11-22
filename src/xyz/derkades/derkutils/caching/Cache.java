@@ -1,12 +1,13 @@
 package xyz.derkades.derkutils.caching;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.commons.lang3.Validate;
 
 public class Cache {
 
@@ -20,9 +21,9 @@ public class Cache {
 	 * @param object
 	 * @param timeout In seconds. If set to <= 0, cache indefinitely
 	 */
-	public static void set(final String identifier, final Object object, long timeout) {
-		Validate.notNull(identifier);
-		Validate.notNull(object);
+	public static void set(final @NotNull String identifier, final @NotNull Object object, long timeout) {
+		Objects.requireNonNull(identifier, "identifier is null");
+		Objects.requireNonNull(object, "object to cache is null");
 
 		if (timeout <= 0){
 			timeout = Long.MAX_VALUE;
@@ -40,8 +41,8 @@ public class Cache {
 		set(identifier, object, DEFAULT_CACHE_DURATION);
 	}
 
-	public static <T> Optional<T> get(final String identifier) {
-		Validate.notNull(identifier);
+	public static <T> Optional<T> get(final @NotNull String identifier) {
+		Objects.requireNonNull(identifier, "identifier is null");
 
 		final CacheObject cache = CACHE_OBJECT_MAP.get(identifier);
 
@@ -59,9 +60,8 @@ public class Cache {
 		}
 	}
 
-	public static void remove(final String identifier) {
-		Validate.notNull(identifier);
-		CACHE_OBJECT_MAP.remove(identifier);
+	public static void remove(final @NotNull String identifier) {
+		CACHE_OBJECT_MAP.remove(Objects.requireNonNull(identifier, "identifier is null"));
 	}
 
 	/**
