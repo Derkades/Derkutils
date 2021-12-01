@@ -18,13 +18,14 @@ import java.util.UUID;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.jetbrains.annotations.NotNull;
 
 public class HeadTextures {
 
 	private static final Gson GSON = new Gson();
 	private static final Map<String, String> HEAD_TEXTURE_CACHE = new HashMap<>();
 
-	public static Optional<String> getHeadTexture(final UUID uuid) {
+	public static Optional<String> getHeadTexture(final @NotNull UUID uuid) {
 		synchronized (HEAD_TEXTURE_CACHE) {
 			if (HEAD_TEXTURE_CACHE.containsKey(uuid.toString())) {
 				return Optional.of(HEAD_TEXTURE_CACHE.get(uuid.toString()));
@@ -49,13 +50,13 @@ public class HeadTextures {
 		}
 	}
 
-	public static void saveCacheToFile(final Path path) throws IOException {
+	public static void saveCacheToFile(final @NotNull Path path) throws IOException {
 		final String json = GSON.toJson(HEAD_TEXTURE_CACHE);
 		Files.write(path, json.getBytes(StandardCharsets.UTF_8),
 				StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 	}
 
-	public static int readFileToCache(final Path path) throws IOException {
+	public static int readFileToCache(final @NotNull Path path) throws IOException {
 		try (Reader reader = Files.newBufferedReader(path)) {
 			@SuppressWarnings("unchecked")
 			final Map<String, String> map = GSON.fromJson(reader, Map.class);
