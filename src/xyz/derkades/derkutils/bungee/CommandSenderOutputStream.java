@@ -5,13 +5,14 @@ import java.io.OutputStream;
 
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.jetbrains.annotations.NotNull;
 
 public class CommandSenderOutputStream extends OutputStream {
 
-	private final CommandSender sender;
-	private final StringBuilder buffer;
+	private final @NotNull CommandSender sender;
+	private final @NotNull StringBuilder buffer;
 
-	public CommandSenderOutputStream(final CommandSender sender) {
+	public CommandSenderOutputStream(final @NotNull CommandSender sender) {
 		this.sender = sender;
 		this.buffer = new StringBuilder();
 	}

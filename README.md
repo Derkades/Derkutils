@@ -6,7 +6,7 @@ See the wiki for more information: https://github.com/Derkades/Derkutils/wiki
 ## Branches
 | Branch         | Minecraft version |
 | -              | -
-| `master`       | Paper 1.17 (not spigot!)
+| `master`       | Paper 1.18 (not spigot!)
 | `spigot-1.13 ` | Spigot 1.13+
 | `legacy`       | Spigot 1.7.10-1.12.2
 
