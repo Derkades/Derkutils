@@ -189,21 +189,17 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	public T hideFlags(@NotNull ItemFlag @NotNull... itemFlags) {
-		ItemMeta meta = this.item.getItemMeta();
-		if (meta == null) {
-			throw new IllegalStateException("Item meta is null");
-		}
-		meta.addItemFlags(itemFlags);
+		this.item.editMeta(meta -> {
+			if (meta == null) {
+				throw new IllegalStateException("Item meta is null");
+			}
+			meta.addItemFlags(itemFlags);
+		});
 		return this.getInstance();
 	}
 
 	public T hideFlags() {
-		ItemMeta meta = this.item.getItemMeta();
-		if (meta == null) {
-			throw new IllegalStateException("Item meta is null");
-		}
-		meta.addItemFlags(ItemFlag.values());
-		return this.getInstance();
+		return this.hideFlags(ItemFlag.values());
 	}
 
 	@NotNull
