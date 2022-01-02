@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Extension of ItemBuilder with functionality that requires NBT API
@@ -62,6 +63,13 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 	public NbtItemBuilder hideFlags(final int hideFlags) {
 		final NBTItem nbt = new NBTItem(this.item);
 		nbt.setInteger("HideFlags", hideFlags);
+		this.item = nbt.getItem();
+		return this;
+	}
+
+	public NbtItemBuilder editNbt(Consumer<NBTItem> nbtModifier) {
+		final NBTItem nbt = new NBTItem(this.item);
+		nbtModifier.accept(nbt);
 		this.item = nbt.getItem();
 		return this;
 	}
