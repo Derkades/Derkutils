@@ -4,6 +4,10 @@ import java.util.Set;
 
 import org.bukkit.Material;
 
+/**
+ * Use {@link com.destroystokyo.paper.MaterialTags} and {@link org.bukkit.Tag}
+ */
+@Deprecated
 public class MaterialLists {
 
 	@SafeVarargs
