@@ -281,7 +281,12 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	@Deprecated
 	public T hideFlags(@NotNull ItemFlag @NotNull... itemFlags) {
+		return addHideFlags(itemFlags);
+	}
+
+	public T addHideFlags(@NotNull ItemFlag @NotNull... itemFlags) {
 		ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
@@ -291,8 +296,37 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
+	public T replaceHideFlags(@NotNull ItemFlag @NotNull... itemFlags) {
+		ItemMeta meta = this.item.getItemMeta();
+		if (meta == null) {
+			throw new IllegalStateException("Item meta is null");
+		}
+		meta.removeItemFlags(ItemFlag.values());
+		meta.addItemFlags(itemFlags);
+		this.item.setItemMeta(meta);
+		return this.getInstance();
+	}
+
+	public T removeHideFlags() {
+		ItemMeta meta = this.item.getItemMeta();
+		if (meta == null) {
+			throw new IllegalStateException("Item meta is null");
+		}
+		meta.removeItemFlags(ItemFlag.values());
+		item.setItemMeta(meta);
+		return this.getInstance();
+	}
+
 	public T hideFlags() {
 		return this.hideFlags(ItemFlag.values());
+	}
+
+	public T hideFlags(boolean hideAllFlags) {
+		if (hideAllFlags) {
+			return this.hideFlags(ItemFlag.values());
+		} else {
+			return removeHideFlags();
+		}
 	}
 
 	@NotNull
