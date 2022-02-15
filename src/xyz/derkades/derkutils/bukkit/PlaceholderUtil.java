@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -15,7 +16,17 @@ public class PlaceholderUtil {
 	@NotNull
 	public static String parsePlaceholders(@NotNull String string, @NotNull final Placeholder... placeholders) {
 		Objects.requireNonNull(string, "input string must not be null");
-		Objects.requireNonNull(placeholders, "placeholders array is null");
+		Objects.requireNonNull(placeholders, "placeholders varargs is null");
+		for (final Placeholder p : placeholders) {
+			string = Objects.requireNonNull(p, "a placeholder is null").parse(string);
+		}
+		return string;
+	}
+
+	@NotNull
+	public static String parsePlaceholders(@NotNull String string, @NotNull final Collection<Placeholder> placeholders) {
+		Objects.requireNonNull(string, "input string must not be null");
+		Objects.requireNonNull(placeholders, "placeholders collection is null");
 		for (final Placeholder p : placeholders) {
 			string = Objects.requireNonNull(p, "a placeholder is null").parse(string);
 		}
@@ -34,11 +45,38 @@ public class PlaceholderUtil {
 	}
 
 	@NotNull
+	public static List<String> parsePlaceholders(@NotNull List<String> strings,
+												 @NotNull final Collection<Placeholder> placeholders) {
+		Objects.requireNonNull(strings, "strings list is null");
+		Objects.requireNonNull(placeholders, "placeholders collection is null");
+		for (final Placeholder p : placeholders) {
+			strings = Objects.requireNonNull(p, "a placeholder is null").parse(strings);
+		}
+		return strings;
+	}
+
+	@NotNull
 	public static String parsePapiPlaceholders(@NotNull final Player player, @NotNull String string,
 											   @NotNull final Placeholder... placeholders) {
 		Objects.requireNonNull(player, "Player must not be null");
 		Objects.requireNonNull(string, "Input string must not be null");
-		Objects.requireNonNull(placeholders, "placeholders array is null");
+		Objects.requireNonNull(placeholders, "Placeholders varargs is null");
+
+		for (final Placeholder p : placeholders) {
+			string = Objects.requireNonNull(p, "a placeholder is null").parse(string);
+		}
+
+		string = parsePapiPlaceholders(player, string);
+
+		return string;
+	}
+
+	@NotNull
+	public static String parsePapiPlaceholders(@NotNull final Player player, @NotNull String string,
+											   @NotNull final Collection<Placeholder> placeholders) {
+		Objects.requireNonNull(player, "Player must not be null");
+		Objects.requireNonNull(string, "Input string must not be null");
+		Objects.requireNonNull(placeholders, "Placeholders collection is null");
 
 		for (final Placeholder p : placeholders) {
 			string = Objects.requireNonNull(p, "a placeholder is null").parse(string);
@@ -53,10 +91,25 @@ public class PlaceholderUtil {
 	public static List<String> parsePapiPlaceholders(@NotNull final Player player, @NotNull List<String> strings,
 													 @NotNull final Placeholder... placeholders) {
 		Objects.requireNonNull(player, "Player must not be null");
-		Objects.requireNonNull(placeholders, "placeholders array is null");
+		Objects.requireNonNull(placeholders, "Placeholders array is null");
 
 		for (final Placeholder p : placeholders) {
-			strings = Objects.requireNonNull(p, "a placeholder is null").parse(strings);
+			strings = Objects.requireNonNull(p, "A placeholder is null").parse(strings);
+		}
+
+		strings = parsePapiPlaceholders(player, strings);
+
+		return strings;
+	}
+
+	@NotNull
+	public static List<String> parsePapiPlaceholders(@NotNull final Player player, @NotNull List<String> strings,
+													 @NotNull final Collection<Placeholder> placeholders) {
+		Objects.requireNonNull(player, "Player must not be null");
+		Objects.requireNonNull(placeholders, "Placeholders collection is null");
+
+		for (final Placeholder p : placeholders) {
+			strings = Objects.requireNonNull(p, "A placeholder is null").parse(strings);
 		}
 
 		strings = parsePapiPlaceholders(player, strings);
