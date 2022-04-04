@@ -68,8 +68,8 @@ public class FileUtils {
 		Objects.requireNonNull(outputFile, "Output file is null");
 
 		if (!Files.exists(outputFile)) {
-			final URL inputUrl = clazz.getResource(pathToFileInJar);
-			try (InputStream in = inputUrl.openStream()) {
+			try (InputStream in = Objects.requireNonNull(clazz.getResourceAsStream(pathToFileInJar),
+					"path does not exist in jar: " + pathToFileInJar)) {
 				Files.copy(in, outputFile);
 			}
 		}
