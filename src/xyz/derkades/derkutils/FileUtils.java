@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
 public class FileUtils {
@@ -68,7 +69,7 @@ public class FileUtils {
 		Objects.requireNonNull(outputFile, "Output file is null");
 
 		if (!Files.exists(outputFile)) {
-			try (InputStream in = Objects.requireNonNull(clazz.getResourceAsStream(pathToFileInJar),
+			try (InputStream in = Objects.requireNonNull(clazz.getClassLoader().getResourceAsStream(pathToFileInJar),
 					"path does not exist in jar: " + pathToFileInJar)) {
 				Files.copy(in, outputFile);
 			}
