@@ -9,32 +9,31 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Objects;
 
 public class Sidebar {
 
-	@NotNull
-	private final Scoreboard scoreboard;
-	@NotNull
-	private final Objective objective;
+	private final @NonNull Scoreboard scoreboard;
+	private final @NonNull Objective objective;
 	private int entries = 0;
 
-	public Sidebar(@NotNull Component displayName) {
+	public Sidebar(final @NonNull Component displayName) {
 		this(displayName,
 				Objects.requireNonNull(Bukkit.getScoreboardManager(),
 				"Can only create scoreboard after a world has been loaded").getNewScoreboard());
 	}
 
-	public Sidebar(@NotNull Component displayName, @NotNull Scoreboard scoreboard) {
+	public Sidebar(final @NonNull Component displayName,
+				   final @NonNull Scoreboard scoreboard) {
 		this.scoreboard = scoreboard;
 		this.objective = scoreboard.registerNewObjective("sb", "dummy", displayName);
 		this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 	}
 
-	@NotNull
-	private String getInvisibleEntry(int index) {
+
+	private @NonNull String getInvisibleEntry(final int index) {
 		return Strings.repeat(ChatColor.COLOR_CHAR + "r", index);
 	}
 
@@ -46,7 +45,7 @@ public class Sidebar {
 		this.entries = 0;
 	}
 
-	public void addEntry(@NotNull Component text) {
+	public void addEntry(final @NonNull Component text) {
 		int i = this.entries++;
 		Team team = this.scoreboard.registerNewTeam(String.valueOf(i));
 		team.prefix(text);
@@ -57,7 +56,8 @@ public class Sidebar {
 		}
 	}
 
-	public void setEntry(int i, @NotNull Component text) {
+	public void setEntry(final int i,
+						 final @NonNull Component text) {
 		if (i >= this.entries) {
 			throw new IllegalArgumentException("There are only " + this.entries + " entries but you are trying to modify index " + i);
 		}
@@ -69,11 +69,11 @@ public class Sidebar {
 		team.prefix(text);
 	}
 
-	public void showTo(@NotNull Player player) {
+	public void showTo(final @NonNull Player player) {
 		player.setScoreboard(this.scoreboard);
 	}
 
-	public void hideFrom(@NotNull Player player) {
+	public void hideFrom(final @NonNull Player player) {
 		player.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
 	}
 

@@ -1,6 +1,6 @@
 package xyz.derkades.derkutils;
 
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -9,11 +9,12 @@ import java.util.logging.Logger;
 
 public class LoggerOutputStream extends OutputStream {
 
-	private final @NotNull Logger logger;
-	private final @NotNull Level level;
-	private @NotNull StringBuilder buf = new StringBuilder();
+	private final @NonNull Logger logger;
+	private final @NonNull Level level;
+	private @NonNull StringBuilder buf = new StringBuilder();
 
-	public LoggerOutputStream(@NotNull Logger logger, @NotNull Level level) {
+	public LoggerOutputStream(final @NonNull Logger logger,
+							  final @NonNull Level level) {
 		this.logger = logger;
 		this.level = level;
 	}

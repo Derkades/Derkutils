@@ -5,13 +5,15 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Objects;
 
 public class LocationUtils {
 
-	public static boolean isIn2dBounds(@NotNull final Location location, @NotNull final Location cornerOne, @NotNull final Location cornerTwo) {
+	public static boolean isIn2dBounds(final @NonNull Location location,
+									   final @NonNull Location cornerOne,
+									   final @NonNull Location cornerTwo) {
 		Objects.requireNonNull(location, "Location is null");
 		Objects.requireNonNull(cornerOne, "First corner is null");
 		Objects.requireNonNull(cornerTwo, "Second corner is null");
@@ -35,7 +37,9 @@ public class LocationUtils {
 				z >= minZ && z <= maxZ;
 	}
 
-	public static boolean isIn3dBounds(@NotNull final Location location, @NotNull final Location cornerOne, @NotNull final Location cornerTwo) {
+	public static boolean isIn3dBounds(final @NonNull Location location,
+									   final @NonNull Location cornerOne,
+									   final @NonNull Location cornerTwo) {
 		Objects.requireNonNull(location, "Location is null");
 		Objects.requireNonNull(cornerOne, "First corner is null");
 		Objects.requireNonNull(cornerTwo, "Second corner is null");
@@ -51,15 +55,16 @@ public class LocationUtils {
 		return y >= minY && y <= maxY;
 	}
 
-	@NotNull
-	public static Location maxCorner(@NotNull final Location a, @NotNull final Location b) {
+
+	public static @NonNull Location maxCorner(final @NonNull Location a,
+											  final @NonNull Location b) {
 		World world = a.getWorld();
 		Preconditions.checkArgument(world != null && world.equals(b.getWorld()), "Locations must be in the same world");
 		return new Location(world, Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
 	}
 
-	@NotNull
-	public static Location minCorner(@NotNull final Location a, @NotNull final Location b) {
+	public static @NonNull Location minCorner(final @NonNull Location a,
+											  final @NonNull Location b) {
 		World world = a.getWorld();
 		Preconditions.checkArgument(world != null && world.equals(b.getWorld()), "Locations must be in the same world");
 		return new Location(a.getWorld(), Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
@@ -72,7 +77,9 @@ public class LocationUtils {
 	 * @param max
 	 * @return
 	 */
-	public static boolean yawInBounds(@NotNull final Player player, final float min, final float max) {
+	public static boolean yawInBounds(final @NonNull Player player,
+									  final float min,
+									  final float max) {
 		return yawInBounds(player.getLocation(), min, max);
 	}
 
@@ -83,7 +90,9 @@ public class LocationUtils {
 	 * @param max
 	 * @return
 	 */
-	public static boolean yawInBounds(@NotNull final Location location, final float min, final float max) {
+	public static boolean yawInBounds(final @NonNull Location location,
+									  final float min,
+									  final float max) {
 		return yawInBounds(location.getYaw(), min, max);
 	}
 
@@ -94,7 +103,9 @@ public class LocationUtils {
 	 * @param clientYawMax Max yaw, as displayed in debug screen
 	 * @return whether yaw is in bounds
 	 */
-	public static boolean yawInBounds(float bukkitYaw, final float clientYawMin, final float clientYawMax) {
+	public static boolean yawInBounds(float bukkitYaw,
+									  final float clientYawMin,
+									  final float clientYawMax) {
 		if (bukkitYaw < -180) {
 			bukkitYaw += 360;
 		} else if (bukkitYaw > 180) {
@@ -103,7 +114,7 @@ public class LocationUtils {
 		return bukkitYaw > clientYawMin && bukkitYaw < clientYawMax;
 	}
 
-	public static BlockFace getYawAsBlockFace(float yaw) {
+	public static @NonNull BlockFace getYawAsBlockFace(float yaw) {
 		if (yaw < 0) {
 			yaw += 360;
 		}

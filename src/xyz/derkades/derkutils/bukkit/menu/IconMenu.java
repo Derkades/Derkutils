@@ -1,9 +1,5 @@
 package xyz.derkades.derkutils.bukkit.menu;
 
-import java.util.Objects;
-import java.util.UUID;
-import java.util.function.Consumer;
-
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -19,20 +15,20 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import java.util.Objects;
+import java.util.UUID;
+import java.util.function.Consumer;
 
 public abstract class IconMenu implements Listener {
 
-	@NotNull
-	private Component name;
+	private @NonNull Component name;
 	private final int size;
-	@NotNull
-	private final UUID uuid;
-
-	@NotNull
-	private final Inventory inventory;
-	@NotNull
-	private final InventoryView view;
+	private final @NonNull UUID uuid;
+	private final @NonNull Inventory inventory;
+	private @Nullable InventoryView view;
 	private boolean closeEventCalled = false;
 
 	/**
@@ -43,15 +39,21 @@ public abstract class IconMenu implements Listener {
 	 * @param player Player that this menu will be opened for
 	 */
 	@SuppressWarnings("null")
-	public IconMenu(@NotNull final Plugin plugin, @NotNull final Component name, final int rows, @NotNull final Player player) {
+	public IconMenu(final @NonNull Plugin plugin,
+					final @NonNull Component name,
+					final int rows,
+					final @NonNull Player player) {
 		this(name, rows, player,
 				t -> t.runTaskTimer(plugin, 1, 1),
 				l -> Bukkit.getServer().getPluginManager().registerEvents(l, plugin));
 	}
 
 	@SuppressWarnings({ "null", "unused" })
-	public IconMenu(@NotNull final Component name, final int rows, @NotNull final Player player,
-					@NotNull final Consumer<BukkitRunnable> timerRegistrar, @NotNull final Consumer<Listener> listenerRegistrar) {
+	public IconMenu(final @NonNull Component name,
+					final int rows,
+					final @NonNull Player player,
+					final @NonNull Consumer<BukkitRunnable> timerRegistrar,
+					final @NonNull Consumer<Listener> listenerRegistrar) {
 		Objects.requireNonNull(name, "Name is null");
 		Objects.requireNonNull(player, "Player is null");
 		Objects.requireNonNull(listenerRegistrar, "Timer registrar is null");
@@ -62,11 +64,12 @@ public abstract class IconMenu implements Listener {
 		this.uuid = player.getUniqueId();
 
 		this.inventory = Bukkit.createInventory(player, this.size, this.name);
-		this.view = player.openInventory(this.inventory);
-		if (this.view == null) {
+		final InventoryView view = player.openInventory(this.inventory);
+		if (view == null) {
 			System.err.println("IconMenu: Failed to open inventory for " + player.getName() + ". Did a plugin cancel the event?");
 			return;
 		}
+		this.view = view;
 
 		listenerRegistrar.accept(this);
 		timerRegistrar.accept(new BukkitRunnable() {
@@ -116,7 +119,7 @@ public abstract class IconMenu implements Listener {
 	 * Sets the name of the menu. Has no effect after the menu has been opened.
 	 * @param name
 	 */
-	public void setName(@NotNull final Component name){
+	public void setName(@NonNull final Component name){
 		this.name = name;
 	}
 
@@ -153,7 +156,7 @@ public abstract class IconMenu implements Listener {
 		this.inventory.clear();
 	}
 
-	public @NotNull Inventory getInventory() {
+	public @NonNull Inventory getInventory() {
 		return this.inventory;
 	}
 

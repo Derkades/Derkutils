@@ -4,7 +4,7 @@ import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,40 +16,36 @@ import java.util.function.Consumer;
  */
 public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 
-	public NbtItemBuilder(@NotNull Material material) {
+	public NbtItemBuilder(final @NonNull Material material) {
 		super(material);
 	}
 	
-	public NbtItemBuilder(@NotNull ItemStack item) {
+	public NbtItemBuilder(final @NonNull ItemStack item) {
 		super(item);
 	}
 	
 	@Override
-	@NotNull
-	public NbtItemBuilder getInstance() {
+	public @NonNull NbtItemBuilder getInstance() {
 		return this;
 	}
-	
-	@NotNull
-	public NbtItemBuilder canDestroy(@NotNull final String... vanillaNamespacedNames) {
+
+	public @NonNull NbtItemBuilder canDestroy(final @NonNull String@NonNull... vanillaNamespacedNames) {
 		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
 		final NBTItem nbt = new NBTItem(this.item);
 		nbt.getStringList("CanDestroy").addAll(List.of(vanillaNamespacedNames));
 		this.item = nbt.getItem();
 		return this;
 	}
-	
-	@NotNull
-	public NbtItemBuilder canPlaceOn(@NotNull final String... vanillaNamespacedNames) {
+
+	public @NonNull NbtItemBuilder canPlaceOn(final @NonNull String@NonNull... vanillaNamespacedNames) {
 		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
 		final NBTItem nbt = new NBTItem(this.item);
 		nbt.getStringList("CanPlaceOn").addAll(List.of(vanillaNamespacedNames));
 		this.item = nbt.getItem();
 		return this;
 	}
-	
-	@NotNull
-	public NbtItemBuilder skullTexture(@NotNull final String texture) {
+
+	public @NonNull NbtItemBuilder skullTexture(final @NonNull String texture) {
 		Objects.requireNonNull(texture, "Texture string is null");
 		final NBTItem nbt = new NBTItem(this.item);
 		final NBTCompound skullOwner = nbt.addCompound("SkullOwner");
@@ -58,16 +54,15 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 		this.item = nbt.getItem();
 		return this;
 	}
-	
-	@NotNull
-	public NbtItemBuilder hideFlags(final int hideFlags) {
+
+	public @NonNull NbtItemBuilder hideFlags(final int hideFlags) {
 		final NBTItem nbt = new NBTItem(this.item);
 		nbt.setInteger("HideFlags", hideFlags);
 		this.item = nbt.getItem();
 		return this;
 	}
 
-	public NbtItemBuilder editNbt(Consumer<NBTItem> nbtModifier) {
+	public @NonNull NbtItemBuilder editNbt(final @NonNull Consumer<NBTItem> nbtModifier) {
 		final NBTItem nbt = new NBTItem(this.item);
 		nbtModifier.accept(nbt);
 		this.item = nbt.getItem();

@@ -1,7 +1,6 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.util.Objects;
-
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -14,26 +13,26 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
+import java.util.Objects;
 
 public class IllegalItems implements Listener {
 
 	private static final String NBT_KEY = "DerkutilsIllegalItem";
 
-	public IllegalItems(final Plugin plugin) {
+	public IllegalItems(final @NonNull Plugin plugin) {
 		Bukkit.getPluginManager().registerEvents(this, Objects.requireNonNull(plugin, "Plugin is null"));
 	}
 
-	public ItemStack setIllegal(@NotNull final ItemStack item, final boolean illegal) {
+	public ItemStack setIllegal(final @NonNull ItemStack item, final boolean illegal) {
 		Objects.requireNonNull(item, "Item is null");
 		final NBTItem nbt = new NBTItem(item);
 		nbt.setBoolean(NBT_KEY, illegal);
 		return nbt.getItem();
 	}
 
-	public boolean isIllegal(@NotNull final ItemStack item) {
+	public boolean isIllegal(final @NonNull ItemStack item) {
 		Objects.requireNonNull(item, "Item is null");
 		final NBTItem nbt = new NBTItem(item);
 		if (!nbt.hasNBTData()) {
@@ -50,7 +49,7 @@ public class IllegalItems implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onInventoryClick(final InventoryClickEvent event) {
+	public void onInventoryClick(final @NonNull InventoryClickEvent event) {
 		if (event.getClickedInventory() == null) { // when clicking outside of the inventory while it is open
 			return;
 		}
@@ -68,7 +67,7 @@ public class IllegalItems implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onItemDrop(final PlayerDropItemEvent event) {
+	public void onItemDrop(final @NonNull PlayerDropItemEvent event) {
 		final ItemStack item = event.getItemDrop().getItemStack();
 		if (this.isIllegal(item)) {
 //			event.getPlayer().sendMessage(ChatColor.RED + "You are not supposed to have this item");
