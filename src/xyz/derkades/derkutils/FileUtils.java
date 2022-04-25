@@ -43,7 +43,7 @@ public class FileUtils {
 	 * @param outputFile
 	 */
 	public static void copyOutOfJar(final @NonNull Class<?> clazz,
-									@NonNull final String pathToFileInJar,
+									final @NonNull String pathToFileInJar,
 									final @NonNull File outputFile) throws IOException {
 		Objects.requireNonNull(clazz, "Class is null");
 		Objects.requireNonNull(pathToFileInJar, "File path is null");

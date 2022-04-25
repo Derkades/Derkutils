@@ -13,9 +13,8 @@ import java.util.stream.Collectors;
 
 public class PlaceholderUtil {
 
-	@NonNull
-	public static String parsePlaceholders(@NonNull String string,
-										   final @NonNull Placeholder... placeholders) {
+	public static @NonNull String parsePlaceholders(@NonNull String string,
+													final @NonNull Placeholder... placeholders) {
 		Objects.requireNonNull(string, "input string must not be null");
 		Objects.requireNonNull(placeholders, "placeholders varargs is null");
 		for (final Placeholder p : placeholders) {
@@ -24,9 +23,8 @@ public class PlaceholderUtil {
 		return string;
 	}
 
-	@NonNull
-	public static String parsePlaceholders(@NonNull String string,
-										   final @NonNull Collection<Placeholder> placeholders) {
+	public static @NonNull String parsePlaceholders(@NonNull String string,
+													final @NonNull Collection<Placeholder> placeholders) {
 		Objects.requireNonNull(string, "input string must not be null");
 		Objects.requireNonNull(placeholders, "placeholders collection is null");
 		for (final Placeholder p : placeholders) {
@@ -35,9 +33,8 @@ public class PlaceholderUtil {
 		return string;
 	}
 
-	@NonNull
-	public static List<String> parsePlaceholders(@NonNull List<String> strings,
-												 final @NonNull Placeholder... placeholders) {
+	public static @NonNull List<String> parsePlaceholders(@NonNull List<String> strings,
+														  final @NonNull Placeholder... placeholders) {
 		Objects.requireNonNull(strings, "strings list is null");
 		Objects.requireNonNull(placeholders, "placeholders array is null");
 		for (final Placeholder p : placeholders) {
@@ -46,9 +43,8 @@ public class PlaceholderUtil {
 		return strings;
 	}
 
-	@NonNull
-	public static List<String> parsePlaceholders(@NonNull List<String> strings,
-												 final @NonNull Collection<Placeholder> placeholders) {
+	public static @NonNull List<String> parsePlaceholders(@NonNull List<String> strings,
+														  final @NonNull Collection<Placeholder> placeholders) {
 		Objects.requireNonNull(strings, "strings list is null");
 		Objects.requireNonNull(placeholders, "placeholders collection is null");
 		for (final Placeholder p : placeholders) {
@@ -57,10 +53,10 @@ public class PlaceholderUtil {
 		return strings;
 	}
 
-	@NonNull
-	public static String parsePapiPlaceholders(final @NonNull Player player,
-											   @NonNull String string,
-											   final @NonNull Placeholder... placeholders) {
+
+	public static @NonNull String parsePapiPlaceholders(final @NonNull Player player,
+														@NonNull String string,
+														final @NonNull Placeholder... placeholders) {
 		Objects.requireNonNull(player, "Player must not be null");
 		Objects.requireNonNull(string, "Input string must not be null");
 		Objects.requireNonNull(placeholders, "Placeholders varargs is null");
@@ -74,10 +70,10 @@ public class PlaceholderUtil {
 		return string;
 	}
 
-	@NonNull
-	public static String parsePapiPlaceholders(final @NonNull Player player,
-											   @NonNull String string,
-											   final @NonNull Collection<Placeholder> placeholders) {
+
+	public static @NonNull String parsePapiPlaceholders(final @NonNull Player player,
+														@NonNull String string,
+														final @NonNull Collection<Placeholder> placeholders) {
 		Objects.requireNonNull(player, "Player must not be null");
 		Objects.requireNonNull(string, "Input string must not be null");
 		Objects.requireNonNull(placeholders, "Placeholders collection is null");
@@ -91,10 +87,10 @@ public class PlaceholderUtil {
 		return string;
 	}
 
-	@NonNull
-	public static List<String> parsePapiPlaceholders(final @NonNull Player player,
-													 @NonNull List<String> strings,
-													 final @NonNull Placeholder... placeholders) {
+
+	public static @NonNull List<@NonNull String> parsePapiPlaceholders(final @NonNull Player player,
+																	   @NonNull List<@NonNull String> strings,
+																	   final @NonNull Placeholder... placeholders) {
 		Objects.requireNonNull(player, "Player must not be null");
 		Objects.requireNonNull(placeholders, "Placeholders array is null");
 
@@ -107,10 +103,10 @@ public class PlaceholderUtil {
 		return strings;
 	}
 
-	@NonNull
-	public static List<String> parsePapiPlaceholders(final @NonNull Player player,
-													 @NonNull List<String> strings,
-													 final @NonNull Collection<Placeholder> placeholders) {
+
+	public static @NonNull List<@NonNull String> parsePapiPlaceholders(final @NonNull Player player,
+																	   @NonNull List<@NonNull String> strings,
+																	   final @NonNull Collection<Placeholder> placeholders) {
 		Objects.requireNonNull(player, "Player must not be null");
 		Objects.requireNonNull(placeholders, "Placeholders collection is null");
 
@@ -145,8 +141,8 @@ public class PlaceholderUtil {
 	 * Parses PlaceholderAPI placeholders in a string if the plugin is installed
 	 * @return
 	 */
-	@NonNull
-	public static String parsePapiPlaceholders(final @NonNull Player player, final @NonNull String string) {
+	public static @NonNull String parsePapiPlaceholders(final @NonNull Player player,
+														final @NonNull String string) {
 		Objects.requireNonNull(player, "Player must not be null");
 		Objects.requireNonNull(string, "Provided string must not be null");
 

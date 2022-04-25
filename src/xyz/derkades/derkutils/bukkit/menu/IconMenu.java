@@ -119,7 +119,7 @@ public abstract class IconMenu implements Listener {
 	 * Sets the name of the menu. Has no effect after the menu has been opened.
 	 * @param name
 	 */
-	public void setName(@NonNull final Component name){
+	public void setName(final @NonNull Component name){
 		this.name = name;
 	}
 

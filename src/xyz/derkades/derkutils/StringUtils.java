@@ -47,8 +47,7 @@ public class StringUtils {
 	 * @param string
 	 * @return
 	 */
-	@NonNull
-	public static String addDotIfNecessary(final @NonNull String string) {
+	public static @NonNull String addDotIfNecessary(final @NonNull String string) {
 		Objects.requireNonNull(string, "Provided string is null");
 
 		if (string.endsWith(".") || string.endsWith("?") || string.endsWith("!")){
@@ -64,8 +63,7 @@ public class StringUtils {
 	 * @param append
 	 * @return
 	 */
-	@NonNull
-	public static String appendIfNotPresent(final @NonNull String string,
+	public static @NonNull String appendIfNotPresent(final @NonNull String string,
 											final @NonNull String append) {
 		Objects.requireNonNull(string, "Provided string is null");
 		Objects.requireNonNull(append, "Append string is null");

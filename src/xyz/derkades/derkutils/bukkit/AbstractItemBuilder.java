@@ -25,11 +25,11 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
 	protected @NonNull ItemStack item;
 	
-	public AbstractItemBuilder(@NonNull final Material material) {
+	public AbstractItemBuilder(final @NonNull Material material) {
 		this.item = new ItemStack(Objects.requireNonNull(material, "Material is null"));
 	}
 
-	public AbstractItemBuilder(@NonNull final ItemStack item) {
+	public AbstractItemBuilder(final @NonNull ItemStack item) {
 		this.item = Objects.requireNonNull(item, "item is null");
 	}
 
@@ -60,7 +60,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public @NonNull T lore(@Nullable final List<@NonNull Component> lore) {
+	public @NonNull T lore(final @Nullable List<@NonNull Component> lore) {
 		if (lore == null) {
 			item.editMeta(meta -> meta.lore(null));
 		} else {
@@ -69,14 +69,14 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public @NonNull T skullOwner(@Nullable final OfflinePlayer player) {
+	public @NonNull T skullOwner(final @Nullable OfflinePlayer player) {
 		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
 		meta.setOwningPlayer(player);
 		this.item.setItemMeta(meta);
 		return this.getInstance();
 	}
 
-	public @NonNull T leatherArmorColor(@NonNull final Color color) {
+	public @NonNull T leatherArmorColor(final @NonNull Color color) {
 		Objects.requireNonNull(color, "Color is null");
 		final LeatherArmorMeta meta = (LeatherArmorMeta) this.item.getItemMeta();
 		meta.setColor(color);
@@ -84,7 +84,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public @NonNull T enchant(@NonNull final Enchantment type) {
+	public @NonNull T enchant(final @NonNull Enchantment type) {
 		return enchant(type, 1);
 	}
 
@@ -105,22 +105,20 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@NonNull
-	public T type(final @Nullable Material type) {
+
+	public @NonNull T type(final @Nullable Material type) {
 		this.item.setType(type == null ? Material.AIR : type);
 		return this.getInstance();
 	}
 
-	@NonNull
-	public T unbreakable() {
+	public @NonNull T unbreakable() {
 		final ItemMeta meta = this.item.getItemMeta();
 		meta.setUnbreakable(true);
 		this.item.setItemMeta(meta);
 		return this.getInstance();
 	}
 
-	@NonNull
-	public T damage(final int damage) {
+	public @NonNull T damage(final int damage) {
 		final Damageable damageable = (Damageable) this.item.getItemMeta();
 		damageable.setDamage(damage);
 		this.item.setItemMeta(damageable);
@@ -174,7 +172,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return addHideFlags(itemFlags);
 	}
 
-	public T addHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
+	public @NonNull T addHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
 		this.item.editMeta(meta -> {
 			if (meta == null) {
 				throw new IllegalStateException("Item meta is null");
@@ -184,7 +182,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public T replaceHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
+	public @NonNull T replaceHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
 		this.item.editMeta(meta -> {
 			if (meta == null) {
 				throw new IllegalStateException("Item meta is null");
@@ -195,7 +193,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public T removeHideFlags() {
+	public @NonNull T removeHideFlags() {
 		this.item.editMeta(meta -> {
 			if (meta == null) {
 				throw new IllegalStateException("Item meta is null");
@@ -205,11 +203,11 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public T hideFlags() {
+	public @NonNull T hideFlags() {
 		return this.hideFlags(ItemFlag.values());
 	}
 
-	public T hideFlags(boolean hideAllFlags) {
+	public @NonNull T hideFlags(boolean hideAllFlags) {
 		if (hideAllFlags) {
 			return this.hideFlags(ItemFlag.values());
 		} else {
@@ -217,8 +215,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		}
 	}
 
-	@NonNull
-	public ItemStack create(){
+	public @NonNull ItemStack create(){
 		return this.item;
 	}
 
