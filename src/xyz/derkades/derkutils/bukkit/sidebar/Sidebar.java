@@ -1,11 +1,5 @@
 package xyz.derkades.derkutils.bukkit.sidebar;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -17,7 +11,9 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.*;
 
 public class Sidebar implements ConfigurationSerializable {
 
@@ -66,7 +62,7 @@ public class Sidebar implements ConfigurationSerializable {
 	}
 
 	@Override
-	public @NotNull Map<String, Object> serialize() {
+	public @NonNull Map<String, Object> serialize() {
 		final Map<String, Object> map = new HashMap<>();
 
 		map.put("entries", this.entries);

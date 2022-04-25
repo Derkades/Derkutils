@@ -1,6 +1,6 @@
 package xyz.derkades.derkutils;
 
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.*;
 import java.net.URL;
@@ -14,8 +14,7 @@ public class FileUtils {
 	 * @param file
 	 * @return File name without extension. For extensions like .tar.gz only .gz will be returned.
 	 */
-	@NotNull
-	public static String getFileName(@NotNull final File file){
+	public static @NonNull String getFileName(final @NonNull File file){
 		String name = file.getName();
 		final int pos = name.lastIndexOf(".");
 		if (pos > 0) {
@@ -27,7 +26,9 @@ public class FileUtils {
 	/**
 	 * Adds a string to the end of a file
 	 */
-	public static void appendStringToFile(@NotNull final File file, @NotNull final String string){
+	@Deprecated
+	public static void appendStringToFile(final @NonNull File file,
+										  final @NonNull String string){
 		try (final Writer writer = new BufferedWriter(new FileWriter(file, true))){
 			writer.append(string);
 		} catch (final IOException e) {
@@ -41,8 +42,9 @@ public class FileUtils {
 	 * @param pathToFileInJar
 	 * @param outputFile
 	 */
-	public static void copyOutOfJar(@NotNull final Class<?> clazz, @NotNull final String pathToFileInJar,
-									@NotNull final File outputFile) throws IOException {
+	public static void copyOutOfJar(final @NonNull Class<?> clazz,
+									final @NonNull String pathToFileInJar,
+									final @NonNull File outputFile) throws IOException {
 		Objects.requireNonNull(clazz, "Class is null");
 		Objects.requireNonNull(pathToFileInJar, "File path is null");
 		Objects.requireNonNull(outputFile, "Output file is null");
@@ -61,14 +63,15 @@ public class FileUtils {
 	 * @param pathToFileInJar
 	 * @param outputFile
 	 */
-	public static void copyOutOfJar(@NotNull final Class<?> clazz, @NotNull final String pathToFileInJar,
-									@NotNull final Path outputFile) throws IOException {
+	public static void copyOutOfJar(final @NonNull Class<?> clazz,
+									final @NonNull String pathToFileInJar,
+									final @NonNull Path outputFile) throws IOException {
 		Objects.requireNonNull(clazz, "Class is null");
 		Objects.requireNonNull(pathToFileInJar, "File path is null");
 		Objects.requireNonNull(outputFile, "Output file is null");
 
 		if (!Files.exists(outputFile)) {
-			try (InputStream in = Objects.requireNonNull(clazz.getResourceAsStream(pathToFileInJar),
+			try (InputStream in = Objects.requireNonNull(clazz.getClassLoader().getResourceAsStream(pathToFileInJar),
 					"path does not exist in jar: " + pathToFileInJar)) {
 				Files.copy(in, outputFile);
 			}

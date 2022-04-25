@@ -1,30 +1,29 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.util.Objects;
-
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.Objects;
 
 public class ItemBuilder extends AbstractItemBuilder<ItemBuilder> {
 	
-	public ItemBuilder(@NotNull Material material) {
+	public ItemBuilder(final @NonNull Material material) {
 		super(material);
 	}
 	
-	public ItemBuilder(@NotNull ItemStack item) {
+	public ItemBuilder(final @NonNull ItemStack item) {
 		super(item);
 	}
 	
 	@Deprecated
-	public ItemBuilder(@NotNull final OfflinePlayer skullOwner) {
+	public ItemBuilder(final @NonNull OfflinePlayer skullOwner) {
 		super(new ItemBuilder(Material.PLAYER_HEAD).skullOwner(Objects.requireNonNull(skullOwner, "Skull owner is null")).create());
 	}
 
 	@Override
-	@NotNull 
-	public ItemBuilder getInstance() {
+	public @NonNull ItemBuilder getInstance() {
 		return this;
 	}
 

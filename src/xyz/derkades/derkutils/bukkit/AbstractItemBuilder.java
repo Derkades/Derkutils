@@ -1,8 +1,6 @@
 package xyz.derkades.derkutils.bukkit;
 
-import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -11,8 +9,8 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,39 +21,34 @@ import java.util.stream.Collectors;
 
 public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
-	@NotNull
-	protected ItemStack item;
+	protected @NonNull ItemStack item;
 
-	public AbstractItemBuilder(@NotNull final Material material) {
+	public AbstractItemBuilder(final @NonNull Material material) {
 		this.item = new ItemStack(Objects.requireNonNull(material, "Material is null"));
 	}
 
-	public AbstractItemBuilder(@NotNull final ItemStack item) {
+	public AbstractItemBuilder(final @NonNull ItemStack item) {
 		this.item = Objects.requireNonNull(item, "item is null");
 	}
 
-	@NotNull
-	public abstract T getInstance();
+	public abstract @NonNull T getInstance();
 
-	@NotNull
-	public T amount(final int amount) {
+
+	public @NonNull T amount(final int amount) {
 		this.item.setAmount(amount);
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T name(@Nullable final String name) {
+	public @NonNull T name(final @Nullable String name) {
 		final ItemMeta meta = this.item.getItemMeta();
 		meta.setDisplayName(name);
 		this.item.setItemMeta(meta);
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T coloredName(@Nullable final String name){
+	public @NonNull T coloredName(final @Nullable String name){
 		final ItemMeta meta = this.item.getItemMeta();
 		if (name == null) {
-
 			meta.setDisplayName(null);
 		} else {
 			meta.setDisplayName(Colors.parseColors(name));
@@ -64,8 +57,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T lore(@Nullable final String... lore){
+	public @NonNull T lore(@Nullable final String... lore){
 		final ItemMeta meta = this.item.getItemMeta();
 		if (lore == null) {
 			meta.setLore(null);
@@ -76,8 +68,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T coloredLore(@Nullable final String... lore){
+	public @NonNull T coloredLore(final @Nullable String... lore){
 		final ItemMeta meta = this.item.getItemMeta();
 		if (lore == null) {
 			meta.setLore(null);
@@ -88,16 +79,14 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T lore(@Nullable final List<String> lore){
+	public @NonNull T lore(final @Nullable List<String> lore){
 		final ItemMeta meta = this.item.getItemMeta();
 		meta.setLore(lore);
 		this.item.setItemMeta(meta);
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T coloredLore(@Nullable final List<String> lore){
+	public @NonNull T coloredLore(final @Nullable List<String> lore){
 		final ItemMeta meta = this.item.getItemMeta();
 		if (lore == null) {
 			meta.setLore(null);
@@ -108,16 +97,14 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T skullOwner(@Nullable final OfflinePlayer player) {
+	public @NonNull T skullOwner(final @Nullable OfflinePlayer player) {
 		final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
 		meta.setOwningPlayer(player);
 		this.item.setItemMeta(meta);
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T leatherArmorColor(@NotNull final Color color) {
+	public @NonNull T leatherArmorColor(final @NonNull Color color) {
 		Objects.requireNonNull(color, "Color is null");
 		final LeatherArmorMeta meta = (LeatherArmorMeta) this.item.getItemMeta();
 		meta.setColor(color);
@@ -125,47 +112,41 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T enchant(@NotNull final Enchantment type) {
+	public @NonNull T enchant(final @NonNull Enchantment type) {
 		return enchant(type, 1);
 	}
 
-	@NotNull
-	public T enchant(@NotNull final Enchantment type, final int level) {
+	public @NonNull T enchant(final @NonNull Enchantment type, final int level) {
 		Objects.requireNonNull(type, "Enchantment type is null");
 		this.item.addEnchantment(type, level);
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T unsafeEnchant(@NotNull final Enchantment type, final int level) {
+	public @NonNull T unsafeEnchant(final @NonNull Enchantment type, final int level) {
 		Objects.requireNonNull(type, "Enchantment type is null");
 		this.item.addUnsafeEnchantment(type, level);
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T material(final Material material) {
+	public @NonNull T material(final Material material) {
 		this.item.setType(material == null ? Material.AIR : material);
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T type(@Nullable final Material type) {
+
+	public @NonNull T type(final @Nullable Material type) {
 		this.item.setType(type == null ? Material.AIR : type);
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T unbreakable() {
+	public @NonNull T unbreakable() {
 		final ItemMeta meta = this.item.getItemMeta();
 		meta.setUnbreakable(true);
 		this.item.setItemMeta(meta);
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T damage(final int damage) {
+	public @NonNull T damage(final int damage) {
 		ItemMeta meta = this.item.getItemMeta();
 		if (meta != null) {
 			((Damageable) meta).setDamage(damage);
@@ -174,8 +155,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T namePlaceholder(@NotNull final String key, @NotNull final String value) {
+	public @NonNull T namePlaceholder(final @NonNull String key, final @NonNull String value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
@@ -186,8 +166,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.name(this.item.getItemMeta().getDisplayName().replace(key, value));
 	}
 
-	@NotNull
-	public T namePlaceholders(@NotNull final Map<String, String> placeholders) {
+	public @NonNull T namePlaceholders(final @NonNull Map<String, String> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
 		if (this.item.getItemMeta() == null) {
@@ -198,8 +177,8 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T namePlaceholderOptional(@NotNull final String key, @NotNull final Supplier<String> value) {
+	public @NonNull T namePlaceholderOptional(final @NonNull String key,
+											  final @NonNull Supplier<String> value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
@@ -215,8 +194,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		}
 	}
 
-	@NotNull
-	public T namePlaceholdersOptional(@NotNull final Map<String, Supplier<String>> placeholders) {
+	public @NonNull T namePlaceholdersOptional(final @NonNull Map<String, Supplier<String>> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
 		if (this.item.getItemMeta() == null) {
@@ -227,8 +205,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T lorePlaceholder(@NotNull final String key, @NotNull final String value) {
+	public @NonNull T lorePlaceholder(final @NonNull String key, final @NonNull String value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
@@ -239,8 +216,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.lore(this.item.getItemMeta().getLore().stream().map((s) -> s.replace(key, value)).collect(Collectors.toList()));
 	}
 
-	@NotNull
-	public T lorePlaceholders(@NotNull final Map<String, String> placeholders) {
+	public @NonNull T lorePlaceholders(final @NonNull Map<String, String> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
@@ -251,8 +227,8 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@NotNull
-	public T lorePlaceholderOptional(@NotNull final String key, @NotNull final Supplier<String> value) {
+	public @NonNull T lorePlaceholderOptional(final @NonNull String key,
+											  final @NonNull Supplier<String> value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
@@ -269,8 +245,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		}).collect(Collectors.toList()));
 	}
 
-	@NotNull
-	public T lorePlaceholdersOptional(@NotNull final Map<String, Supplier<String>> placeholders) {
+	public @NonNull T lorePlaceholdersOptional(final @NonNull Map<String, Supplier<String>> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
@@ -282,11 +257,11 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	@Deprecated
-	public T hideFlags(@NotNull ItemFlag @NotNull... itemFlags) {
+	public T hideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
 		return addHideFlags(itemFlags);
 	}
 
-	public T addHideFlags(@NotNull ItemFlag @NotNull... itemFlags) {
+	public @NonNull T addHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
 		ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
@@ -296,7 +271,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public T replaceHideFlags(@NotNull ItemFlag @NotNull... itemFlags) {
+	public @NonNull T replaceHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
 		ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
@@ -317,11 +292,11 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public T hideFlags() {
+	public @NonNull T hideFlags() {
 		return this.hideFlags(ItemFlag.values());
 	}
 
-	public T hideFlags(boolean hideAllFlags) {
+	public @NonNull T hideFlags(boolean hideAllFlags) {
 		if (hideAllFlags) {
 			return this.hideFlags(ItemFlag.values());
 		} else {
@@ -329,38 +304,35 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		}
 	}
 
-	@NotNull
-	public T placeholder(@NotNull final String key, @NotNull final String value) {
+	public @NonNull T placeholder(final @NonNull String key,
+								  final @NonNull String value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
 		return this.namePlaceholder(key, value).lorePlaceholder(key, value);
 	}
 
-	@NotNull
-	public T placeholders(@NotNull final Map<String, String> placeholders) {
+	public @NonNull T placeholders(final @NonNull Map<String, String> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
 		return this.namePlaceholders(placeholders).lorePlaceholders(placeholders);
 	}
 
-	@NotNull
-	public T placeholderOptional(@NotNull final String key, final Supplier<String> value) {
+	public @NonNull T placeholderOptional(final @NonNull String key,
+								 final Supplier<String> value) {
 		Objects.requireNonNull(key, "Placeholder key is null");
 		Objects.requireNonNull(value, "Placeholder value is null");
 
 		return this.namePlaceholderOptional(key, value).lorePlaceholderOptional(key, value);
 	}
 
-	@NotNull
-	public T placeholdersOptional(@NotNull final Map<String, Supplier<String>> placeholders) {
+	public @NonNull T placeholdersOptional(final @NonNull Map<String, Supplier<String>> placeholders) {
 		Objects.requireNonNull(placeholders, "Placeholder map is null");
 
 		return this.namePlaceholdersOptional(placeholders).lorePlaceholdersOptional(placeholders);
 	}
 
-	@NotNull
-	public T lorePapi(@NotNull final Player player) {
+	public @NonNull T lorePapi(final @NonNull Player player) {
 		if (this.item.getItemMeta() == null || this.item.getItemMeta().getLore() == null) {
 			return this.getInstance();
 		}
@@ -368,8 +340,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.lore(this.item.getItemMeta().getLore().stream().map((s) -> PlaceholderUtil.parsePapiPlaceholders(player, s)).collect(Collectors.toList()));
 	}
 
-	@NotNull
-	public T namePapi(@NotNull final Player player) {
+	public @NonNull T namePapi(final @NonNull Player player) {
 		if (this.item.getItemMeta() == null) {
 			return this.getInstance();
 		}
@@ -377,15 +348,13 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.name(PlaceholderUtil.parsePapiPlaceholders(player, this.item.getItemMeta().getDisplayName()));
 	}
 
-	@NotNull
-	public T papi(@NotNull final Player player) {
+	public @NonNull T papi(final @NonNull Player player) {
 		Objects.requireNonNull(player, "Player is null");
 		this.namePapi(player);
 		return this.lorePapi(player);
 	}
 
-	@NotNull
-	public ItemStack create(){
+	public @NonNull ItemStack create(){
 		return this.item;
 	}
 
