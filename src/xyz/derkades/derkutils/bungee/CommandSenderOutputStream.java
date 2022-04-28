@@ -1,18 +1,18 @@
 package xyz.derkades.derkutils.bungee;
 
+import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
-import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.chat.TextComponent;
-import org.jetbrains.annotations.NotNull;
-
 public class CommandSenderOutputStream extends OutputStream {
 
-	private final @NotNull CommandSender sender;
-	private final @NotNull StringBuilder buffer;
+	private final @NonNull CommandSender sender;
+	private final @NonNull StringBuilder buffer;
 
-	public CommandSenderOutputStream(final @NotNull CommandSender sender) {
+	public CommandSenderOutputStream(final @NonNull CommandSender sender) {
 		this.sender = sender;
 		this.buffer = new StringBuilder();
 	}

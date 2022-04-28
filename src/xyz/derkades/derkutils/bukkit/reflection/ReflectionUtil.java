@@ -1,5 +1,13 @@
 package xyz.derkades.derkutils.bukkit.reflection;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -7,14 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandMap;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 public class ReflectionUtil {
 
@@ -118,7 +118,7 @@ public class ReflectionUtil {
 	}
 
 	@SuppressWarnings("null")
-	@NotNull
+	@NonNull
 	public static CommandMap getCommandMap() {
 		try {
 			final Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
@@ -129,12 +129,12 @@ public class ReflectionUtil {
 		}
 	}
 
-	public static void registerCommand(@NotNull final String name, @NotNull final Command command) {
+	public static void registerCommand(final @NonNull String name, final @NonNull Command command) {
 		getCommandMap().register(name, command);
 	}
 
 	@SuppressWarnings({ "unchecked", "null" })
-	@NotNull
+	@NonNull
 	public static Map<String, Command> getKnownCommands() {
 		try {
 			final CommandMap map = getCommandMap();

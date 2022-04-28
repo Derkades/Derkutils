@@ -1,6 +1,10 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.io.FileReader;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -15,17 +19,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.jetbrains.annotations.NotNull;
-
 public class HeadTextures {
 
 	private static final Gson GSON = new Gson();
 	private static final Map<String, String> HEAD_TEXTURE_CACHE = new HashMap<>();
 
-	public static Optional<String> getHeadTexture(final @NotNull UUID uuid) {
+	public static Optional<String> getHeadTexture(final @NonNull UUID uuid) {
 		synchronized (HEAD_TEXTURE_CACHE) {
 			if (HEAD_TEXTURE_CACHE.containsKey(uuid.toString())) {
 				return Optional.of(HEAD_TEXTURE_CACHE.get(uuid.toString()));
@@ -50,13 +49,13 @@ public class HeadTextures {
 		}
 	}
 
-	public static void saveCacheToFile(final @NotNull Path path) throws IOException {
+	public static void saveCacheToFile(final @NonNull Path path) throws IOException {
 		final String json = GSON.toJson(HEAD_TEXTURE_CACHE);
 		Files.write(path, json.getBytes(StandardCharsets.UTF_8),
 				StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 	}
 
-	public static int readFileToCache(final @NotNull Path path) throws IOException {
+	public static int readFileToCache(final @NonNull Path path) throws IOException {
 		try (Reader reader = Files.newBufferedReader(path)) {
 			@SuppressWarnings("unchecked")
 			final Map<String, String> map = GSON.fromJson(reader, Map.class);

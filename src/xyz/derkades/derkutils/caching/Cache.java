@@ -1,12 +1,8 @@
 package xyz.derkades.derkutils.caching;
 
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Cache {
@@ -21,7 +17,7 @@ public class Cache {
 	 * @param object
 	 * @param timeout In seconds. If set to <= 0, cache indefinitely
 	 */
-	public static void set(final @NotNull String identifier, final @NotNull Object object, long timeout) {
+	public static void set(final @NonNull String identifier, final @NonNull Object object, long timeout) {
 		Objects.requireNonNull(identifier, "identifier is null");
 		Objects.requireNonNull(object, "object to cache is null");
 
@@ -41,7 +37,7 @@ public class Cache {
 		set(identifier, object, DEFAULT_CACHE_DURATION);
 	}
 
-	public static <T> Optional<T> get(final @NotNull String identifier) {
+	public static <T> Optional<T> get(final @NonNull String identifier) {
 		Objects.requireNonNull(identifier, "identifier is null");
 
 		final CacheObject cache = CACHE_OBJECT_MAP.get(identifier);
@@ -60,7 +56,7 @@ public class Cache {
 		}
 	}
 
-	public static void remove(final @NotNull String identifier) {
+	public static void remove(final @NonNull String identifier) {
 		CACHE_OBJECT_MAP.remove(Objects.requireNonNull(identifier, "identifier is null"));
 	}
 

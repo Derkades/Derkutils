@@ -4,31 +4,30 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
  * Event fired when a player clicks on an item in an {@link IconMenu}.
  */
 public class OptionClickEvent {
 
-	@NotNull
-	private final Player player;
+	private final @NonNull Player player;
 	private final int position;
-	@Nullable
-	private final ItemStack item;
-	@NotNull
-	private final ClickType click;
+	private final @Nullable ItemStack item;
+	private final @NonNull ClickType click;
 
-	OptionClickEvent(@NotNull final Player player, final int position, @Nullable final ItemStack item, @NotNull final ClickType click) {
+	OptionClickEvent(final @NonNull Player player,
+					 final int position,
+					 final @Nullable ItemStack item,
+					 final @NonNull ClickType click) {
 		this.player = player;
 		this.position = position;
 		this.item = item;
 		this.click = click;
 	}
 
-	@NotNull
-	public Player getPlayer() {
+	public @NonNull Player getPlayer() {
 		return this.player;
 	}
 
@@ -42,8 +41,7 @@ public class OptionClickEvent {
 	/**
 	 * @return Display name of the item clicked.
 	 */
-	@Nullable
-	public String getName() {
+	public @Nullable String getName() {
 		if (this.item == null) {
 			return null;
 		}
@@ -55,13 +53,11 @@ public class OptionClickEvent {
 	/**
 	 * @return The clicked item stack
 	 */
-	@Nullable
-	public ItemStack getItemStack() {
+	public @Nullable ItemStack getItemStack() {
 		return this.item;
 	}
 
-	@NotNull
-	public ClickType getClickType() {
+	public @NonNull ClickType getClickType() {
 		return this.click;
 	}
 

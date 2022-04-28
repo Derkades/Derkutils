@@ -2,16 +2,9 @@ package xyz.derkades.derkutils;
 
 import com.google.common.base.Preconditions;
 import io.netty.util.internal.ThreadLocalRandom;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -173,7 +166,7 @@ public class ListUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T[] combineArrays(final T[]... arrays) {
+	public static <T> @NonNull T @NonNull[] combineArrays(final @NonNull T@NonNull []... arrays) {
 		final List<T> list = new ArrayList<>(sizeSum(arrays));
 		for (final T[] array : arrays) {
 			list.addAll(Arrays.asList(array));
@@ -188,7 +181,7 @@ public class ListUtils {
 	 * @throws IllegalArgumentException collection is not empty and size is not == 1
 	 * @return
 	 */
-	public static <T> Optional<T> toOptional(final Collection<T> collection) {
+	public static <T> @NonNull Optional<@NonNull T> toOptional(final @NonNull Collection<@NonNull T> collection) {
 		if (collection.isEmpty()) {
 			return Optional.empty();
 		}
@@ -199,18 +192,17 @@ public class ListUtils {
 		return Optional.of(collection.iterator().next());
 	}
 
-	public static <T> T choice(@NotNull final Set<T> set) {
+	public static <T> @NonNull T choice(final @NonNull Set<@NonNull T> set) {
 		Preconditions.checkNotNull(set, "Set is null");
 		Preconditions.checkArgument(set.size() > 0, "Set must contain at least one element");
 	    return set.stream().skip(ThreadLocalRandom.current().nextInt(set.size())).findFirst().orElseThrow(IllegalStateException::new);
 	}
 
-	public static <T> T choice(@NotNull final List<T> list) {
+	public static <T> @NonNull T choice(final @NonNull List<@NonNull T> list) {
 		return list.get(ThreadLocalRandom.current().nextInt(list.size()));
 	}
 
-	@NotNull
-	public static <T> T choice(@NotNull final T[] array) {
+	public static <T> @NonNull T choice(final @NonNull T@NonNull[] array) {
 		return array[ThreadLocalRandom.current().nextInt(array.length)];
 	}
 

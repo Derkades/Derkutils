@@ -2,7 +2,7 @@ package xyz.derkades.derkutils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.jetbrains.annotations.NotNull;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
@@ -24,8 +24,8 @@ public class Hastebin {
 	 * @return key (full url will be https://hastebin.com/key or https://hastebin.com/raw/key)
 	 * @throws IOException
 	 */
-	@NotNull
-	public static String createPaste(@NotNull final String content, @NotNull final String baseUrl) throws IOException {
+	public static @NonNull String createPaste(final @NonNull String content,
+											  final @NonNull String baseUrl) throws IOException {
 		Objects.requireNonNull(content, "Content is null");
 		Objects.requireNonNull(baseUrl, "Base url is null");
 
@@ -39,8 +39,8 @@ public class Hastebin {
 	 * @return key (full url will be https://hastebin.com/key or https://hastebin.com/raw/key)
 	 * @throws IOException
 	 */
-	@NotNull
-	public static String createPaste(final byte[] content, @NotNull final String baseUrl) throws IOException {
+	public static @NonNull String createPaste(final byte @NonNull[] content,
+											  final @NonNull String baseUrl) throws IOException {
 		Objects.requireNonNull(content, "Content is null");
 		Objects.requireNonNull(baseUrl, "Base url is null");
 

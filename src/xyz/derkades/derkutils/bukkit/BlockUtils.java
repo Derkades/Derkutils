@@ -5,15 +5,15 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Objects;
 import java.util.function.Function;
 
 public class BlockUtils {
 
-	public static boolean atSameLocation(final Block a, final Block b) {
+	public static boolean atSameLocation(final @NonNull Block a, final @NonNull Block b) {
 		Objects.requireNonNull(a, "Block A is null");
 		Objects.requireNonNull(b, "Block B is null");
 		return (a.getX() == b.getX() &&
@@ -22,10 +22,12 @@ public class BlockUtils {
 				a.getWorld().getName().equals(b.getWorld().getName()));	}
 
 
-	public static void fillArea(@NotNull final World world,
-			final int x1, final int y1, final int z1,
-			final int x2, final int y2, final int z2,
-			@NotNull final Material material, @Nullable final Function<Block, Boolean> blockFilter, final boolean applyPhysics) {
+	public static void fillArea(final @NonNull World world,
+								final int x1, final int y1, final int z1,
+								final int x2, final int y2, final int z2,
+								final @NonNull Material material,
+								final @Nullable Function<Block, Boolean> blockFilter,
+								final boolean applyPhysics) {
 
 		Objects.requireNonNull(world, "World is null");
 		Objects.requireNonNull(material, "Material is null");
@@ -52,33 +54,38 @@ public class BlockUtils {
 		}
 	}
 
-	public static void fillArea(@NotNull final World world,
-			final int x1, final int y1, final int z1,
-			final int x2, final int y2, final int z2,
-			@NotNull final Material material, final boolean applyPhysics) {
+	public static void fillArea(final @NonNull World world,
+								final int x1, final int y1, final int z1,
+								final int x2, final int y2, final int z2,
+								final @NonNull Material material,
+								final boolean applyPhysics) {
 
 		fillArea(world, x1, y1, z1, x2, y2, z2, material, null, applyPhysics);
 	}
 
-	public static void fillArea(@NotNull final World world,
-			final int x1, final int y1, final int z1,
-			final int x2, final int y2, final int z2,
-			@NotNull final Material material) {
+	public static void fillArea(final @NonNull World world,
+								final int x1, final int y1, final int z1,
+								final int x2, final int y2, final int z2,
+								final @NonNull Material material) {
 
 		fillArea(world, x1, y1, z1, x2, y2, z2, material, null, true);
 	}
 
-	public static void fillArea(@NotNull final World world,
-			final int x1, final int y1, final int z1,
-			final int x2, final int y2, final int z2,
-			@NotNull final Material material, @Nullable final Function<Block, Boolean> blockFilter) {
+	public static void fillArea(final @NonNull World world,
+								final int x1, final int y1, final int z1,
+								final int x2, final int y2, final int z2,
+								final @NonNull Material material,
+								final @Nullable Function<Block, Boolean> blockFilter) {
 
 		fillArea(world, x1, y1, z1, x2, y2, z2, material, blockFilter, true);
 	}
 
 	@SuppressWarnings("null")
-	public static void fillArea(@NotNull final Location a, @NotNull final Location b, @NotNull final Material material,
-			@Nullable final Function<Block, Boolean> blockFilter, final boolean applyPhysics) {
+	public static void fillArea(final @NonNull Location a,
+								final @NonNull Location b,
+								final @NonNull Material material,
+								final @Nullable Function<Block, Boolean> blockFilter,
+								final boolean applyPhysics) {
 		final World world = a.getWorld();
 		Objects.requireNonNull(a, "Location a is null");
 		Objects.requireNonNull(world, "Location a is not in any world");
@@ -90,20 +97,29 @@ public class BlockUtils {
 				material, blockFilter, applyPhysics);
 	}
 
-	public static void fillArea(@NotNull final Location a, @NotNull final Location b, @NotNull final Material material,
-			final Function<Block, Boolean> blockFilter) {
+	public static void fillArea(final @NonNull Location a,
+								final @NonNull Location b,
+								final @NonNull Material material,
+								final Function<Block, Boolean> blockFilter) {
 		fillArea(a, b, material, blockFilter, true);
 	}
 
-	public static void fillArea(@NotNull final Location a, @NotNull final Location b, @NotNull final Material material, final boolean applyPhysics) {
+	public static void fillArea(final @NonNull Location a,
+								final @NonNull Location b,
+								final @NonNull Material material,
+								final boolean applyPhysics) {
 		fillArea(a, b, material, null, applyPhysics);
 	}
 
-	public static void fillArea(@NotNull final Location a, @NotNull final Location b, @NotNull final Material material) {
+	public static void fillArea(final @NonNull Location a,
+								final @NonNull Location b,
+								final @NonNull Material material) {
 		fillArea(a, b, material, null, true);
 	}
 
-	public static void replaceBlocks(@NotNull final Material original, @NotNull final Material newMaterial, final Block... blocks) {
+	public static void replaceBlocks(final @NonNull Material original,
+									 final @NonNull Material newMaterial,
+									 final @NonNull Block @NonNull... blocks) {
 		Objects.requireNonNull(original, "Original material is null");
 		Objects.requireNonNull(newMaterial, "New material is null");
 		Objects.requireNonNull(blocks, "Blocks array is null");
