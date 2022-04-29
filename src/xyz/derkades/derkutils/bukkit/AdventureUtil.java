@@ -1,8 +1,10 @@
 package xyz.derkades.derkutils.bukkit;
 
+import io.netty.util.internal.ThreadLocalRandom;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.util.HSVLike;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.derkades.derkutils.Colors;
 
@@ -40,6 +42,23 @@ public class AdventureUtil {
 			if (f > 1.0f) {
 				f = 1.0f;
 			}
+		}
+
+		return b.asComponent();
+	}
+
+	public static @NonNull Component gradientHsv(final @NonNull String string,
+												 final float hueRange,
+												 final float saturation,
+												 final float value) {
+		final float hueStart = ThreadLocalRandom.current().nextFloat();
+
+		final TextComponent.Builder b = text();
+		for (int i = 0; i < string.length(); i++) {
+			final char c = string.charAt(i);
+			final float hMult = (float) i / string.length();
+			final float hue = ((1 - hMult) * hueStart + hMult * (hueStart + hueRange)) % 1;
+			b.append(text(c, TextColor.color(HSVLike.of(hue, saturation, value))));
 		}
 
 		return b.asComponent();
