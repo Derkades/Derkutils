@@ -36,31 +36,35 @@ public class OptionalOptional<T> {
 		return this.value != null;
 	}
 
-	public @NonNull T getOrThrow() {
-		final T value = this.getNullable();
+	public @NonNull T getValueOrThrow() {
+		final T value = this.getValueAsNullable();
 		if (value == null) {
 			throw new IllegalStateException("Value is known not present");
 		}
 		return value;
 	}
 
-	public @Nullable T getNullable() {
+	public @Nullable T getValueAsNullable() {
 		if (!this.known) {
 			throw new IllegalStateException("Value is not known");
 		}
 		return Objects.requireNonNull(this.value, "Value is not present");
 	}
 
-	public Optional<T> getOptional() {
+	public Optional<T> getValueAsOptional() {
 		if (!this.known) {
 			throw new IllegalStateException("Value is not known");
 		}
 		return this.value != null ? Optional.of(this.value) : Optional.empty();
 	}
 
+	public Optional<T> toOptional() {
+		return this.known ? this.getValueAsOptional() : Optional.empty();
+	}
+
 	public void ifKnown(final Consumer<Optional<T>> optionalConsumer) {
 		if (this.known) {
-			optionalConsumer.accept(this.getOptional());
+			optionalConsumer.accept(this.getValueAsOptional());
 		}
 	}
 
