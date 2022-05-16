@@ -5,6 +5,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 public class OptionalOptional<T> {
 
@@ -34,8 +36,12 @@ public class OptionalOptional<T> {
 		return this.value != null;
 	}
 
-	public @NonNull T get() {
-		return Objects.requireNonNull(this.getNullable(), "Value is not present");
+	public @NonNull T getOrThrow() {
+		final T value = this.getNullable();
+		if (value == null) {
+			throw new IllegalStateException("Value is known not present");
+		}
+		return value;
 	}
 
 	public @Nullable T getNullable() {
@@ -43,6 +49,25 @@ public class OptionalOptional<T> {
 			throw new IllegalStateException("Value is not known");
 		}
 		return Objects.requireNonNull(this.value, "Value is not present");
+	}
+
+	public Optional<T> getOptional() {
+		if (!this.known) {
+			throw new IllegalStateException("Value is not known");
+		}
+		return this.value != null ? Optional.of(this.value) : Optional.empty();
+	}
+
+	public void ifKnown(final Consumer<Optional<T>> optionalConsumer) {
+		if (this.known) {
+			optionalConsumer.accept(this.getOptional());
+		}
+	}
+
+	public void ifKnownPresent(final Consumer<T> consumer) {
+		if (this.known && this.value != null) {
+			consumer.accept(this.value);
+		}
 	}
 
 	public static <T> OptionalOptional<T> unknown() {
