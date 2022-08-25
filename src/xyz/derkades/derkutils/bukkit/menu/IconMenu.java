@@ -109,6 +109,15 @@ public abstract class IconMenu implements Listener {
 	public abstract boolean onOptionClick(OptionClickEvent event);
 
 	/**
+	 * Called when a player clicks on a blank slot in the menu
+	 * @param event
+	 * @return Whether the menu should be closed
+	 */
+	public boolean onBlankClick(SlotClickEvent event) {
+		return false;
+	}
+
+	/**
 	 * Called when the menu closes
 	 * @param event
 	 */
@@ -176,10 +185,14 @@ public abstract class IconMenu implements Listener {
 
 		final Player clicker = (Player) event.getWhoClicked();
 
-		if (slot >= 0 && slot < this.size && this.hasItem(slot)) {
-			final ItemStack item = this.inventory.getItem(slot);
+		if (slot >= 0 && slot < this.size) {
+			final boolean close;
+			if (this.hasItem(slot)) {
+				close = this.onOptionClick(new OptionClickEvent(clicker, slot, event.getClick(), this.inventory.getItem(slot)));
+			} else {
+				close = this.onBlankClick(new SlotClickEvent(clicker, slot, event.getClick()));
+			}
 
-			final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, item, event.getClick()));
 			if (close) {
 				this.closeEventCalled = true;
 				IconMenu.this.onClose(new MenuCloseEvent(this.getPlayer(), CloseReason.ITEM_CLICK));
