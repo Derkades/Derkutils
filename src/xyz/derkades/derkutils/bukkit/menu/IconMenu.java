@@ -29,6 +29,7 @@ public abstract class IconMenu implements Listener {
 	private final @NonNull Inventory inventory;
 	private @Nullable InventoryView view;
 	private boolean closeEventCalled = false;
+	private @Nullable CloseReason closeReason = null;
 
 	/**
 	 * Creates a new menu instance. To add items, use the {@link IconMenu#addItem(int, ItemStack)} method</li>
@@ -79,12 +80,17 @@ public abstract class IconMenu implements Listener {
 				if (player == null) {
 					// player went offline
 					if (!IconMenu.this.closeEventCalled) {
+						closeEventCalled = true;
 						IconMenu.this.onClose(new MenuCloseEvent(Bukkit.getOfflinePlayer(IconMenu.this.uuid), CloseReason.PLAYER_QUIT));
 					}
 				} else if (!player.getOpenInventory().getTopInventory().equals(IconMenu.this.inventory)) {
 					// player closed inventory
 					if (!IconMenu.this.closeEventCalled) {
-						IconMenu.this.onClose(new MenuCloseEvent(player, CloseReason.PLAYER_CLOSED));
+						closeEventCalled = true;
+						if (closeReason == null) {
+							closeReason = CloseReason.PLAYER_CLOSED;
+						}
+						IconMenu.this.onClose(new MenuCloseEvent(player, closeReason));
 					}
 				} else {
 					// menu is still open
@@ -104,6 +110,15 @@ public abstract class IconMenu implements Listener {
 	 * @return Whether the menu should be closed
 	 */
 	public abstract boolean onOptionClick(OptionClickEvent event);
+
+	/**
+	 * Called when a player clicks on a blank slot in the menu
+	 * @param event
+	 * @return Whether the menu should be closed
+	 */
+	public boolean onBlankClick(SlotClickEvent event) {
+		return false;
+	}
 
 	/**
 	 * Called when the menu closes
@@ -133,10 +148,8 @@ public abstract class IconMenu implements Listener {
 	 * Calls {@link #onClose(MenuCloseEvent)} with {@link CloseReason#FORCE_CLOSE} and closes the inventory.
 	 */
 	public void close() {
-		this.closeEventCalled = true;
-		this.onClose(new MenuCloseEvent(this.getPlayer(), CloseReason.FORCE_CLOSE));
+		this.closeReason = CloseReason.FORCE_CLOSE;
 		this.view.close();
-//		this.cancelTask = true;
 	}
 
 	public void addItem(final int slot, final ItemStack item) {
@@ -176,13 +189,16 @@ public abstract class IconMenu implements Listener {
 
 		final Player clicker = (Player) event.getWhoClicked();
 
-		if (slot >= 0 && slot < this.size && this.hasItem(slot)) {
-			final ItemStack item = this.inventory.getItem(slot);
+		if (slot >= 0 && slot < this.size) {
+			final boolean close;
+			if (this.hasItem(slot)) {
+				close = this.onOptionClick(new OptionClickEvent(clicker, slot, event.getClick(), this.inventory.getItem(slot)));
+			} else {
+				close = this.onBlankClick(new SlotClickEvent(clicker, slot, event.getClick()));
+			}
 
-			final boolean close = this.onOptionClick(new OptionClickEvent(clicker, slot, item, event.getClick()));
 			if (close) {
-				this.closeEventCalled = true;
-				IconMenu.this.onClose(new MenuCloseEvent(this.getPlayer(), CloseReason.ITEM_CLICK));
+				this.closeReason = CloseReason.ITEM_CLICK;
 				this.view.close();
 			}
 		}
