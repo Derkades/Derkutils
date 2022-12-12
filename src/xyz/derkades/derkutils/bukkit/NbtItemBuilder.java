@@ -1,6 +1,8 @@
 package xyz.derkades.derkutils.bukkit;
 
 import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.NBTCompound;
+import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteItemNBT;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -47,12 +49,12 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 
 	public @NonNull NbtItemBuilder skullTexture(final @NonNull String texture) {
 		Objects.requireNonNull(texture, "Texture string is null");
-		NBT.modify(this.item, nbt -> {
-			final ReadWriteItemNBT skullOwner = (ReadWriteItemNBT) nbt.getOrCreateCompound("SkullOwner");
-			skullOwner.setString("Id", UUID.randomUUID().toString());
-			final ReadWriteItemNBT properties = (ReadWriteItemNBT) nbt.getOrCreateCompound("Properties");
-			properties.getCompoundList("textures").addCompound().setString("Value", texture);
-		});
+		// TODO use new NBT class
+		final NBTItem nbt = new NBTItem(this.item);
+		final NBTCompound skullOwner = nbt.addCompound("SkullOwner");
+		skullOwner.setString("Id", UUID.randomUUID().toString());
+		skullOwner.addCompound("Properties").getCompoundList("textures").addCompound().setString("Value", texture);
+		this.item = nbt.getItem();
 		return this;
 	}
 
