@@ -1,7 +1,9 @@
 package xyz.derkades.derkutils.bukkit;
 
+import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteItemNBT;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -19,11 +21,11 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 	public NbtItemBuilder(final @NonNull Material material) {
 		super(material);
 	}
-	
+
 	public NbtItemBuilder(final @NonNull ItemStack item) {
 		super(item);
 	}
-	
+
 	@Override
 	public @NonNull NbtItemBuilder getInstance() {
 		return this;
@@ -31,22 +33,23 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 
 	public @NonNull NbtItemBuilder canDestroy(final @NonNull String@NonNull... vanillaNamespacedNames) {
 		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
-		final NBTItem nbt = new NBTItem(this.item);
-		nbt.getStringList("CanDestroy").addAll(Arrays.asList(vanillaNamespacedNames));
-		this.item = nbt.getItem();
+		NBT.modify(this.item, nbt -> {
+			nbt.getStringList("CanDestroy").addAll(Arrays.asList(vanillaNamespacedNames));
+		});
 		return this;
 	}
 
 	public @NonNull NbtItemBuilder canPlaceOn(final @NonNull String@NonNull... vanillaNamespacedNames) {
 		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
-		final NBTItem nbt = new NBTItem(this.item);
-		nbt.getStringList("CanPlaceOn").addAll(Arrays.asList(vanillaNamespacedNames));
-		this.item = nbt.getItem();
+		NBT.modify(this.item, nbt -> {
+			nbt.getStringList("CanPlaceOn").addAll(Arrays.asList(vanillaNamespacedNames));
+		});
 		return this;
 	}
 
 	public @NonNull NbtItemBuilder skullTexture(final @NonNull String texture) {
 		Objects.requireNonNull(texture, "Texture string is null");
+		// TODO use new NBT class
 		final NBTItem nbt = new NBTItem(this.item);
 		final NBTCompound skullOwner = nbt.addCompound("SkullOwner");
 		skullOwner.setString("Id", UUID.randomUUID().toString());
@@ -56,16 +59,14 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 	}
 
 	public @NonNull NbtItemBuilder hideFlags(final int hideFlags) {
-		final NBTItem nbt = new NBTItem(this.item);
-		nbt.setInteger("HideFlags", hideFlags);
-		this.item = nbt.getItem();
+		NBT.modify(this.item, nbt -> {
+			nbt.setInteger("HideFlags", hideFlags);
+		});
 		return this;
 	}
 
-	public @NonNull NbtItemBuilder editNbt(final @NonNull Consumer<NBTItem> nbtModifier) {
-		final NBTItem nbt = new NBTItem(this.item);
-		nbtModifier.accept(nbt);
-		this.item = nbt.getItem();
+	public @NonNull NbtItemBuilder editNbt(final @NonNull Consumer<ReadWriteItemNBT> nbtModifier) {
+		NBT.modify(this.item, nbtModifier);
 		return this;
 	}
 
