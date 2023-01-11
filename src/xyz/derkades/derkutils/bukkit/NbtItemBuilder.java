@@ -4,12 +4,14 @@ import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteItemNBT;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBTList;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -31,6 +33,7 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 		return this;
 	}
 
+	@Deprecated
 	public @NonNull NbtItemBuilder canDestroy(final @NonNull String@NonNull... vanillaNamespacedNames) {
 		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
 		NBT.modify(this.item, nbt -> {
@@ -39,10 +42,31 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 		return this;
 	}
 
+	public NbtItemBuilder canDestroy(final Set<Material> materials) {
+		NBT.modify(this.item, nbt -> {
+			ReadWriteNBTList<String> list = nbt.getStringList("CanDestroy");
+			for (Material material : materials) {
+				list.add(material.getKey().toString());
+			}
+		});
+		return this;
+	}
+
+	@Deprecated
 	public @NonNull NbtItemBuilder canPlaceOn(final @NonNull String@NonNull... vanillaNamespacedNames) {
 		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
 		NBT.modify(this.item, nbt -> {
 			nbt.getStringList("CanPlaceOn").addAll(Arrays.asList(vanillaNamespacedNames));
+		});
+		return this;
+	}
+
+	public NbtItemBuilder canPlaceOn(final Set<Material> materials) {
+		NBT.modify(this.item, nbt -> {
+			ReadWriteNBTList<String> list = nbt.getStringList("CanPlaceOn");
+			for (Material material : materials) {
+				list.add(material.getKey().toString());
+			}
 		});
 		return this;
 	}
