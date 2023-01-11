@@ -46,7 +46,7 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 		NBT.modify(this.item, nbt -> {
 			ReadWriteNBTList<String> list = nbt.getStringList("CanDestroy");
 			for (Material material : materials) {
-				list.add(material.getKey().asString());
+				list.add(material.getKey().toString());
 			}
 		});
 		return this;
@@ -65,7 +65,7 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 		NBT.modify(this.item, nbt -> {
 			ReadWriteNBTList<String> list = nbt.getStringList("CanPlaceOn");
 			for (Material material : materials) {
-				list.add(material.getKey().asString());
+				list.add(material.getKey().toString());
 			}
 		});
 		return this;
