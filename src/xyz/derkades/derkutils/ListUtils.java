@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import io.netty.util.internal.ThreadLocalRandom;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ListUtils {
@@ -147,7 +148,7 @@ public class ListUtils {
 	            .distinct()
 	            .limit(amount)
 	            .mapToObj(i -> array[i])
-	            .toList();
+				.collect(Collectors.toList());
 	}
 
 	public static <T> List<T> chooseMultiple(final List<T> list, final int amount) {
@@ -157,7 +158,7 @@ public class ListUtils {
 	            .distinct()
 	            .limit(amount)
 	            .mapToObj(list::get)
-	            .toList();
+				.collect(Collectors.toList());
 	}
 
 }
