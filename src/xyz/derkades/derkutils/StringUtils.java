@@ -1,7 +1,5 @@
 package xyz.derkades.derkutils;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.Objects;
 
 public class StringUtils {
@@ -11,7 +9,7 @@ public class StringUtils {
 	 * @param allowSpaces False if spaces should be considered as non-alphanumeric characters. (e.g. "hello world" will return false but "helloworld" will return true)
 	 * @return True if the specified string contains characters other than A-Z, a-z, 0-9 and optionally spaces.
 	 */
-	public static boolean containsNonAlphanumericalCharacters(final @NonNull String string,
+	public static boolean containsNonAlphanumericalCharacters(final String string,
 															  final boolean allowSpaces){
 		Objects.requireNonNull(string, "String is null");
 
@@ -31,7 +29,7 @@ public class StringUtils {
 	 * @param string
 	 * @return true if the string contains only numbers, letters and underscores.
 	 */
-	public static boolean validateString(final @NonNull String string) {
+	public static boolean validateString(final String string) {
 		Objects.requireNonNull(string,"Provided string is null");
 
 		for (final char c : string.toCharArray()){
@@ -47,7 +45,7 @@ public class StringUtils {
 	 * @param string
 	 * @return
 	 */
-	public static @NonNull String addDotIfNecessary(final @NonNull String string) {
+	public static String addDotIfNecessary(final String string) {
 		Objects.requireNonNull(string, "Provided string is null");
 
 		if (string.endsWith(".") || string.endsWith("?") || string.endsWith("!")){
@@ -63,8 +61,8 @@ public class StringUtils {
 	 * @param append
 	 * @return
 	 */
-	public static @NonNull String appendIfNotPresent(final @NonNull String string,
-											final @NonNull String append) {
+	public static String appendIfNotPresent(final String string,
+											final String append) {
 		Objects.requireNonNull(string, "Provided string is null");
 		Objects.requireNonNull(append, "Append string is null");
 		if (string.endsWith(append)) {
