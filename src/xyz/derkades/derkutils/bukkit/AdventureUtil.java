@@ -5,7 +5,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.HSVLike;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import xyz.derkades.derkutils.Colors;
 
 import static net.kyori.adventure.text.Component.text;
@@ -19,8 +18,8 @@ public class AdventureUtil {
 	 *                       are "cropped off".
 	 * @return Component where the text is the input string with gradient color
 	 */
-	public static @NonNull Component gradient(final @NonNull String string,
-											  final float gradientMargin) {
+	public static Component gradient(final String string,
+									 final float gradientMargin) {
 		if (gradientMargin < 0.0f || gradientMargin >= 0.5f) {
 			throw new IllegalArgumentException("gradientMargin must be between 0 (inclusive) and 0.5 (exclusive)");
 		}
@@ -47,10 +46,10 @@ public class AdventureUtil {
 		return b.asComponent();
 	}
 
-	public static @NonNull Component gradientHsv(final @NonNull String string,
-												 final float hueRange,
-												 final float saturation,
-												 final float value) {
+	public static Component gradientHsv(final String string,
+										final float hueRange,
+										final float saturation,
+										final float value) {
 		final float hueStart = ThreadLocalRandom.current().nextFloat();
 
 		final TextComponent.Builder b = text();

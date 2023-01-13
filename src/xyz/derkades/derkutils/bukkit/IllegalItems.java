@@ -59,7 +59,6 @@ public class IllegalItems implements Listener {
 				inventory.getType() == InventoryType.PLAYER) {
 			final ItemStack item = event.getCurrentItem();
 			if (item != null && this.isIllegal(item)) {
-//				event.getView().getPlayer().sendMessage(ChatColor.RED + "You are not supposed to have this item");
 				item.setType(Material.AIR);
 				event.setCurrentItem(item);
 			}
@@ -70,7 +69,6 @@ public class IllegalItems implements Listener {
 	public void onItemDrop(final @NonNull PlayerDropItemEvent event) {
 		final ItemStack item = event.getItemDrop().getItemStack();
 		if (this.isIllegal(item)) {
-//			event.getPlayer().sendMessage(ChatColor.RED + "You are not supposed to have this item");
 			item.setType(Material.AIR);
 			event.getItemDrop().remove();
 		}

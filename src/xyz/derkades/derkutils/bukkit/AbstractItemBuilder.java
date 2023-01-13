@@ -23,17 +23,17 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
 	private static final Component NO_ITALICS = Component.empty().decoration(TextDecoration.ITALIC, false);
 
-	protected @NonNull ItemStack item;
+	protected ItemStack item;
 	
-	public AbstractItemBuilder(final @NonNull Material material) {
+	public AbstractItemBuilder(final Material material) {
 		this.item = new ItemStack(Objects.requireNonNull(material, "Material is null"));
 	}
 
-	public AbstractItemBuilder(final @NonNull ItemStack item) {
+	public AbstractItemBuilder(final ItemStack item) {
 		this.item = Objects.requireNonNull(item, "item is null");
 	}
 
-	public abstract @NonNull T getInstance();
+	public abstract T getInstance();
 
 
 	public @NonNull T amount(final int amount) {

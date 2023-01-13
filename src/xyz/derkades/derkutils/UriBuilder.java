@@ -1,5 +1,7 @@
 package xyz.derkades.derkutils;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -76,7 +78,7 @@ public class UriBuilder {
 	}
 
 	@Override
-	public boolean equals(final Object other) {
+	public boolean equals(final @Nullable Object other) {
 		return other instanceof UriBuilder &&
 				Objects.equals(other.toString(), this.toString());
 	}
