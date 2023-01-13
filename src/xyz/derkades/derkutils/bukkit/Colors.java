@@ -1,13 +1,12 @@
 package xyz.derkades.derkutils.bukkit;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.ChatColor;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-
-import org.bukkit.ChatColor;
-
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
 
 public class Colors {
 
@@ -40,18 +39,6 @@ public class Colors {
 	public static BaseComponent[] toComponent(final String string) {
 		Objects.requireNonNull(string, "String is null");
 		return TextComponent.fromLegacyText(Colors.parseColors(string));
-	}
-
-	/**
-	 * Converts all & characters belonging to a color code in a string to ChatColor.COLOR_CHAR, and
-	 * then uses {@link ChatColor#stripColor} to remove all color codes.
-	 * @param string String to convert
-	 * @deprecated Use {@link #stripColorCodes(String)}
-	 */
-	@Deprecated
-	public static String stripColors(final String string) {
-		Objects.requireNonNull(string, "String is null");
-		return ChatColor.stripColor(Colors.parseColors(string));
 	}
 
 	/**

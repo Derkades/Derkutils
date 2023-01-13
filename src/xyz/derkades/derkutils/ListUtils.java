@@ -2,7 +2,6 @@ package xyz.derkades.derkutils;
 
 import com.google.common.base.Preconditions;
 import io.netty.util.internal.ThreadLocalRandom;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -52,20 +51,6 @@ public class ListUtils {
 	}
 
 	/**
-	 * Removes the first string from a string array
-	 * @param array
-	 * @return Array without the first string
-	 * @deprecated Use Arrays.copyOfRange(array, 1, array.length);
-	 */
-	@Deprecated
-	public static String[] removeFirstStringFromArray(final String[] array){
-		final int n = array.length - 1;
-		final String[] newArray = new String[n];
-		System.arraycopy(array, 1, newArray, 0, n);
-		return newArray;
-	}
-
-	/**
 	 * Replaces strings with other strings in a string list.
 	 * @param list ["Hello world", "Lorem ipsum"]
 	 * @param before ["world", "ipsum"]
@@ -95,46 +80,6 @@ public class ListUtils {
 		return replaceInStringList(list, new Object[] {before}, new Object[] {after});
 	}
 
-	@SafeVarargs
-	@Deprecated
-	public static <T> List<T> addToList(final List<T> list, final T... items) {
-		list.addAll(Arrays.asList(items));
-
-		return list;
-	}
-
-	@SafeVarargs
-	@Deprecated
-	public static <T> List<T> addToList(final List<T> list, final List<T>... listsToAdd){
-		for (final List<T> listToAdd : listsToAdd) {
-			list.addAll(listToAdd);
-		}
-
-		return list;
-	}
-
-	/**
-	 * Fill a list with numbers between min and max
-	 * @param min Inclusive
-	 * @param max Inclusive
-	 * @return
-	 */
-	@Deprecated
-	public static List<Integer> getNumbersList(final int min, final int max) {
-		final List<Integer> list = new ArrayList<>();
-		for (int i = min; i <= max; i++) {
-			list.add(i);
-		}
-		return list;
-	}
-
-	@Deprecated
-	public static List<Integer> getRandomizedNumbersList(final int min, final int max) {
-		final List<Integer> list = getNumbersList(min, max);
-		Collections.shuffle(list);
-		return list;
-	}
-
 	public static <T> int sizeSum(final Collection<Collection<T>> collections) {
 		Objects.requireNonNull(collections, "Collections collection is null");
 		int size = 0;
@@ -156,17 +101,7 @@ public class ListUtils {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Deprecated
-	public static <T> T[] mergeArrays(final T[]... arrays) {
-		final List<T> list = new ArrayList<>();
-		for (final T[] array : arrays) {
-			list.addAll(Arrays.asList(array));
-		}
-		return (T[]) list.toArray();
-	}
-
-	@SuppressWarnings("unchecked")
-	public static <T> @NonNull T @NonNull[] combineArrays(final @NonNull T@NonNull []... arrays) {
+	public static <T> T [] combineArrays(final T[]... arrays) {
 		final List<T> list = new ArrayList<>(sizeSum(arrays));
 		for (final T[] array : arrays) {
 			list.addAll(Arrays.asList(array));
@@ -181,7 +116,7 @@ public class ListUtils {
 	 * @throws IllegalArgumentException collection is not empty and size is not == 1
 	 * @return
 	 */
-	public static <T> @NonNull Optional<@NonNull T> toOptional(final @NonNull Collection<@NonNull T> collection) {
+	public static <T> Optional<T> toOptional(final Collection<T> collection) {
 		if (collection.isEmpty()) {
 			return Optional.empty();
 		}
@@ -192,17 +127,17 @@ public class ListUtils {
 		return Optional.of(collection.iterator().next());
 	}
 
-	public static <T> @NonNull T choice(final @NonNull Set<@NonNull T> set) {
+	public static <T> T choice(final Set<T> set) {
 		Preconditions.checkNotNull(set, "Set is null");
 		Preconditions.checkArgument(set.size() > 0, "Set must contain at least one element");
 	    return set.stream().skip(ThreadLocalRandom.current().nextInt(set.size())).findFirst().orElseThrow(IllegalStateException::new);
 	}
 
-	public static <T> @NonNull T choice(final @NonNull List<@NonNull T> list) {
+	public static <T> T choice(final List<T> list) {
 		return list.get(ThreadLocalRandom.current().nextInt(list.size()));
 	}
 
-	public static <T> @NonNull T choice(final @NonNull T@NonNull[] array) {
+	public static <T> T choice(final T[] array) {
 		return array[ThreadLocalRandom.current().nextInt(array.length)];
 	}
 
