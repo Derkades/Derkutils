@@ -90,7 +90,7 @@ public class LocationUtils {
 	 * @param max
 	 * @return
 	 */
-	public static boolean yawInBounds(final @NonNull Location location,
+	public static boolean yawInBounds(final Location location,
 									  final float min,
 									  final float max) {
 		return yawInBounds(location.getYaw(), min, max);
@@ -114,7 +114,7 @@ public class LocationUtils {
 		return bukkitYaw > clientYawMin && bukkitYaw < clientYawMax;
 	}
 
-	public static @NonNull BlockFace getYawAsBlockFace(float yaw) {
+	public static BlockFace getYawAsBlockFace(float yaw) {
 		if (yaw < 0) {
 			yaw += 360;
 		}
