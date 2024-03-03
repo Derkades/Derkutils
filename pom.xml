@@ -32,10 +32,10 @@
 					<source>${jdk.version}</source>
 					<target>${jdk.version}</target>
 					<fork>true</fork> <!-- Must fork or else JVM arguments are ignored. -->
-					<compilerArguments>
+					<compilerArgs>
 						<Xmaxerrs>100</Xmaxerrs>
 						<Xmaxwarns>100</Xmaxwarns>
-					</compilerArguments>
+					</compilerArgs>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.checkerframework</groupId>
