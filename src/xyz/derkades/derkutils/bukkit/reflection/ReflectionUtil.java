@@ -2,6 +2,7 @@ package xyz.derkades.derkutils.bukkit.reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,16 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public class ReflectionUtil {
 
 	private static final Map<String, Class<?>> classCache = new HashMap<>();
+	private static Method playerPingMethod;
+	
+	static {
+		try {
+			playerPingMethod = Player.class.getMethod("ping");
+		} catch (NoSuchMethodException | SecurityException e) {
+			playerPingMethod = null;
+		}
+	}
+	
 
 	private static Class<?> getCB(final String pathAfterCB) {
 		classCache.computeIfAbsent("CB" + pathAfterCB, key -> {
@@ -28,28 +39,34 @@ public class ReflectionUtil {
 		return classCache.get("CB" + pathAfterCB);
 	}
 
+
 	/**
 	 *
 	 * @param player
 	 * @return Player ping or -1 if an error occurred
 	 */
 	public static int getPing(final Player player) {
-		try {
-			return player.getPing();
-		} catch (NoSuchMethodError e) {
+		if (playerPingMethod != null) {
 			try {
-				// Does not exist pre-1.17
-				// Use NMS hack instead
-				String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
-				Class<?> entityPlayerClass = Class.forName("net.minecraft.server." + version + ".EntityPlayer");
-				final Object entityPlayer = getCB(".entity.CraftPlayer").getMethod("getHandle").invoke(player);
-				final Object ping = entityPlayerClass.getField("ping").get(entityPlayer);
-				return (Integer) ping;
-			} catch (final ClassNotFoundException | NoSuchMethodException | SecurityException |
-					IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e2) {
-				e2.printStackTrace();
-				return -1;
+				return (int) playerPingMethod.invoke(player);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+				return 0;
 			}
+		}
+		
+		try {
+			// Does not exist pre-1.17
+			// Use NMS hack instead
+			String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+			Class<?> entityPlayerClass = Class.forName("net.minecraft.server." + version + ".EntityPlayer");
+			final Object entityPlayer = getCB(".entity.CraftPlayer").getMethod("getHandle").invoke(player);
+			final Object ping = entityPlayerClass.getField("ping").get(entityPlayer);
+			return (Integer) ping;
+		} catch (final ClassNotFoundException | NoSuchMethodException | SecurityException |
+				IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e2) {
+			e2.printStackTrace();
+			return 0;
 		}
 	}
 
