@@ -27,15 +27,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.11.0</version>
+				<version>3.13.0</version>
 				<configuration>
 					<source>${jdk.version}</source>
 					<target>${jdk.version}</target>
 					<fork>true</fork> <!-- Must fork or else JVM arguments are ignored. -->
-					<compilerArgs>
-						<Xmaxerrs>100</Xmaxerrs>
-						<Xmaxwarns>100</Xmaxwarns>
-					</compilerArgs>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.checkerframework</groupId>
@@ -52,6 +48,8 @@
 					<compilerArgs>
 						<arg>-Awarns</arg>
 						<arg>-J-Xbootclasspath/p:${settings.localRepository}/com/google/errorprone/javac/${javac.version}/javac-${javac.version}.jar</arg>
+						<Xmaxerrs>100</Xmaxerrs>
+						<Xmaxwarns>100</Xmaxwarns>
 					</compilerArgs>
 				</configuration>
 			</plugin>
@@ -83,7 +81,7 @@
 		<dependency>
 			<groupId>de.tr7zw</groupId>
 			<artifactId>item-nbt-api</artifactId>
-			<version>2.12.2</version>
+			<version>2.12.4</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -103,7 +101,7 @@
 		<dependency>
 			<groupId>org.checkerframework</groupId>
 			<artifactId>checker-qual</artifactId>
-			<version>3.42.0</version>
+			<version>3.43.0</version>
 		</dependency>
 
 		<dependency>

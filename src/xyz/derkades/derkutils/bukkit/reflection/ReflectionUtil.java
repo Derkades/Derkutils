@@ -1,10 +1,5 @@
 package xyz.derkades.derkutils.bukkit.reflection;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandMap;
-import org.bukkit.entity.Player;
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -13,28 +8,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
+import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 public class ReflectionUtil {
 
 	private static final Map<String, Class<?>> classCache = new HashMap<>();
-	private static final String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 
-	/**
-	 *
-	 * @param pathToClass Path to a Minecraft class, with %s where the version string would usually be. For example: <i>org.bukkit.craftbukkit.%s.entity.CraftPlayer</i>
-	 * @return Class from formatted string
-	 * @throws ClassNotFoundException
-	 */
-	public static Class<?> getMinecraftClass(final String pathToClass) throws ClassNotFoundException {
-		Class<?> cached = classCache.get(pathToClass);
-
-		if (cached == null) {
-			String className = String.format(pathToClass, version);
-			className = className.replace(".v1_17_R1", "");
-			cached = Class.forName(className);
-			classCache.put(pathToClass, cached);
-		}
-
-		return cached;
+	private static Class<?> getCB(final String pathAfterCB) {
+		classCache.computeIfAbsent("CB" + pathAfterCB, key -> {
+			try {
+				return Class.forName(Bukkit.getServer().getClass().getPackage().getName() + "." + pathAfterCB);
+			} catch (ClassNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+		});
+		return classCache.get("CB" + pathAfterCB);
 	}
 
 	/**
@@ -44,17 +36,18 @@ public class ReflectionUtil {
 	 */
 	public static int getPing(final Player player) {
 		try {
-			final Object entityPlayer = getMinecraftClass("org.bukkit.craftbukkit.%s.entity.CraftPlayer").getMethod("getHandle").invoke(player);
-			final Object ping = getMinecraftClass("net.minecraft.server.%s.EntityPlayer").getField("ping").get(entityPlayer);
-			return (int) ping;
+			String version = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+			Class<?> entityPlayerClass = Class.forName("net.minecraft.server." + version + ".EntityPlayer");
+			final Object entityPlayer = getCB(".entity.CraftPlayer").getMethod("getHandle").invoke(player);
+			final Object ping = entityPlayerClass.getField("ping").get(entityPlayer);
+			return (Integer) ping;
 		} catch (final ClassNotFoundException | NoSuchMethodException | SecurityException |
-				IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e) {
-			e.printStackTrace();
+				IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchFieldException e2) {
+			e2.printStackTrace();
 			return -1;
 		}
 	}
 
-	@SuppressWarnings("null")
 	public static CommandMap getCommandMap() {
 		try {
 			final Field field = Bukkit.getServer().getClass().getDeclaredField("commandMap");
@@ -69,7 +62,7 @@ public class ReflectionUtil {
 		getCommandMap().register(name, command);
 	}
 
-	@SuppressWarnings({ "unchecked", "null" })
+	@SuppressWarnings({ "unchecked" })
 	public static Map<String, Command> getKnownCommands() {
 		try {
 			final CommandMap map = getCommandMap();
