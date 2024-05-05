@@ -48,8 +48,6 @@
 					<compilerArgs>
 						<arg>-Awarns</arg>
 						<arg>-J-Xbootclasspath/p:${settings.localRepository}/com/google/errorprone/javac/${javac.version}/javac-${javac.version}.jar</arg>
-						<Xmaxerrs>100</Xmaxerrs>
-						<Xmaxwarns>100</Xmaxwarns>
 					</compilerArgs>
 				</configuration>
 			</plugin>
