@@ -1,12 +1,21 @@
 package xyz.derkades.derkutils.bukkit;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -21,7 +30,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.google.common.base.Supplier;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
@@ -265,6 +275,43 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		}
 
 		placeholders.forEach(this::lorePlaceholderOptional);
+		return this.getInstance();
+	}
+
+	public @NonNull T skullTexture(final @NonNull String skinTextureJson) {
+		final URL skinTextureUrl;
+		try {
+			skinTextureUrl = new URI(
+					JsonParser.parseString(skinTextureJson)
+							.getAsJsonObject()
+							.get("textures")
+							.getAsJsonObject()
+							.get("SKIN")
+							.getAsJsonObject()
+							.get("url")
+							.getAsString()
+					).toURL();
+		} catch (IllegalStateException | JsonSyntaxException | MalformedURLException | URISyntaxException e) {
+			throw new RuntimeException("Failed to parse skin texture json", e);
+		}
+		
+		// Uses reflection so it compiles for older server versions
+		
+		try {
+			Method createPlayerProfile = Bukkit.getServer().getClass().getMethod("createPlayerProfile", UUID.class);
+			Object playerProfile = createPlayerProfile.invoke(Bukkit.getServer(), UUID.randomUUID());
+			Object playerTextures = playerProfile.getClass().getMethod("getTextures").invoke(playerProfile);
+			playerTextures.getClass().getMethod("setSkin", URL.class).invoke(playerTextures, skinTextureUrl);
+			playerProfile.getClass().getMethod("setTextures", playerTextures.getClass()).invoke(playerProfile, playerTextures);
+			SkullMeta meta = (SkullMeta) item.getItemMeta();
+			SkullMeta.class.getMethod("setOwnerProfile", playerProfile.getClass()).invoke(meta, playerProfile);
+			item.setItemMeta(meta);
+		} catch (NoSuchMethodException e) {
+			throw new UnsupportedOperationException("Method not found, only available on 1.20+", e);
+		} catch (IllegalAccessException | InvocationTargetException e2) {
+			e2.printStackTrace();
+		}
+		
 		return this.getInstance();
 	}
 
