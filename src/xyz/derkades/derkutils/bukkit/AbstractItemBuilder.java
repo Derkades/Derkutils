@@ -1,5 +1,7 @@
 package xyz.derkades.derkutils.bukkit;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,14 +28,10 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.profile.PlayerProfile;
-import org.bukkit.profile.PlayerTextures;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.destroystokyo.paper.Namespaced;
-import com.destroystokyo.paper.profile.ProfileProperty;
-import com.google.common.base.FinalizablePhantomReference;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
@@ -186,7 +184,6 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@SuppressWarnings("deprecation") // we intentionally use methods deprecated in paper, to support spigot servers
 	public @NonNull T skullTexture(final @NonNull String skinTextureJson) {
 		final URL skinTextureUrl;
 		try {
@@ -204,27 +201,21 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 			throw new RuntimeException("Failed to parse skin texture json", e);
 		}
 		
-		Throwable spigotError = null;
+		// Uses reflection so it compiles for older server versions
 		
-		// Try spigot native method first, exists since 1.20
 		try {
-			PlayerProfile profile = Bukkit.getServer().createPlayerProfile(UUID.randomUUID());;
-			PlayerTextures textures = profile.getTextures();
-			textures.setSkin(skinTextureUrl);
-			profile.setTextures(textures); // is this necessary?
-			this.editMeta(SkullMeta.class, skullMeta -> skullMeta.setOwnerProfile(profile));
-		} catch (NoSuchMethodError err) {
-			spigotError = err;
-		}
-		
-		// Try paper method next, exists since at least 1.18
-		try {
-			com.destroystokyo.paper.profile.PlayerProfile profile = Bukkit.getServer().createProfile(UUID.randomUUID());
-			profile.setProperty(new ProfileProperty("textures", skinTextureJson));
-			this.editMeta(SkullMeta.class, skullMeta -> skullMeta.setPlayerProfile(profile));
-		} catch (NoSuchMethodError paperError) {
-			throw new UnsupportedOperationException("Failed to set head texture, API not available.", 
-					spigotError != null ? spigotError : paperError);
+			Method createPlayerProfile = Bukkit.getServer().getClass().getMethod("createPlayerProfile", UUID.class);
+			Object playerProfile = createPlayerProfile.invoke(Bukkit.getServer(), UUID.randomUUID());
+			Object playerTextures = playerProfile.getClass().getMethod("getTextures").invoke(playerProfile);
+			playerTextures.getClass().getMethod("setSkin", URL.class).invoke(playerTextures, skinTextureUrl);
+			playerProfile.getClass().getMethod("setTextures", playerTextures.getClass()).invoke(playerProfile, playerTextures);
+			SkullMeta meta = (SkullMeta) item.getItemMeta();
+			SkullMeta.class.getMethod("setOwnerProfile", playerProfile.getClass()).invoke(meta, playerProfile);
+			item.setItemMeta(meta);
+		} catch (NoSuchMethodException e) {
+			throw new UnsupportedOperationException("Method not found, only available on 1.20+", e);
+		} catch (IllegalAccessException | InvocationTargetException e2) {
+			e2.printStackTrace();
 		}
 		
 		return this.getInstance();
