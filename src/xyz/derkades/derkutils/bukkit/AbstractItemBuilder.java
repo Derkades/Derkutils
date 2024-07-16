@@ -1,6 +1,15 @@
 package xyz.derkades.derkutils.bukkit;
 
-import org.bukkit.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -12,12 +21,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import com.google.common.base.Supplier;
 
 public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
@@ -32,6 +36,15 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	public abstract T getInstance();
+
+	@SuppressWarnings("unchecked")
+	public @NonNull <M extends ItemMeta> T editMeta(Class<M> metaClasss, Consumer<M> metaEditor) {
+		// Convenient helper function inspired by paper
+	   final @Nullable ItemMeta meta = this.item.getItemMeta();
+	   metaEditor.accept((M) meta);
+		this.item.setItemMeta(meta);
+		return this.getInstance();
+	}
 
 	public @NonNull T amount(final int amount) {
 		this.item.setAmount(amount);
