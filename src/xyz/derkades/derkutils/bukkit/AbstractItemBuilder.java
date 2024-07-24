@@ -1,5 +1,24 @@
 package xyz.derkades.derkutils.bukkit;
 
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -12,12 +31,8 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
@@ -32,6 +47,15 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	public abstract T getInstance();
+
+	@SuppressWarnings("unchecked")
+	public @NonNull <M extends ItemMeta> T editMeta(Class<M> metaClasss, Consumer<M> metaEditor) {
+		// Convenient helper function inspired by paper
+	   final @Nullable ItemMeta meta = this.item.getItemMeta();
+	   metaEditor.accept((M) meta);
+		this.item.setItemMeta(meta);
+		return this.getInstance();
+	}
 
 	public @NonNull T amount(final int amount) {
 		this.item.setAmount(amount);
@@ -241,6 +265,52 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		}
 
 		placeholders.forEach(this::lorePlaceholderOptional);
+		return this.getInstance();
+	}
+
+	public @NonNull T skullTexture(final @NonNull String skinTextureJsonBase64) {
+		final String skinTextureJson;
+		try {
+			skinTextureJson = new String(Base64.getDecoder().decode(skinTextureJsonBase64), StandardCharsets.UTF_8.toString());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Failed to decode skin texture base64: " + skinTextureJsonBase64);
+		}
+		
+		final URL skinTextureUrl;
+		try {
+			skinTextureUrl = new URI(
+					JsonParser.parseString(skinTextureJson)
+							.getAsJsonObject()
+							.get("textures")
+							.getAsJsonObject()
+							.get("SKIN")
+							.getAsJsonObject()
+							.get("url")
+							.getAsString()
+					).toURL();
+		} catch (IllegalStateException | JsonSyntaxException | MalformedURLException | URISyntaxException e) {
+			throw new RuntimeException("Failed to parse skin texture json: " + skinTextureJson);
+		}
+		
+		// Uses reflection so it compiles for older server versions
+		
+		try {
+			Class<?> iPlayerProfile = Class.forName("org.bukkit.profile.PlayerProfile");
+			Class<?> iPlayerTextures = Class.forName("org.bukkit.profile.PlayerTextures");
+			Method createPlayerProfile = Bukkit.getServer().getClass().getMethod("createPlayerProfile", UUID.class);
+			Object playerProfile = createPlayerProfile.invoke(Bukkit.getServer(), UUID.randomUUID());
+			Object playerTextures = iPlayerProfile.getMethod("getTextures").invoke(playerProfile);
+			iPlayerTextures.getMethod("setSkin", URL.class).invoke(playerTextures, skinTextureUrl);
+			iPlayerProfile.getMethod("setTextures", iPlayerTextures).invoke(playerProfile, playerTextures);
+			SkullMeta meta = (SkullMeta) item.getItemMeta();
+			SkullMeta.class.getMethod("setOwnerProfile", iPlayerProfile).invoke(meta, playerProfile);
+			item.setItemMeta(meta);
+		} catch (ClassNotFoundException | NoSuchMethodException e) {
+			throw new UnsupportedOperationException("Method not found, only available on 1.20+", e);
+		} catch (IllegalAccessException | InvocationTargetException e2) {
+			e2.printStackTrace();
+		}
+		
 		return this.getInstance();
 	}
 
