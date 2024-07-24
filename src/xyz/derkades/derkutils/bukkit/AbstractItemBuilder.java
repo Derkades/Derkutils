@@ -1,12 +1,16 @@
 package xyz.derkades.derkutils.bukkit;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -184,7 +188,14 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public @NonNull T skullTexture(final @NonNull String skinTextureJson) {
+	public @NonNull T skullTexture(final @NonNull String skinTextureJsonBase64) {
+		final String skinTextureJson;
+		try {
+			skinTextureJson = new String(Base64.getDecoder().decode(skinTextureJsonBase64), StandardCharsets.UTF_8.toString());
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException("Failed to decode skin texture base64: " + skinTextureJsonBase64);
+		}
+		
 		final URL skinTextureUrl;
 		try {
 			skinTextureUrl = new URI(
@@ -198,7 +209,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 							.getAsString()
 					).toURL();
 		} catch (IllegalStateException | JsonSyntaxException | MalformedURLException | URISyntaxException e) {
-			throw new RuntimeException("Failed to parse skin texture json", e);
+			throw new RuntimeException("Failed to parse skin texture json: " + skinTextureJson);
 		}
 		
 		// Uses reflection so it compiles for older server versions
