@@ -215,15 +215,17 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		// Uses reflection so it compiles for older server versions
 		
 		try {
+			Class<?> iPlayerProfile = Class.forName("org.bukkit.profile.PlayerProfile");
+			Class<?> iPlayerTextures = Class.forName("org.bukkit.profile.PlayerTextures");
 			Method createPlayerProfile = Bukkit.getServer().getClass().getMethod("createPlayerProfile", UUID.class);
 			Object playerProfile = createPlayerProfile.invoke(Bukkit.getServer(), UUID.randomUUID());
-			Object playerTextures = playerProfile.getClass().getMethod("getTextures").invoke(playerProfile);
-			playerTextures.getClass().getMethod("setSkin", URL.class).invoke(playerTextures, skinTextureUrl);
-			playerProfile.getClass().getMethod("setTextures", playerTextures.getClass()).invoke(playerProfile, playerTextures);
+			Object playerTextures = iPlayerProfile.getMethod("getTextures").invoke(playerProfile);
+			iPlayerTextures.getMethod("setSkin", URL.class).invoke(playerTextures, skinTextureUrl);
+			iPlayerProfile.getMethod("setTextures", iPlayerTextures).invoke(playerProfile, playerTextures);
 			SkullMeta meta = (SkullMeta) item.getItemMeta();
-			SkullMeta.class.getMethod("setOwnerProfile", playerProfile.getClass()).invoke(meta, playerProfile);
+			SkullMeta.class.getMethod("setOwnerProfile", iPlayerProfile).invoke(meta, playerProfile);
 			item.setItemMeta(meta);
-		} catch (NoSuchMethodException e) {
+		} catch (ClassNotFoundException | NoSuchMethodException e) {
 			throw new UnsupportedOperationException("Method not found, only available on 1.20+", e);
 		} catch (IllegalAccessException | InvocationTargetException e2) {
 			e2.printStackTrace();
