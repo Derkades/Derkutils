@@ -7,7 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
@@ -239,11 +238,6 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@Deprecated
-	public T hideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
-		return addHideFlags(itemFlags);
-	}
-
 	public @NonNull T addHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
 		this.item.editMeta(meta -> {
 			if (meta == null) {
@@ -276,12 +270,12 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	public @NonNull T hideFlags() {
-		return this.hideFlags(ItemFlag.values());
+		return addHideFlags(ItemFlag.values());
 	}
 
 	public @NonNull T hideFlags(boolean hideAllFlags) {
 		if (hideAllFlags) {
-			return this.hideFlags(ItemFlag.values());
+			return this.hideFlags();
 		} else {
 			return removeHideFlags();
 		}
