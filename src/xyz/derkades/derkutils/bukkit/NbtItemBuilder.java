@@ -1,20 +1,19 @@
 package xyz.derkades.derkutils.bukkit;
 
-import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTItem;
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteItemNBT;
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
-import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBTList;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteItemNBT;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBTList;
 
 /**
  * Extension of ItemBuilder with functionality that requires NBT API
@@ -45,8 +44,8 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 
 	public NbtItemBuilder canDestroy(final Set<Material> materials) {
 		NBT.modify(this.item, nbt -> {
-			ReadWriteNBTList<String> list = nbt.getStringList("CanDestroy");
-			for (Material material : materials) {
+			final ReadWriteNBTList<String> list = nbt.getStringList("CanDestroy");
+			for (final Material material : materials) {
 				list.add(material.getKey().asString());
 			}
 		});
@@ -64,23 +63,24 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 
 	public NbtItemBuilder canPlaceOn(final Set<Material> materials) {
 		NBT.modify(this.item, nbt -> {
-			ReadWriteNBTList<String> list = nbt.getStringList("CanPlaceOn");
-			for (Material material : materials) {
+			final ReadWriteNBTList<String> list = nbt.getStringList("CanPlaceOn");
+			for (final Material material : materials) {
 				list.add(material.getKey().asString());
 			}
 		});
 		return this;
 	}
 
+	@Override
 	public @NonNull NbtItemBuilder skullTexture(final @NonNull String texture) {
 		// Try native method first, newer server versions no longer support setting skull texture via NBT
 		try {
 			super.skullTexture(texture);			
 			return this;
-		} catch (UnsupportedOperationException ignored) {}
+		} catch (final UnsupportedOperationException ignored) {}
 		
 		Objects.requireNonNull(texture, "Texture string is null");
-		editNbt(nbt -> {
+		this.editNbt(nbt -> {
 			final ReadWriteNBT skullOwner = nbt.getOrCreateCompound("SkullOwner");
 			skullOwner.setString("Id", UUID.randomUUID().toString());
 			skullOwner.getOrCreateCompound("Properties").getCompoundList("textures").addCompound().setString("Value", texture);

@@ -1,6 +1,7 @@
 package xyz.derkades.derkutils.bukkit;
 
-import de.tr7zw.changeme.nbtapi.NBTItem;
+import java.util.Objects;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -15,7 +16,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.Objects;
+import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.iface.ReadableNBT;
 
 public class IllegalItems implements Listener {
 
@@ -27,17 +29,16 @@ public class IllegalItems implements Listener {
 
 	public ItemStack setIllegal(final @NonNull ItemStack item, final boolean illegal) {
 		Objects.requireNonNull(item, "Item is null");
-		final NBTItem nbt = new NBTItem(item);
-		nbt.setBoolean(NBT_KEY, illegal);
-		return nbt.getItem();
+		NBT.modify(item, nbt -> {
+			nbt.setBoolean(NBT_KEY, illegal);
+		});
+		return item;
 	}
 
 	public boolean isIllegal(final @NonNull ItemStack item) {
 		Objects.requireNonNull(item, "Item is null");
-		final NBTItem nbt = new NBTItem(item);
-		if (!nbt.hasNBTData()) {
-			return false;
-		} else if (!nbt.hasKey(NBT_KEY)) {
+		final ReadableNBT nbt = NBT.readNbt(item);
+		if (!nbt.hasTag(NBT_KEY)) {
 			return false;
 		} else {
 			return nbt.getBoolean(NBT_KEY);
