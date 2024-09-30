@@ -73,13 +73,14 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 
 	@Override
 	public @NonNull NbtItemBuilder skullTexture(final @NonNull String texture) {
+		Objects.requireNonNull(texture, "Texture string is null");
+		
 		// Try native method first, newer server versions no longer support setting skull texture via NBT
 		try {
 			super.skullTexture(texture);			
 			return this;
 		} catch (final UnsupportedOperationException ignored) {}
 		
-		Objects.requireNonNull(texture, "Texture string is null");
 		this.editNbt(nbt -> {
 			final ReadWriteNBT skullOwner = nbt.getOrCreateCompound("SkullOwner");
 			skullOwner.setString("Id", UUID.randomUUID().toString());
