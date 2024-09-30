@@ -36,7 +36,7 @@
 						<path>
 							<groupId>org.checkerframework</groupId>
 							<artifactId>checker</artifactId>
-							<version>3.45.0</version>
+							<version>3.47.0</version>
 						</path>
 					</annotationProcessorPaths>
 					<annotationProcessors>
@@ -79,7 +79,7 @@
 		<dependency>
 			<groupId>de.tr7zw</groupId>
 			<artifactId>item-nbt-api</artifactId>
-			<version>2.13.1</version>
+			<version>2.13.2</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -99,7 +99,7 @@
 		<dependency>
 			<groupId>org.checkerframework</groupId>
 			<artifactId>checker-qual</artifactId>
-			<version>3.45.0</version>
+			<version>3.47.0</version>
 		</dependency>
 
 		<dependency>

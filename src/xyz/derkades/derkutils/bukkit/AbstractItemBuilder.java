@@ -1,24 +1,14 @@
 package xyz.derkades.derkutils.bukkit;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import org.bukkit.Bukkit;
+import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -30,9 +20,6 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
 
 public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
@@ -136,7 +123,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	public @NonNull T enchant(final @NonNull Enchantment type) {
-		return enchant(type, 1);
+		return this.enchant(type, 1);
 	}
 
 	public @NonNull T enchant(final @NonNull Enchantment type, final int level) {
@@ -163,7 +150,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	public @NonNull T damage(final int durability) {
-		item.setDurability((short) durability);
+		this.item.setDurability((short) durability);
 		return this.getInstance();
 	}
 
@@ -268,59 +255,8 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public @NonNull T skullTexture(final @NonNull String skinTextureJsonBase64) {
-		final String skinTextureJson;
-		try {
-			skinTextureJson = new String(Base64.getDecoder().decode(skinTextureJsonBase64), StandardCharsets.UTF_8.toString());
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("Failed to decode skin texture base64: " + skinTextureJsonBase64);
-		}
-		
-		final URL skinTextureUrl;
-		try {
-			skinTextureUrl = new URI(
-					JsonParser.parseString(skinTextureJson)
-							.getAsJsonObject()
-							.get("textures")
-							.getAsJsonObject()
-							.get("SKIN")
-							.getAsJsonObject()
-							.get("url")
-							.getAsString()
-					).toURL();
-		} catch (IllegalStateException | JsonSyntaxException | MalformedURLException | URISyntaxException e) {
-			throw new RuntimeException("Failed to parse skin texture json: " + skinTextureJson);
-		}
-		
-		// Uses reflection so it compiles for older server versions
-		
-		try {
-			Class<?> iPlayerProfile = Class.forName("org.bukkit.profile.PlayerProfile");
-			Class<?> iPlayerTextures = Class.forName("org.bukkit.profile.PlayerTextures");
-			Method createPlayerProfile = Bukkit.getServer().getClass().getMethod("createPlayerProfile", UUID.class);
-			Object playerProfile = createPlayerProfile.invoke(Bukkit.getServer(), UUID.randomUUID());
-			Object playerTextures = iPlayerProfile.getMethod("getTextures").invoke(playerProfile);
-			iPlayerTextures.getMethod("setSkin", URL.class).invoke(playerTextures, skinTextureUrl);
-			iPlayerProfile.getMethod("setTextures", iPlayerTextures).invoke(playerProfile, playerTextures);
-			SkullMeta meta = (SkullMeta) item.getItemMeta();
-			SkullMeta.class.getMethod("setOwnerProfile", iPlayerProfile).invoke(meta, playerProfile);
-			item.setItemMeta(meta);
-		} catch (ClassNotFoundException | NoSuchMethodException e) {
-			throw new UnsupportedOperationException("Method not found, only available on 1.20+", e);
-		} catch (IllegalAccessException | InvocationTargetException e2) {
-			e2.printStackTrace();
-		}
-		
-		return this.getInstance();
-	}
-
-	@Deprecated
-	public T hideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
-		return addHideFlags(itemFlags);
-	}
-
 	public @NonNull T addHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
-		ItemMeta meta = this.item.getItemMeta();
+		final ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
 		}
@@ -330,7 +266,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	public @NonNull T replaceHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
-		ItemMeta meta = this.item.getItemMeta();
+		final ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
 		}
@@ -341,24 +277,24 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	public T removeHideFlags() {
-		ItemMeta meta = this.item.getItemMeta();
+		final ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
 		}
 		meta.removeItemFlags(ItemFlag.values());
-		item.setItemMeta(meta);
+		this.item.setItemMeta(meta);
 		return this.getInstance();
 	}
 
 	public @NonNull T hideFlags() {
-		return this.hideFlags(ItemFlag.values());
+		return this.addHideFlags(ItemFlag.values());
 	}
 
 	public @NonNull T hideFlags(boolean hideAllFlags) {
 		if (hideAllFlags) {
-			return this.hideFlags(ItemFlag.values());
+			return this.hideFlags();
 		} else {
-			return removeHideFlags();
+			return this.removeHideFlags();
 		}
 	}
 
@@ -410,6 +346,10 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		Objects.requireNonNull(player, "Player is null");
 		this.namePapi(player);
 		return this.lorePapi(player);
+	}
+
+	public @NonNull NbtItemBuilder skullTexture(final @NonNull String texture) {
+		throw new NotImplementedException("Only implemented in NbtItemBuilder");
 	}
 
 	public @NonNull ItemStack create(){

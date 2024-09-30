@@ -31,7 +31,7 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 		return this;
 	}
 
-	public @NonNull NbtItemBuilder canDestroy(final @NonNull String@NonNull... vanillaNamespacedNames) {
+	public @NonNull NbtItemBuilder canDestroy(final String... vanillaNamespacedNames) {
 		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
 		NBT.modify(this.item, nbt -> {
 			nbt.getStringList("CanDestroy").addAll(Arrays.asList(vanillaNamespacedNames));
@@ -39,7 +39,7 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 		return this;
 	}
 
-	public @NonNull NbtItemBuilder canPlaceOn(final @NonNull String@NonNull... vanillaNamespacedNames) {
+	public @NonNull NbtItemBuilder canPlaceOn(final String... vanillaNamespacedNames) {
 		Objects.requireNonNull(vanillaNamespacedNames, "names varargs is null");
 		NBT.modify(this.item, nbt -> {
 			nbt.getStringList("CanPlaceOn").addAll(Arrays.asList(vanillaNamespacedNames));
@@ -47,9 +47,10 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 		return this;
 	}
 
+	@Override
 	public @NonNull NbtItemBuilder skullTexture(final @NonNull String texture) {
 		Objects.requireNonNull(texture, "Texture string is null");
-		editNbt(nbt -> {
+		this.editNbt(nbt -> {
 			final ReadWriteNBT skullOwner = nbt.getOrCreateCompound("SkullOwner");
 			skullOwner.setString("Id", UUID.randomUUID().toString());
 			skullOwner.getOrCreateCompound("Properties").getCompoundList("textures").addCompound().setString("Value", texture);
