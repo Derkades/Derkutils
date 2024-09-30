@@ -138,7 +138,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	public @NonNull T enchant(final @NonNull Enchantment type) {
-		return enchant(type, 1);
+		return this.enchant(type, 1);
 	}
 
 	public @NonNull T enchant(final @NonNull Enchantment type, final int level) {
@@ -172,10 +172,10 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	public @NonNull T damage(final int damage) {
-		ItemMeta meta = this.item.getItemMeta();
+		final ItemMeta meta = this.item.getItemMeta();
 		if (meta != null) {
 			((Damageable) meta).setDamage(damage);
-			item.setItemMeta(meta);
+			this.item.setItemMeta(meta);
 		}
 		return this.getInstance();
 	}
@@ -285,7 +285,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		final String skinTextureJson;
 		try {
 			skinTextureJson = new String(Base64.getDecoder().decode(skinTextureJsonBase64), StandardCharsets.UTF_8.toString());
-		} catch (UnsupportedEncodingException e) {
+		} catch (final UnsupportedEncodingException e) {
 			throw new RuntimeException("Failed to decode skin texture base64: " + skinTextureJsonBase64);
 		}
 		
@@ -308,16 +308,16 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		// Uses reflection so it compiles for older server versions
 		
 		try {
-			Class<?> iPlayerProfile = Class.forName("org.bukkit.profile.PlayerProfile");
-			Class<?> iPlayerTextures = Class.forName("org.bukkit.profile.PlayerTextures");
-			Method createPlayerProfile = Bukkit.getServer().getClass().getMethod("createPlayerProfile", UUID.class);
-			Object playerProfile = createPlayerProfile.invoke(Bukkit.getServer(), UUID.randomUUID());
-			Object playerTextures = iPlayerProfile.getMethod("getTextures").invoke(playerProfile);
+			final Class<?> iPlayerProfile = Class.forName("org.bukkit.profile.PlayerProfile");
+			final Class<?> iPlayerTextures = Class.forName("org.bukkit.profile.PlayerTextures");
+			final Method createPlayerProfile = Bukkit.getServer().getClass().getMethod("createPlayerProfile", UUID.class);
+			final Object playerProfile = createPlayerProfile.invoke(Bukkit.getServer(), UUID.randomUUID());
+			final Object playerTextures = iPlayerProfile.getMethod("getTextures").invoke(playerProfile);
 			iPlayerTextures.getMethod("setSkin", URL.class).invoke(playerTextures, skinTextureUrl);
 			iPlayerProfile.getMethod("setTextures", iPlayerTextures).invoke(playerProfile, playerTextures);
-			SkullMeta meta = (SkullMeta) item.getItemMeta();
+			final SkullMeta meta = (SkullMeta) this.item.getItemMeta();
 			SkullMeta.class.getMethod("setOwnerProfile", iPlayerProfile).invoke(meta, playerProfile);
-			item.setItemMeta(meta);
+			this.item.setItemMeta(meta);
 		} catch (ClassNotFoundException | NoSuchMethodException e) {
 			throw new UnsupportedOperationException("Method not found, only available on 1.20+", e);
 		} catch (IllegalAccessException | InvocationTargetException e2) {
@@ -327,13 +327,8 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	@Deprecated
-	public T hideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
-		return addHideFlags(itemFlags);
-	}
-
 	public @NonNull T addHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
-		ItemMeta meta = this.item.getItemMeta();
+		final ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
 		}
@@ -343,7 +338,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	public @NonNull T replaceHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
-		ItemMeta meta = this.item.getItemMeta();
+		final ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
 		}
@@ -354,24 +349,24 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	}
 
 	public T removeHideFlags() {
-		ItemMeta meta = this.item.getItemMeta();
+		final ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
 		}
 		meta.removeItemFlags(ItemFlag.values());
-		item.setItemMeta(meta);
+		this.item.setItemMeta(meta);
 		return this.getInstance();
 	}
 
 	public @NonNull T hideFlags() {
-		return this.hideFlags(ItemFlag.values());
+		return this.addHideFlags(ItemFlag.values());
 	}
 
 	public @NonNull T hideFlags(boolean hideAllFlags) {
 		if (hideAllFlags) {
-			return this.hideFlags(ItemFlag.values());
+			return this.hideFlags();
 		} else {
-			return removeHideFlags();
+			return this.removeHideFlags();
 		}
 	}
 
