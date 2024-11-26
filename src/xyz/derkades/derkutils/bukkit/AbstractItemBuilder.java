@@ -265,7 +265,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public @NonNull T replaceHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
+	public @NonNull T replaceHideFlags(final ItemFlag... itemFlags) {
 		final ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
