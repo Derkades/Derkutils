@@ -327,7 +327,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public @NonNull T addHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
+	public @NonNull T addHideFlags(final ItemFlag... itemFlags) {
 		final ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
@@ -337,7 +337,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public @NonNull T replaceHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
+	public @NonNull T replaceHideFlags(final ItemFlag... itemFlags) {
 		final ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
@@ -368,6 +368,19 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		} else {
 			return this.removeHideFlags();
 		}
+	}
+	
+	public T modelData(@Nullable Integer data) {
+		final ItemMeta meta = this.item.getItemMeta();
+		// Only available in some Minecraft versions, so must be accessed using reflection
+		try {
+			final Method setCustomModelData = meta.getClass().getMethod("setCustomModelData", Integer.class);
+			setCustomModelData.invoke(data);
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			throw new UnsupportedOperationException("Cannot set custom model data in this Minecraft version");
+		}
+		this.item.setItemMeta(meta);
+		return this.getInstance();
 	}
 
 	public @NonNull T placeholder(final @NonNull String key,
