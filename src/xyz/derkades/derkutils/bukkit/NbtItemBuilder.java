@@ -88,7 +88,8 @@ public class NbtItemBuilder extends AbstractItemBuilder<NbtItemBuilder> {
 		});
 		return this;
 	}
-
+	
+	@Deprecated
 	public @NonNull NbtItemBuilder hideFlags(final int hideFlags) {
 		NBT.modify(this.item, nbt -> {
 			nbt.setInteger("HideFlags", hideFlags);

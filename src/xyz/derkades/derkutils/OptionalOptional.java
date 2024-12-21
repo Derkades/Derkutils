@@ -1,13 +1,16 @@
 package xyz.derkades.derkutils;
 
-import com.google.common.base.Preconditions;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import com.google.common.base.Preconditions;
+
+// Deprecated: use Tristate
+@Deprecated
 public class OptionalOptional<T> {
 
 	private static final OptionalOptional<Object> UNKNOWN = new OptionalOptional<>(false, null);
@@ -74,10 +77,12 @@ public class OptionalOptional<T> {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> OptionalOptional<T> unknown() {
 		return (OptionalOptional<T>) UNKNOWN;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> OptionalOptional<T> knownEmpty() {
 		return (OptionalOptional<T>) KNOWN_EMPTY;
 	}

@@ -22,6 +22,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
@@ -327,22 +330,14 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		return this.getInstance();
 	}
 
-	public @NonNull T addHideFlags(final ItemFlag... itemFlags) {
+	public T addHideFlags(final ItemFlag... itemFlags) {
 		final ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {
 			throw new IllegalStateException("Item meta is null");
 		}
-		meta.addItemFlags(itemFlags);
-		this.item.setItemMeta(meta);
-		return this.getInstance();
-	}
-
-	public @NonNull T replaceHideFlags(final ItemFlag... itemFlags) {
-		final ItemMeta meta = this.item.getItemMeta();
-		if (meta == null) {
-			throw new IllegalStateException("Item meta is null");
-		}
-		meta.removeItemFlags(ItemFlag.values());
+		// Paper requires an attribute to be present to hide anything
+		// https://github.com/PaperMC/Paper/issues/10655
+		meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "", 1, Operation.ADD_NUMBER));
 		meta.addItemFlags(itemFlags);
 		this.item.setItemMeta(meta);
 		return this.getInstance();
