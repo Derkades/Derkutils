@@ -13,7 +13,6 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -253,49 +252,6 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 
 		placeholders.forEach(this::lorePlaceholderOptional);
 		return this.getInstance();
-	}
-
-	public @NonNull T addHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
-		final ItemMeta meta = this.item.getItemMeta();
-		if (meta == null) {
-			throw new IllegalStateException("Item meta is null");
-		}
-		meta.addItemFlags(itemFlags);
-		this.item.setItemMeta(meta);
-		return this.getInstance();
-	}
-
-	public @NonNull T replaceHideFlags(final ItemFlag... itemFlags) {
-		final ItemMeta meta = this.item.getItemMeta();
-		if (meta == null) {
-			throw new IllegalStateException("Item meta is null");
-		}
-		meta.removeItemFlags(ItemFlag.values());
-		meta.addItemFlags(itemFlags);
-		this.item.setItemMeta(meta);
-		return this.getInstance();
-	}
-
-	public T removeHideFlags() {
-		final ItemMeta meta = this.item.getItemMeta();
-		if (meta == null) {
-			throw new IllegalStateException("Item meta is null");
-		}
-		meta.removeItemFlags(ItemFlag.values());
-		this.item.setItemMeta(meta);
-		return this.getInstance();
-	}
-
-	public @NonNull T hideFlags() {
-		return this.addHideFlags(ItemFlag.values());
-	}
-
-	public @NonNull T hideFlags(boolean hideAllFlags) {
-		if (hideAllFlags) {
-			return this.hideFlags();
-		} else {
-			return this.removeHideFlags();
-		}
 	}
 
 	public @NonNull T placeholder(final @NonNull String key,

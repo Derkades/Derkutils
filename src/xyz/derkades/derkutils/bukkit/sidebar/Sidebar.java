@@ -1,5 +1,11 @@
 package xyz.derkades.derkutils.bukkit.sidebar;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -12,8 +18,6 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.util.*;
 
 public class Sidebar implements ConfigurationSerializable {
 
@@ -48,9 +52,9 @@ public class Sidebar implements ConfigurationSerializable {
 
 		this.title = title;
 
-		update();
+		this.update();
 
-		setUpdateDelay(plugin, updateDelayInTicks);
+		this.setUpdateDelay(plugin, updateDelayInTicks);
 
 		SidebarAPI.registerSidebar(this);
 	}
@@ -91,7 +95,7 @@ public class Sidebar implements ConfigurationSerializable {
 
 			@Override
 			public void run() {
-				update();
+				Sidebar.this.update();
 			}
 
 		}).runTaskTimer(plugin, delayInTicks, delayInTicks);
@@ -200,7 +204,7 @@ public class Sidebar implements ConfigurationSerializable {
 	 * @return (Sidebar) - this Sidebar Object, for chaining.
 	 */
 	public Sidebar update() {
-		redoBukkitObjective();
+		this.redoBukkitObjective();
 
 		for (int i = this.entries.size(); i > 0; i--) {
 			this.bukkitObjective.getScore(this.entries.get(this.entries.size() - i).getNext()).setScore(i);

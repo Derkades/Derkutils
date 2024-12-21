@@ -31,10 +31,12 @@ public class Tristate<T> {
 		return new Tristate<>(true, value);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> Tristate<T> unknown() {
 		return (Tristate<T>) UNKNOWN;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T> Tristate<T> knownEmpty() {
 		return (Tristate<T>) KNOWN_EMPTY;
 	}
