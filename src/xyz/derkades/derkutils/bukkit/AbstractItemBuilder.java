@@ -248,7 +248,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 			}
 			// Paper requires an attribute to be present to hide anything
 			// https://github.com/PaperMC/Paper/issues/10655
-			meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "", 1, Operation.ADD_NUMBER));
+			meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(UUID.randomUUID(), "", 1, Operation.ADD_NUMBER));
 			meta.addItemFlags(itemFlags);
 		});
 		return this.getInstance();
