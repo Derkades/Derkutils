@@ -14,9 +14,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.8</jdk.version>
-		<!-- This property will be set by the Maven Dependency plugin -->
-<!--		<errorProneJavac>${com.google.errorprone:javac:jar}</errorProneJavac>-->
-		<javac.version>9+181-r4173-1</javac.version>
 	</properties>
 
 	<build>
@@ -31,24 +28,6 @@
 				<configuration>
 					<source>${jdk.version}</source>
 					<target>${jdk.version}</target>
-					<fork>true</fork> <!-- Must fork or else JVM arguments are ignored. -->
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.checkerframework</groupId>
-							<artifactId>checker</artifactId>
-							<version>3.48.3</version>
-						</path>
-					</annotationProcessorPaths>
-					<annotationProcessors>
-						<annotationProcessor>org.checkerframework.checker.nullness.NullnessChecker</annotationProcessor>
-						<annotationProcessor>org.checkerframework.checker.optional.OptionalChecker</annotationProcessor>
-						<annotationProcessor>org.checkerframework.checker.regex.RegexChecker</annotationProcessor>
-						<annotationProcessor>org.checkerframework.checker.formatter.FormatterChecker</annotationProcessor>
-					</annotationProcessors>
-					<compilerArgs>
-						<arg>-Awarns</arg>
-						<arg>-J-Xbootclasspath/p:${settings.localRepository}/com/google/errorprone/javac/${javac.version}/javac-${javac.version}.jar</arg>
-					</compilerArgs>
 				</configuration>
 			</plugin>
 
@@ -100,12 +79,6 @@
 			<groupId>org.checkerframework</groupId>
 			<artifactId>checker-qual</artifactId>
 			<version>3.48.3</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.errorprone</groupId>
-			<artifactId>javac</artifactId>
-			<version>9+181-r4173-1</version>
 		</dependency>
 
 	</dependencies>
