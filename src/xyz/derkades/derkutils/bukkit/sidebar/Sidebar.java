@@ -1,17 +1,20 @@
 package xyz.derkades.derkutils.bukkit.sidebar;
 
-import com.google.common.base.Strings;
-import net.kyori.adventure.text.Component;
+import java.util.Objects;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.Objects;
+import com.google.common.base.Strings;
+
+import net.kyori.adventure.text.Component;
 
 public class Sidebar {
 
@@ -28,7 +31,7 @@ public class Sidebar {
 	public Sidebar(final @NonNull Component displayName,
 				   final @NonNull Scoreboard scoreboard) {
 		this.scoreboard = scoreboard;
-		this.objective = scoreboard.registerNewObjective("sb", "dummy", displayName);
+		this.objective = scoreboard.registerNewObjective("sb", Criteria.DUMMY, displayName);
 		this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 	}
 
@@ -40,19 +43,19 @@ public class Sidebar {
 	public void clearEntries() {
 		this.scoreboard.getTeams().forEach(Team::unregister);
 		for (int i = 0; i < this.entries; i++) {
-			this.scoreboard.resetScores(getInvisibleEntry(i));
+			this.scoreboard.resetScores(this.getInvisibleEntry(i));
 		}
 		this.entries = 0;
 	}
 
 	public void addEntry(final @NonNull Component text) {
-		int i = this.entries++;
-		Team team = this.scoreboard.registerNewTeam(String.valueOf(i));
+		final int i = this.entries++;
+		final Team team = this.scoreboard.registerNewTeam(String.valueOf(i));
 		team.prefix(text);
-		String entry = getInvisibleEntry(i);
+		final String entry = this.getInvisibleEntry(i);
 		team.addEntry(entry);
 		for (int j = 0; j < this.entries; j++) {
-			this.objective.getScore(getInvisibleEntry(j)).setScore(this.entries - j);
+			this.objective.getScore(this.getInvisibleEntry(j)).setScore(this.entries - j);
 		}
 	}
 
@@ -62,7 +65,7 @@ public class Sidebar {
 			throw new IllegalArgumentException("There are only " + this.entries + " entries but you are trying to modify index " + i);
 		}
 
-		Team team = this.scoreboard.getTeam(String.valueOf(i));
+		final Team team = this.scoreboard.getTeam(String.valueOf(i));
 		if (team == null) {
 			throw new IllegalStateException();
 		}

@@ -1,13 +1,13 @@
 package xyz.derkades.derkutils.bukkit;
 
+import static net.kyori.adventure.text.Component.text;
+
 import io.netty.util.internal.ThreadLocalRandom;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.util.HSVLike;
 import xyz.derkades.derkutils.Colors;
-
-import static net.kyori.adventure.text.Component.text;
 
 public class AdventureUtil {
 
@@ -57,7 +57,7 @@ public class AdventureUtil {
 			final char c = string.charAt(i);
 			final float hMult = (float) i / string.length();
 			final float hue = ((1 - hMult) * hueStart + hMult * (hueStart + hueRange)) % 1;
-			b.append(text(c, TextColor.color(HSVLike.of(hue, saturation, value))));
+			b.append(text(c, TextColor.color(HSVLike.hsvLike(hue, saturation, value))));
 		}
 
 		return b.asComponent();
