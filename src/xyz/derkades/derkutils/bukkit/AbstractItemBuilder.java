@@ -24,6 +24,9 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -243,6 +246,9 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 			if (meta == null) {
 				throw new IllegalStateException("Item meta is null");
 			}
+			// Paper requires an attribute to be present to hide anything
+			// https://github.com/PaperMC/Paper/issues/10655
+			meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), "", 1, Operation.ADD_NUMBER));
 			meta.addItemFlags(itemFlags);
 		});
 		return this.getInstance();
