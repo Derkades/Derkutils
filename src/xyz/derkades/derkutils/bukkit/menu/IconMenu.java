@@ -1,5 +1,10 @@
 package xyz.derkades.derkutils.bukkit.menu;
 
+
+import java.util.Objects;
+import java.util.UUID;
+import java.util.function.Consumer;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -16,10 +21,6 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
-
-import java.util.Objects;
-import java.util.UUID;
-import java.util.function.Consumer;
 
 public abstract class IconMenu implements Listener {
 
@@ -80,17 +81,17 @@ public abstract class IconMenu implements Listener {
 				if (player == null) {
 					// player went offline
 					if (!IconMenu.this.closeEventCalled) {
-						closeEventCalled = true;
+						IconMenu.this.closeEventCalled = true;
 						IconMenu.this.onClose(new MenuCloseEvent(Bukkit.getOfflinePlayer(IconMenu.this.uuid), CloseReason.PLAYER_QUIT));
 					}
 				} else if (!player.getOpenInventory().getTopInventory().equals(IconMenu.this.inventory)) {
 					// player closed inventory
 					if (!IconMenu.this.closeEventCalled) {
-						closeEventCalled = true;
-						if (closeReason == null) {
-							closeReason = CloseReason.PLAYER_CLOSED;
+						IconMenu.this.closeEventCalled = true;
+						if (IconMenu.this.closeReason == null) {
+							IconMenu.this.closeReason = CloseReason.PLAYER_CLOSED;
 						}
-						IconMenu.this.onClose(new MenuCloseEvent(player, closeReason));
+						IconMenu.this.onClose(new MenuCloseEvent(player, IconMenu.this.closeReason));
 					}
 				} else {
 					// menu is still open
@@ -124,7 +125,6 @@ public abstract class IconMenu implements Listener {
 	 * Called when the menu closes
 	 * @param event
 	 */
-	@SuppressWarnings("EmptyMethod")
 	public void onClose(final MenuCloseEvent event) {}
 
 	/**
