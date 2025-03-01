@@ -213,9 +213,11 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		} catch (IllegalStateException | JsonSyntaxException | MalformedURLException | URISyntaxException e) {
 			throw new RuntimeException("Failed to parse skin texture json: " + skinTextureJson);
 		}
-		
+		return this.skullTextureURL(skinTextureUrl);	
+	}
+	
+	public T skullTextureURL(final URL skinTextureUrl) {
 		// Uses reflection so it compiles for older server versions
-		
 		try {
 			final Class<?> iPlayerProfile = Class.forName("org.bukkit.profile.PlayerProfile");
 			final Class<?> iPlayerTextures = Class.forName("org.bukkit.profile.PlayerTextures");
