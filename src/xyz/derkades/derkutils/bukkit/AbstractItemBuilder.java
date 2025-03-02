@@ -374,7 +374,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 			final Method setCustomModelData = meta.getClass().getMethod("setCustomModelData", int.class);
 			setCustomModelData.invoke(data);
 		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-			throw new UnsupportedOperationException("Cannot set custom model data in this Minecraft version");
+			throw new UnsupportedOperationException("Cannot set custom model data in this Minecraft version", e);
 		}
 		this.item.setItemMeta(meta);
 		return this.getInstance();
