@@ -1,17 +1,21 @@
 package xyz.derkades.derkutils;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import org.checkerframework.checker.nullness.qual.NonNull;
-
-import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URL;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class Hastebin {
 
@@ -44,7 +48,12 @@ public class Hastebin {
 		Objects.requireNonNull(content, "Content is null");
 		Objects.requireNonNull(baseUrl, "Base url is null");
 
-		final HttpsURLConnection connection = (HttpsURLConnection) new URL("https://" + baseUrl + "/documents").openConnection();
+		HttpsURLConnection connection;
+		try {
+			connection = (HttpsURLConnection) new URI("https://" + baseUrl + "/documents").toURL().openConnection();
+		} catch (MalformedURLException | URISyntaxException e) {
+			throw new IOException(e);
+		}
 		connection.setRequestMethod("POST");
 		connection.setDoOutput(true);
 		connection.getOutputStream().write(content);
