@@ -291,7 +291,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		} catch (final UnsupportedEncodingException e) {
 			throw new RuntimeException("Failed to decode skin texture base64: " + skinTextureJsonBase64);
 		}
-		
+
 		final URL skinTextureUrl;
 		try {
 			skinTextureUrl = new URI(
@@ -307,9 +307,9 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		} catch (IllegalStateException | JsonSyntaxException | MalformedURLException | URISyntaxException e) {
 			throw new RuntimeException("Failed to parse skin texture json: " + skinTextureJson);
 		}
-		return this.skullTextureURL(skinTextureUrl);	
+		return this.skullTextureURL(skinTextureUrl);
 	}
-	
+
 	public T skullTextureURL(final URL skinTextureUrl) {
 		// Uses reflection so it compiles for older server versions
 		try {
@@ -328,7 +328,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		} catch (IllegalAccessException | InvocationTargetException e2) {
 			e2.printStackTrace();
 		}
-		
+
 		return this.getInstance();
 	}
 
@@ -366,12 +366,12 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 			return this.removeHideFlags();
 		}
 	}
-	
+
 	public T modelData(@Nullable Integer data) {
 		final ItemMeta meta = this.item.getItemMeta();
 		// Only available in some Minecraft versions, so must be accessed using reflection
 		try {
-			final Method setCustomModelData = meta.getClass().getMethod("setCustomModelData", Integer.class);
+			final Method setCustomModelData = ItemMeta.class.getMethod("setCustomModelData", Integer.class);
 			setCustomModelData.invoke(data);
 		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 			throw new UnsupportedOperationException("Cannot set custom model data in this Minecraft version", e);
