@@ -254,7 +254,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		placeholders.forEach(this::lorePlaceholderOptional);
 		return this.getInstance();
 	}
-	
+
 	public @NonNull T addHideFlags(final @NonNull ItemFlag @NonNull... itemFlags) {
 		final ItemMeta meta = this.item.getItemMeta();
 		if (meta == null) {

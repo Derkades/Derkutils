@@ -58,7 +58,7 @@ public class Hastebin {
 		connection.setDoOutput(true);
 		connection.getOutputStream().write(content);
 		try (Reader reader = new InputStreamReader(connection.getInputStream())) {
-			final JsonObject json = (JsonObject) JsonParser.parseReader(reader);
+			final JsonObject json = new JsonParser().parse(reader).getAsJsonObject();
 			return json.get("key").getAsString();
 		}
 	}
