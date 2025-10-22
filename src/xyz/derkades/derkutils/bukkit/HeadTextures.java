@@ -34,7 +34,7 @@ public class HeadTextures {
 			final HttpURLConnection connection = (HttpURLConnection) new URL(
 					"https://sessionserver.mojang.com/session/minecraft/profile/" + uuid).openConnection();
 			try (final Reader reader = new InputStreamReader(connection.getInputStream())) {
-				final JsonObject jsonResponse = (JsonObject) JsonParser.parseReader(reader);
+				final JsonObject jsonResponse = new JsonParser().parse(reader).getAsJsonObject();
 				final String texture = jsonResponse.get("properties").getAsJsonArray().get(0).getAsJsonObject()
 						.get("value").getAsString();
 				synchronized (HEAD_TEXTURE_CACHE) {
