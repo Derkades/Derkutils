@@ -201,7 +201,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		final URL skinTextureUrl;
 		try {
 			skinTextureUrl = new URI(
-					JsonParser.parseString(skinTextureJson)
+					new JsonParser().parse(skinTextureJson)
 							.getAsJsonObject()
 							.get("textures")
 							.getAsJsonObject()
