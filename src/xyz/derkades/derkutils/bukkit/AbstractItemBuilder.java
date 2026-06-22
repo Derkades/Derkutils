@@ -50,7 +50,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 	private static final Component NO_ITALICS = Component.empty().decoration(TextDecoration.ITALIC, false);
 
 	protected ItemStack item;
-	
+
 	public AbstractItemBuilder(final Material material) {
 		this.item = new ItemStack(Objects.requireNonNull(material, "Material is null"));
 	}
@@ -197,7 +197,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		} catch (final UnsupportedEncodingException e) {
 			throw new RuntimeException("Failed to decode skin texture base64: " + skinTextureJsonBase64);
 		}
-		
+
 		final URL skinTextureUrl;
 		try {
 			skinTextureUrl = new URI(
@@ -213,9 +213,9 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		} catch (IllegalStateException | JsonSyntaxException | MalformedURLException | URISyntaxException e) {
 			throw new RuntimeException("Failed to parse skin texture json: " + skinTextureJson);
 		}
-		return this.skullTextureURL(skinTextureUrl);	
+		return this.skullTextureURL(skinTextureUrl);
 	}
-	
+
 	public T skullTextureURL(final URL skinTextureUrl) {
 		// Uses reflection so it compiles for older server versions
 		try {
@@ -234,7 +234,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		} catch (IllegalAccessException | InvocationTargetException e2) {
 			e2.printStackTrace();
 		}
-		
+
 		return this.getInstance();
 	}
 
@@ -288,11 +288,27 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 			return this.removeHideFlags();
 		}
 	}
-	
+
 	public T modelData(@Nullable Integer data) {
 		this.item.editMeta(meta -> {
 			meta.setCustomModelData(data);
 		});
+
+		return this.getInstance();
+	}
+
+	public T itemModel(NamespacedKey itemModel) {
+		this.item.editMeta(meta -> {
+			// Only available on 1.21.4+ so we must use reflection
+			Method method;
+			try {
+				method = meta.getClass().getMethod("setItemModel", NamespacedKey.class);
+				method.invoke(itemModel);
+			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
+				throw new RuntimeException(e);
+			}
+		});
+
 		return this.getInstance();
 	}
 
