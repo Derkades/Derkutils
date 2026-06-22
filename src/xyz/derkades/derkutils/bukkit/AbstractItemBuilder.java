@@ -387,7 +387,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		Method method;
 		try {
 			method = meta.getClass().getMethod("setItemModel", NamespacedKey.class);
-			method.invoke(itemModel);
+			method.invoke(meta, itemModel);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
 			throw new RuntimeException(e);
 		}
