@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -295,7 +296,7 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		final URL skinTextureUrl;
 		try {
 			skinTextureUrl = new URI(
-					JsonParser.parseString(skinTextureJson)
+					new JsonParser().parse(skinTextureJson)
 							.getAsJsonObject()
 							.get("textures")
 							.getAsJsonObject()
@@ -375,6 +376,20 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 			setCustomModelData.invoke(meta, data);
 		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
 			throw new UnsupportedOperationException("Cannot set custom model data in this Minecraft version", e);
+		}
+		this.item.setItemMeta(meta);
+		return this.getInstance();
+	}
+
+	public T itemModel(NamespacedKey itemModel) {
+		final ItemMeta meta = this.item.getItemMeta();
+		// Only available on 1.21.4+ so we must use reflection
+		Method method;
+		try {
+			method = meta.getClass().getMethod("setItemModel", NamespacedKey.class);
+			method.invoke(itemModel);
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
+			throw new RuntimeException(e);
 		}
 		this.item.setItemMeta(meta);
 		return this.getInstance();
