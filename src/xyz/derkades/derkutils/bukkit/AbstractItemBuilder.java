@@ -1,5 +1,7 @@
 package xyz.derkades.derkutils.bukkit;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -296,6 +298,19 @@ public abstract class AbstractItemBuilder<T extends AbstractItemBuilder<T>> {
 		} else {
 			return this.removeHideFlags();
 		}
+	}
+
+	public T modelData(@Nullable Integer data) {
+		final ItemMeta meta = this.item.getItemMeta();
+		// Only available in some Minecraft versions, so must be accessed using reflection
+		try {
+			final Method setCustomModelData = ItemMeta.class.getMethod("setCustomModelData", Integer.class);
+			setCustomModelData.invoke(meta, data);
+		} catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+			throw new UnsupportedOperationException("Cannot set custom model data in this Minecraft version", e);
+		}
+		this.item.setItemMeta(meta);
+		return this.getInstance();
 	}
 
 	public @NonNull T placeholder(final @NonNull String key,
